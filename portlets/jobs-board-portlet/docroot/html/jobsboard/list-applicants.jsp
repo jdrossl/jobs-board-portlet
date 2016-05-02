@@ -1,0 +1,83 @@
+<%@ include file="/html/init.jsp" %>
+
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+
+<%
+	List applicantsList = new ArrayList();
+	applicantsList.add(1);
+	applicantsList.add(1);
+	applicantsList.add(1);
+	applicantsList.add(1);
+	applicantsList.add(1);
+%>
+
+<aui:container>
+	<aui:row>
+		<aui:col>
+			<aui:nav-bar>
+				<aui:nav>
+					<aui:nav-item label="back" iconCssClass="icon-arrow-left" href="<%= redirect %>"/>
+					<aui:nav-item label="filters" iconCssClass="icon-chevron-down" href="javascript:openFiltersForm();" />
+					<aui:nav-item>
+						<aui:field-wrapper cssClass="nav-keyword-wrapper">
+							<aui:input name="keywords" label="" placeholder="keywords" />
+						</aui:field-wrapper>
+					</aui:nav-item>
+					<aui:nav-item label="clear-search" />
+				</aui:nav>
+			</aui:nav-bar>
+			
+			<div id="filters-form" class="hidden">
+				<aui:form>
+					<aui:fieldset>
+						<aui:select name="location" inlineField="true">
+						</aui:select>
+						<aui:select name="category" inlineField="true">
+						</aui:select>
+						<aui:select name="type" inlineField="true">
+						</aui:select>
+						<aui:select name="status" inlineField="true">
+							<aui:option label="all" value="" />
+							<aui:option label="active" value="active" />
+							<aui:option label="inactive" value="inactive" />
+						</aui:select>
+						<aui:input name="only-bookmarked" type="checkbox" />
+					</aui:fieldset>
+				</aui:form>
+			</div>
+			
+			<c:if test="<%= !applicantsList.isEmpty() %>">
+			<aui:row>
+				<aui:col>
+					<h2><liferay-ui:message key="x-applicants-for-x" /></h2>
+				</aui:col>
+			</aui:row>
+			</c:if>
+			
+			<liferay-ui:search-container delta="3" emptyResultsMessage="no-applicants-found">
+				<liferay-ui:search-container-results results="<%= applicantsList %>" total="5" />
+				<liferay-ui:search-container-row className="Integer">
+					<portlet:renderURL var="viewURL">
+						<portlet:param name="mvcPath" value="/html/jobsboard/applicant-details.jsp"/>
+						<portlet:param name="redirect" value="<%= currentURL %>"/>
+						<portlet:param name="applicantId" value="1"/>
+					</portlet:renderURL>
+					<div class="applicant-summary">
+						<hr/>
+						<div class="applicant-name"><h4><a href="<%= viewURL %>">Applicant Name</a></h4></div>
+						<span class="applicant-status"><liferay-ui:message key="applicant-status-on-board" /></span>
+						<span class="applicant-submitted">Jul-12-2016, 3:30pm</span>
+						<span class="applicant-delete">
+							<liferay-ui:icon iconCssClass="icon-trash" />
+						</span>
+						<span class="applicant-edit">
+							<liferay-ui:icon iconCssClass="icon-edit" />
+						</span>
+					</div>
+				</liferay-ui:search-container-row>
+				<liferay-ui:search-iterator />
+			</liferay-ui:search-container>
+		</aui:col>
+	</aui:row>
+</aui:container>
