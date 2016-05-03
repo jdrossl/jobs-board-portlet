@@ -1,6 +1,21 @@
 <%@ include file="/html/init.jsp" %>
 
+<%
+	long jobId = ParamUtil.getLong(request, WebKeys.PARAM_JOB_ID, -1);
+	Job job = null;
+	if(jobId != -1) {
+	    job = JobLocalServiceUtil.fetchJob(jobId);
+	}
+%>
+
+<c:if test="<%= job != null %>">
+	<aui:model-context model="<%= Job.class %>" bean="<%= job %>" />
+</c:if>
+
 <portlet:actionURL name="addJob" var="addURL">
+	<c:if test="">
+	<portlet:param name="jobId" value="<%= job.getJobId() %>"/>
+	</c:if>
 	<portlet:param name="redirect" value="<%= redirect %>"/>
 </portlet:actionURL>
 
@@ -41,5 +56,5 @@
 </aui:container>
 
 <script type="text/javascript">
-	function <portlet:namespace />initEditor() { return ""; }
+	function <portlet:namespace />initEditor() { return '<%= (job != null)? job.getDescription() : StringPool.BLANK %>'; }
 </script>

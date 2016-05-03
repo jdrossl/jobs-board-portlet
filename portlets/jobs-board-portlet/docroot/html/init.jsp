@@ -6,10 +6,13 @@
 
 <%@ page import="com.liferay.portal.util.PortalUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.StringPool" %>
 
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 
+<%@ page import="com.rivetlogic.jobsboard.util.WebKeys" %>
 <%@ page import="com.rivetlogic.jobsboard.model.Job" %>
 <%@ page import="com.rivetlogic.jobsboard.service.JobLocalServiceUtil" %>
 

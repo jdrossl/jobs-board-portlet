@@ -23,14 +23,20 @@ public class JobsBoardPortlet extends MVCPortlet {
     private static final Log LOG = LogFactoryUtil.getLog(JobsBoardPortlet.class);
     
     public void addJob(ActionRequest req, ActionResponse res) throws IOException {
+        ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
+        long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID, -1);
+        Date now = new Date();
+        Job job = null;
         try {
-            ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
-            Job job = JobLocalServiceUtil.createJob();
+            if(jobId == -1) {
+                job = JobLocalServiceUtil.createJob();
+                job.setCompanyId(themeDisplay.getCompanyId());
+                job.setGroupId(themeDisplay.getScopeGroupId());
+                job.setCreateDate(now);
+            } else {
+                job = JobLocalServiceUtil.fetchJob(jobId);
+            }
             
-            job.setCompanyId(themeDisplay.getCompanyId());
-            job.setGroupId(themeDisplay.getScopeGroupId());
-            Date now = new Date();
-            job.setCreateDate(now);
             job.setModifiedDate(now);
             
             String name = ParamUtil.getString(req, WebKeys.PARAM_NAME);

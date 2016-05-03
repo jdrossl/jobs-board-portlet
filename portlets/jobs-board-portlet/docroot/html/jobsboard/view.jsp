@@ -9,6 +9,7 @@
 	} catch(Exception e) {
 	    jobsList = new ArrayList<Job>();
 	}
+	SimpleDateFormat format = new SimpleDateFormat("d MMMM, yyyy");
 %>
 
 <portlet:renderURL var="addURL">
@@ -100,7 +101,7 @@
 						<ul class="position-info">
 							<li class="position-category">${ job.category }</li>
 							<li class="position-location">${ job.location }</li>
-							<li class="position-posted">${ job.createDate }</li>
+							<li class="position-posted"><%= format.format(job.getCreateDate()) %></li>
 							<li class="position-type">${ job.type }</li>
 						</ul>
 						<div class="list-item-actions">
