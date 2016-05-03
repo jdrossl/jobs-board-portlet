@@ -18,7 +18,20 @@
 			<aui:nav-bar>
 				<aui:nav>
 					<aui:nav-item label="back" iconCssClass="icon-arrow-left" href="<%= redirect %>"/>
-					<aui:nav-item label="filters" iconCssClass="icon-chevron-down" href="javascript:openFiltersForm();" />
+					<aui:nav-item label="filters" cssClass="filters" iconCssClass="icon-chevron-down">
+						<div class="filters-form popover bottom hidden">
+							<div class="arrow"></div>
+							<div class="popover-content">
+								<aui:form>
+									<aui:fieldset>
+										<aui:select name="status" inlineField="true">
+											<aui:option label="all" value="" />
+										</aui:select>
+									</aui:fieldset>
+								</aui:form>
+							</div>
+						</div>
+					</aui:nav-item>
 					<aui:nav-item>
 						<aui:field-wrapper cssClass="nav-keyword-wrapper">
 							<aui:input name="keywords" label="" placeholder="keywords" />
@@ -28,24 +41,7 @@
 				</aui:nav>
 			</aui:nav-bar>
 			
-			<div id="filters-form" class="hidden">
-				<aui:form>
-					<aui:fieldset>
-						<aui:select name="location" inlineField="true">
-						</aui:select>
-						<aui:select name="category" inlineField="true">
-						</aui:select>
-						<aui:select name="type" inlineField="true">
-						</aui:select>
-						<aui:select name="status" inlineField="true">
-							<aui:option label="all" value="" />
-							<aui:option label="active" value="active" />
-							<aui:option label="inactive" value="inactive" />
-						</aui:select>
-						<aui:input name="only-bookmarked" type="checkbox" />
-					</aui:fieldset>
-				</aui:form>
-			</div>
+			
 			
 			<c:if test="<%= !applicantsList.isEmpty() %>">
 			<aui:row>
