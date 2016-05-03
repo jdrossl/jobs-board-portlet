@@ -57,7 +57,7 @@
         <column name="description" type="String"></column>
         <column name="salary" type="double"></column>
         <order by="desc">
-            <order-column name="createdDate" order-by="desc"></order-column>
+            <order-column name="createDate" order-by="desc"></order-column>
         </order>
         <finder name="CompanyGroup" return-type="Collection">
             <finder-column name="companyId"></finder-column>
