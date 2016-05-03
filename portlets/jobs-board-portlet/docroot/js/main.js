@@ -9,17 +9,17 @@ AUI.add('jobs-board-portlet', function (A) {
     
     bindEvents: function() {
       var self = this;
-      this.one('.filters a').on('click', function(e) {
+      this.one('.portlet-body').delegate('click', function(e) {
           e.preventDefault();
           self.one('.filters-form').toggleClass('hidden');
-      });
+      }, '.filters a');
+      
       A.one(document).on('click', function(e) {
         if (!e.target.ancestor('.filters')) {
           self.one('.filters-form').addClass('hidden');
         }
       });
-    },
-    
+    }
     
   }, {
     ATTRS: {
