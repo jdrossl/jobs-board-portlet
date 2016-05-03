@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="com.rivetlogic.jobsboard">
+	<author>joseross</author>
+	<namespace>rivetlogic_jobsboard</namespace>
+
+	<entity name="Subscription" local-service="true"
+		remote-service="false">
+
+		<!-- PK fields -->
+
+		<!-- Group instance -->
+        <column name="emailAddress" primary="true" type="String"></column>
+        <column name="fullName" type="String"></column>
+
+		<column name="groupId" type="long"></column>
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+        <finder name="CompanyGroup" return-type="Collection">
+            <finder-column name="companyId"></finder-column>
+            <finder-column name="groupId"></finder-column>
+        </finder>
+	</entity>
+	<entity name="Job" remote-service="false" local-service="true">
+
+		<!-- PK fields -->
+
+		<column name="jobId" type="long" primary="true"></column>
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long"></column>
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long"></column>
+		<column name="userId" type="long"></column>
+		<column name="userName" type="String"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+		<column name="name" type="String"></column>
+		<column name="active" type="boolean"></column>
+
+
+		<!-- PK fields -->
+
+		<!-- Group instance -->
+
+		<!-- Audit fields -->
+        <column name="category" type="long"></column>
+        <column name="location" type="long"></column>
+        <column name="type" type="String"></column>
+        <column name="description" type="String"></column>
+        <column name="salary" type="double"></column>
+        <order by="desc">
+            <order-column name="createdDate" order-by="desc"></order-column>
+        </order>
+        <finder name="CompanyGroup" return-type="Collection">
+            <finder-column name="companyId"></finder-column>
+            <finder-column name="groupId"></finder-column>
+        </finder>
+        <finder name="Filters" return-type="Collection">
+            <finder-column name="companyId"></finder-column>
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="name" comparator="LIKE" arrayable-operator="AND"></finder-column>
+            <finder-column name="active"></finder-column>
+            <finder-column name="category"></finder-column>
+            <finder-column name="location"></finder-column>
+            <finder-column name="type"></finder-column>
+            <finder-column name="description" comparator="LIKE" arrayable-operator="AND"></finder-column>
+        </finder>
+	</entity>
+	<entity name="Applicant" remote-service="false"
+		local-service="true">
+
+
+		<!-- PK fields -->
+
+		<column name="applicantId" type="long" primary="true"></column>
+        <column name="jobId" type="long"></column>
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long"></column>
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+        <column name="name" type="String"></column>
+        <column name="email" type="String"></column>
+        <column name="phone" type="String"></column>
+        <column name="cv" type="long"></column>
+        <column name="info" type="String"></column>
+        <finder name="CompanyGroupJob" return-type="Collection">
+            <finder-column name="companyId"></finder-column>
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="jobId"></finder-column>
+        </finder>
+	</entity>
+</service-builder>
