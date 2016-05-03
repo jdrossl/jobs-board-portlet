@@ -1,4 +1,4 @@
-.jobs-board-portlet {
+.aui .jobs-board-portlet {
 	
 	
 	.nav-keyword-wrapper {
@@ -20,8 +20,12 @@
 	}
 	
 	.sort-by-wrapper {
-		margin-bottom: 0 !important;
-		margin-top: 15px !important;
+		margin: 20px 0 0 0 !important;
+		label {
+			float: left;
+			line-height: 1;
+			margin: 7px;
+		}
 	}
 	
 	.sort-by-wrapper > .control-group {
@@ -30,12 +34,23 @@
 	
 	.filters-form {
 		display: block;
+		max-width: 500px;
 		top: 38px;
 		&.hidden {
 			display: none;
 		}
 	}
-	
+	.position-summary {
+		border-top: 1px solid #eeeeee;
+		padding: 10px 20px;
+		position: relative;
+	}
+	.position-name {
+		padding-right: 150px;
+		h3 {
+			margin-top: 0;
+		}
+	}
 	.position-info {
 		margin: 0;
 		&, li {
@@ -52,7 +67,24 @@
 			}
 		}
 	}
-	
+	.jobs-actions {
+		display: inline-block;
+		position: absolute;
+		right: 0;
+		top: 20px;
+		ul {
+			margin: 0;
+		}
+		&, li {
+			list-style: none;
+		}
+		li {
+			display: inline-block;
+			line-height: 1;
+			margin-right: 10px;
+			padding-right: 10px;
+		}
+	}
 	// EDIT
 	
 	.edit-form-categories {
