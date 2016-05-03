@@ -50,7 +50,7 @@
 			<c:if test="<%= !applicantsList.isEmpty() %>">
 			<aui:row>
 				<aui:col>
-					<h2><liferay-ui:message key="x-applicants-for-x" /></h2>
+					<h2><liferay-ui:message key="x-applicants-for-x" arguments="<%= new Object[]{ 5, \"Position Name\" } %>" /></h2>
 				</aui:col>
 			</aui:row>
 			</c:if>
@@ -66,7 +66,7 @@
 					<div class="applicant-summary">
 						<hr/>
 						<div class="applicant-name"><h4><a href="<%= viewURL %>">Applicant Name</a></h4></div>
-						<span class="applicant-status"><liferay-ui:message key="applicant-status-on-board" /></span>
+						<span class="applicant-status"><liferay-ui:message key="status-on-board" /></span>
 						<span class="applicant-submitted">Jul-12-2016, 3:30pm</span>
 						<span class="applicant-delete">
 							<liferay-ui:icon iconCssClass="icon-trash" />

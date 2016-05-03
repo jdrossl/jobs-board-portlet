@@ -55,7 +55,7 @@
 			<c:if test="<%= !jobsList.isEmpty() %>">
 			<aui:row>
 				<aui:col width="50">
-					<h2><liferay-ui:message key="x-total-jobs" /></h2>
+					<h2><liferay-ui:message key="x-total-jobs" arguments="5" /></h2>
 				</aui:col>
 				<aui:col width="50">
 					<aui:field-wrapper cssClass="sort-by-wrapper pull-right">
@@ -106,7 +106,7 @@
 		</aui:col>
 		<aui:col width="25">
 			<div class="well">
-				<p><liferay-ui:message key="subscribe-form-title" /></p>
+				<h4><liferay-ui:message key="subscribe-form-title" /></h4>
 				<aui:form>
 					<aui:fieldset>
 						<aui:field-wrapper cssClass="submit-form-group">

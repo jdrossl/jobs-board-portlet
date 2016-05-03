@@ -7,10 +7,10 @@
 		<aui:col width="75">
 			<h2>Position Name</h2>
 			<div>
-				<span>15-Jun-2016</span>
-				<span>Costa Rica, San Jose</span>
-				<span>Salary</span>
-				<span>Full Time</span>
+				<span><span class="icon icon-calendar"></span>&nbsp; 15-Jun-2016</span>&nbsp;
+				<span><span class="icon icon-globe"></span>&nbsp; Costa Rica, San Jose</span>&nbsp;
+				<span><span class="icon icon-money"></span>&nbsp; Salary</span>&nbsp;
+				<span><span class="icon icon-time"></span>&nbsp; Full Time</span>&nbsp;
 			</div>
 			<h3>Description</h3>
 			<div>
@@ -19,21 +19,35 @@
 		</aui:col>
 		<aui:col width="25">
 			<div class="share-box well">
-				<h3><liferay-ui:message key="share" /></h3>
+				<h3><liferay-ui:message key="share-title" /></h3>
+				<ul>
+					<li>
+						<span class="share-button">FB</span>
+					</li>
+					<li>
+						<span class="share-button">TW</span>
+					</li>
+					<li>
+						<span class="share-button">IN</span>
+					</li>
+					<li>
+						<span class="share-button">@</span>
+					</li>
+				</ul>
 			</div>
 			
 			<div class="apply-box well">
 				<h3><liferay-ui:message key="apply-title" /></h3>
 				<aui:form>
 					<aui:fieldset>
-						<aui:field-wrapper>
+						<aui:field-wrapper cssClass="apply-box-group">
 							<aui:input name="name" label="" placeholder="full-name"/>
 							<aui:input name="email" label="" placeholder="email-address"/>
 							<aui:input name="confirm-email" label="" placeholder="confirm-email-address"/>
 							<aui:input name="phone" label="" placeholder="phone-number"/>
 							<aui:input name="cv" label="" placeholder="cv" type="file"/>
 							<aui:input name="info" label="" placeholder="additional-information" type="textarea"/>
-							<aui:button value="apply" cssClass="btn-primary" />
+							<aui:button value="apply" cssClass="btn-primary apply-form-button" />
 						</aui:field-wrapper>
 					</aui:fieldset>
 				</aui:form>
