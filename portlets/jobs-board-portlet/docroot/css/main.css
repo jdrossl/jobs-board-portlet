@@ -1,3 +1,5 @@
+@import "mixins";
+
 .aui .jobs-board-portlet {
 	
 	
@@ -79,6 +81,10 @@
 			line-height: 1;
 			margin-right: 10px;
 			padding-right: 10px;
+		}
+		@include respond-to(phone) {
+			display: block;
+			position: static;
 		}
 	}
 	.applicant-name {
