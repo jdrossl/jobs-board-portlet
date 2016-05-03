@@ -18,7 +18,9 @@ AUI.add('jobs-board-portlet', function (A) {
           self.one('.filters-form').addClass('hidden');
         }
       });
-    }
+    },
+    
+    
   }, {
     ATTRS: {
       

@@ -28,17 +28,23 @@
 							<div class="popover-content">
 								<aui:form>
 									<aui:fieldset>
-										<aui:select name="location" inlineField="true">
-										</aui:select>
-										<aui:select name="category" inlineField="true">
-										</aui:select>
-										<aui:select name="type" inlineField="true">
-										</aui:select>
-										<aui:select name="status" inlineField="true">
-											<aui:option label="all" value="" />
-											<aui:option label="active" value="active" />
-											<aui:option label="inactive" value="inactive" />
-										</aui:select>
+										<div class="row-fluid">
+											<div class="span6">
+												<aui:select name="location" inlineField="true">
+												</aui:select>
+												<aui:select name="type" inlineField="true">
+												</aui:select>
+											</div>
+											<div class="span6">
+												<aui:select name="category" inlineField="true">
+												</aui:select>
+												<aui:select name="status" inlineField="true">
+													<aui:option label="all" value="" />
+													<aui:option label="active" value="active" />
+													<aui:option label="inactive" value="inactive" />
+												</aui:select>
+											</div>
+										</div>
 										<aui:input name="only-bookmarked" type="checkbox" />
 									</aui:fieldset>
 								</aui:form>
@@ -64,7 +70,7 @@
 				</aui:col>
 				<aui:col width="50">
 					<aui:field-wrapper cssClass="sort-by-wrapper pull-right">
-						<aui:select name="sort-by" inlineLabel="true">
+						<aui:select name="sort-by" >
 							<aui:option label="name" value="name" />
 						</aui:select>
 					</aui:field-wrapper>
@@ -90,8 +96,7 @@
 						<portlet:param name="redirect" value="<%= currentURL %>"/>
 						<portlet:param name="jobId" value="${ job.jobId }"/>
 					</portlet:renderURL>
-					<div class="position-summary">
-						<hr/>
+					<div class="list-item">
 						<div class="position-name"><h3><a href="<%= viewURL %>">${ job.name }</a></h3></div>
 						<ul class="position-info">
 							<li class="position-category">${ job.category }</li>
@@ -99,20 +104,24 @@
 							<li class="position-posted"><%= format.format(job.getCreateDate()) %></li>
 							<li class="position-type">${ job.type }</li>
 						</ul>
+						<div class="list-item-actions">
+							<ul>
+								<li class="position-applicants">
+									<liferay-ui:icon iconCssClass="icon-user" url="<%= applicantsURL %>" />
+								</li>
+								<li class="position-bookmark">
+									<liferay-ui:icon iconCssClass="icon-bookmark" />
+								</li>
+								<li class="position-edit">
+									<liferay-ui:icon iconCssClass="icon-edit" url="<%= editURL %>" />
+								</li>
+								<li class="position-delete">
+									<liferay-ui:icon iconCssClass="icon-trash" />
+								</li>
+							</ul>
+						</div>
 						
 						
-						<span class="position-applicants">
-							<liferay-ui:icon iconCssClass="icon-user" url="<%= applicantsURL %>" />
-						</span>
-						<span class="position-bookmark">
-							<liferay-ui:icon iconCssClass="icon-bookmark" />
-						</span>
-						<span class="position-edit">
-							<liferay-ui:icon iconCssClass="icon-edit" url="<%= editURL %>" />
-						</span>
-						<span class="position-delete">
-							<liferay-ui:icon iconCssClass="icon-trash" />
-						</span>
 					</div>
 				</liferay-ui:search-container-row>
 				<liferay-ui:search-iterator />
