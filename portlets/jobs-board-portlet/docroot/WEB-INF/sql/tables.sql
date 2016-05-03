@@ -25,7 +25,7 @@ create table rivetlogic_jobsboard_Job (
 	category LONG,
 	location LONG,
 	type_ VARCHAR(75) null,
-	description VARCHAR(75) null,
+	description TEXT null,
 	salary DOUBLE
 );
 

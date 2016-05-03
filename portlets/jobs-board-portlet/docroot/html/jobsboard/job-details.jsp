@@ -19,7 +19,7 @@
 				<c:if test="${ job.salary != 0 }">
 				<span><span class="icon icon-money"></span>&nbsp; ${ job.salary }</span>&nbsp;
 				</c:if>
-				<span><span class="icon icon-time"></span>&nbsp; ${ job.type }</span>&nbsp;
+				<span><span class="icon icon-time"></span>&nbsp; <liferay-ui:message key="${ job.type }"/></span>&nbsp;
 			</div>
 			<div>
 				${ job.description }

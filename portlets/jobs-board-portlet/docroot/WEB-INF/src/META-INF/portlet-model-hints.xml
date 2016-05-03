@@ -27,7 +27,9 @@
 		<field name="category" type="long" />
 		<field name="location" type="long" />
 		<field name="type" type="String" />
-		<field name="description" type="String" />
+		<field name="description" type="String">
+			<hint-collection name="CLOB" />
+		</field>
 		<field name="salary" type="double" />
 	</model>
 	<model name="com.rivetlogic.jobsboard.model.Subscription">

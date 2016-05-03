@@ -287,6 +287,11 @@ public class SubscriptionLocalServiceWrapper implements SubscriptionLocalService
 			arguments);
 	}
 
+	@Override
+	public void notifySubscribers(com.rivetlogic.jobsboard.model.Job job) {
+		_subscriptionLocalService.notifySubscribers(job);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

@@ -13,8 +13,8 @@
 </c:if>
 
 <portlet:actionURL name="addJob" var="addURL">
-	<c:if test="">
-	<portlet:param name="jobId" value="<%= job.getJobId() %>"/>
+	<c:if test="<%= job != null %>">
+	<portlet:param name="jobId" value="<%= Long.toString(job.getJobId()) %>"/>
 	</c:if>
 	<portlet:param name="redirect" value="<%= redirect %>"/>
 </portlet:actionURL>
@@ -31,7 +31,7 @@
 						<aui:input type="checkbox" name="is-active"/>
 					</aui:field-wrapper>
 					<aui:field-wrapper label="categories" cssClass="edit-form-categories">
-						<liferay-ui:asset-categories-selector />
+						<liferay-ui:asset-categories-selector hiddenInput="categories"  />
 					</aui:field-wrapper>
 					<aui:field-wrapper>
 						<aui:input name="location"/>
@@ -56,5 +56,5 @@
 </aui:container>
 
 <script type="text/javascript">
-	function <portlet:namespace />initEditor() { return '<%= (job != null)? job.getDescription() : StringPool.BLANK %>'; }
+	function <portlet:namespace />initEditor() { return '<%= (job != null)? UnicodeFormatter.toString(job.getDescription()) : StringPool.BLANK %>'; }
 </script>
