@@ -63,17 +63,22 @@
 						<portlet:param name="redirect" value="<%= currentURL %>"/>
 						<portlet:param name="applicantId" value="1"/>
 					</portlet:renderURL>
-					<div class="applicant-summary">
-						<hr/>
+					<div class="list-item">
 						<div class="applicant-name"><h4><a href="<%= viewURL %>">Applicant Name</a></h4></div>
 						<span class="applicant-status"><liferay-ui:message key="status-on-board" /></span>
-						<span class="applicant-submitted">Jul-12-2016, 3:30pm</span>
-						<span class="applicant-delete">
-							<liferay-ui:icon iconCssClass="icon-trash" />
-						</span>
-						<span class="applicant-edit">
-							<liferay-ui:icon iconCssClass="icon-edit" />
-						</span>
+						
+						<div class="list-item-actions">
+						  <ul>
+								<li><span class="applicant-submitted">Submitted: Jul-12-2016, 3:30pm</span></li>
+								<li class="applicant-delete">
+									<liferay-ui:icon iconCssClass="icon-trash" />
+								</li>
+								<li class="applicant-edit">
+									<liferay-ui:icon iconCssClass="icon-edit" />
+								</li>
+						  </ul>
+						</div>
+					
 					</div>
 				</liferay-ui:search-container-row>
 				<liferay-ui:search-iterator />

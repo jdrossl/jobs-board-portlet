@@ -2,34 +2,30 @@
 	
 	
 	.nav-keyword-wrapper {
-		margin-bottom: 0 !important;
+		margin-bottom: 0;
 		margin-top: 8px;
 		padding: 0 15px 0 15px;
 	}
 	
 	.subscribe-form-control {
-		width: 95% !important;
+		width: 95%;
 	}
 	
 	.subscribe-form-button {
 		width: 100% !important;
 	}
 	
-	.submit-form-group{
-		margin-bottom: 10px !important;
+	.submit-form-group {
+		margin-bottom: 10px;
 	}
 	
 	.sort-by-wrapper {
-		margin: 20px 0 0 0 !important;
+		margin: 20px 0 0 0;
 		label {
 			float: left;
 			line-height: 1;
 			margin: 7px;
 		}
-	}
-	
-	.sort-by-wrapper > .control-group {
-		margin-bottom: 0 !important;
 	}
 	
 	.filters-form {
@@ -40,7 +36,7 @@
 			display: none;
 		}
 	}
-	.position-summary {
+	.list-item {
 		border-top: 1px solid #eeeeee;
 		padding: 10px 20px;
 		position: relative;
@@ -67,7 +63,7 @@
 			}
 		}
 	}
-	.jobs-actions {
+	.list-item-actions {
 		display: inline-block;
 		position: absolute;
 		right: 0;
@@ -85,6 +81,17 @@
 			padding-right: 10px;
 		}
 	}
+	.applicant-name {
+		&, * {
+			display: inline-block;
+		}
+	}
+	.applicant-status {
+		color: #999;
+		font-size: 12px;
+		margin-left: 10px;
+	}
+	
 	// EDIT
 	
 	.edit-form-categories {

@@ -95,7 +95,7 @@
 						<portlet:param name="redirect" value="<%= currentURL %>"/>
 						<portlet:param name="jobId" value="${ job.jobId }"/>
 					</portlet:renderURL>
-					<div class="position-summary">
+					<div class="list-item">
 						<div class="position-name"><h3><a href="<%= viewURL %>">${ job.name }</a></h3></div>
 						<ul class="position-info">
 							<li class="position-category">${ job.category }</li>
@@ -103,7 +103,7 @@
 							<li class="position-posted">${ job.createDate }</li>
 							<li class="position-type">${ job.type }</li>
 						</ul>
-						<div class="jobs-actions">
+						<div class="list-item-actions">
 							<ul>
 								<li class="position-applicants">
 									<liferay-ui:icon iconCssClass="icon-user" url="<%= applicantsURL %>" />
