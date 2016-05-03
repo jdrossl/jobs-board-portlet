@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.rivetlogic.jobsboard.service.ApplicantLocalService" class="com.rivetlogic.jobsboard.service.impl.ApplicantLocalServiceImpl" />
+	<bean id="com.rivetlogic.jobsboard.service.persistence.ApplicantPersistence" class="com.rivetlogic.jobsboard.service.persistence.ApplicantPersistenceImpl" parent="basePersistence" />
+	<bean id="com.rivetlogic.jobsboard.service.JobLocalService" class="com.rivetlogic.jobsboard.service.impl.JobLocalServiceImpl" />
+	<bean id="com.rivetlogic.jobsboard.service.persistence.JobPersistence" class="com.rivetlogic.jobsboard.service.persistence.JobPersistenceImpl" parent="basePersistence" />
+	<bean id="com.rivetlogic.jobsboard.service.SubscriptionLocalService" class="com.rivetlogic.jobsboard.service.impl.SubscriptionLocalServiceImpl" />
+	<bean id="com.rivetlogic.jobsboard.service.persistence.SubscriptionPersistence" class="com.rivetlogic.jobsboard.service.persistence.SubscriptionPersistenceImpl" parent="basePersistence" />
+</beans>

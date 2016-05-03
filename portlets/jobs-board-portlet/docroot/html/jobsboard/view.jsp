@@ -1,15 +1,14 @@
 <%@ include file="/html/init.jsp" %>
 
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
-
 <%
-	List jobsList = new ArrayList();
-	jobsList.add(1);
-	jobsList.add(1);
-	jobsList.add(1);
-	jobsList.add(1);
-	jobsList.add(1);
+	int totalJobs = 0;
+	List<Job> jobsList = null;
+	try {
+		jobsList = JobLocalServiceUtil.findByCompanyGroup(themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId());
+		totalJobs = JobLocalServiceUtil.countByCompanyGroup(themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId());
+	} catch(Exception e) {
+	    jobsList = new ArrayList<Job>();
+	}
 %>
 
 <portlet:renderURL var="addURL">
@@ -55,7 +54,7 @@
 			<c:if test="<%= !jobsList.isEmpty() %>">
 			<aui:row>
 				<aui:col width="50">
-					<h2><liferay-ui:message key="x-total-jobs" arguments="5" /></h2>
+					<h2><liferay-ui:message key="x-total-jobs" arguments="<%= totalJobs %>" /></h2>
 				</aui:col>
 				<aui:col width="50">
 					<aui:field-wrapper cssClass="sort-by-wrapper pull-right">
@@ -68,25 +67,30 @@
 			</c:if>
 			
 			<liferay-ui:search-container delta="3" emptyResultsMessage="no-jobs-found">
-				<liferay-ui:search-container-results results="<%= jobsList %>" total="5" />
-				<liferay-ui:search-container-row className="Integer">
+				<liferay-ui:search-container-results results="<%= jobsList %>" total="<%= totalJobs %>" />
+				<liferay-ui:search-container-row className="com.rivetlogic.jobsboard.model.Job" modelVar="job">
 					<portlet:renderURL var="viewURL">
 						<portlet:param name="mvcPath" value="/html/jobsboard/job-details.jsp"/>
 						<portlet:param name="redirect" value="<%= currentURL %>"/>
-						<portlet:param name="jobId" value="1"/>
+						<portlet:param name="jobId" value="${ job.jobId }"/>
+					</portlet:renderURL>
+					<portlet:renderURL var="editURL">
+						<portlet:param name="mvcPath" value="/html/jobsboard/edit-job.jsp"/>
+						<portlet:param name="redirect" value="<%= currentURL %>"/>
+						<portlet:param name="jobId" value="${ job.jobId }"/>
 					</portlet:renderURL>
 					<portlet:renderURL var="applicantsURL">
 						<portlet:param name="mvcPath" value="/html/jobsboard/list-applicants.jsp"/>
 						<portlet:param name="redirect" value="<%= currentURL %>"/>
-						<portlet:param name="jobId" value="1"/>
+						<portlet:param name="jobId" value="${ job.jobId }"/>
 					</portlet:renderURL>
 					<div class="position-summary">
 						<hr/>
-						<div class="position-name"><h4><a href="<%= viewURL %>">Position Name</a></h4></div>
-						<span class="position-category">Software Engineering</span>|
-						<span class="position-location">Costa Rica, San Jose</span>|
-						<span class="position-posted">15 Jul, 2016</span>|
-						<span class="position-type">Full Time</span>
+						<div class="position-name"><h4><a href="<%= viewURL %>">${ job.name }</a></h4></div>
+						<span class="position-category">${ job.category }</span>|
+						<span class="position-location">${ job.location }</span>|
+						<span class="position-posted">${ job.createDate }</span>|
+						<span class="position-type">${ job.type }</span>
 						<span class="position-applicants">
 							<liferay-ui:icon iconCssClass="icon-user" url="<%= applicantsURL %>" />
 						</span>
@@ -94,7 +98,7 @@
 							<liferay-ui:icon iconCssClass="icon-bookmark" />
 						</span>
 						<span class="position-edit">
-							<liferay-ui:icon iconCssClass="icon-edit" />
+							<liferay-ui:icon iconCssClass="icon-edit" url="<%= editURL %>" />
 						</span>
 						<span class="position-delete">
 							<liferay-ui:icon iconCssClass="icon-trash" />

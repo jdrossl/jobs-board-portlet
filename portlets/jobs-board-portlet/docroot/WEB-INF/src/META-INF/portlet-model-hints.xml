@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.rivetlogic.jobsboard.model.Applicant">
+		<field name="applicantId" type="long" />
+		<field name="jobId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String" />
+		<field name="email" type="String" />
+		<field name="phone" type="String" />
+		<field name="cv" type="long" />
+		<field name="info" type="String" />
+	</model>
+	<model name="com.rivetlogic.jobsboard.model.Job">
+		<field name="jobId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String" />
+		<field name="active" type="boolean" />
+		<field name="category" type="long" />
+		<field name="location" type="long" />
+		<field name="type" type="String" />
+		<field name="description" type="String" />
+		<field name="salary" type="double" />
+	</model>
+	<model name="com.rivetlogic.jobsboard.model.Subscription">
+		<field name="emailAddress" type="String" />
+		<field name="fullName" type="String" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
+</model-hints>
