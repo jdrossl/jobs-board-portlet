@@ -91,11 +91,15 @@
 					</portlet:renderURL>
 					<div class="position-summary">
 						<hr/>
-						<div class="position-name"><h4><a href="<%= viewURL %>">${ job.name }</a></h4></div>
-						<span class="position-category">${ job.category }</span>|
-						<span class="position-location">${ job.location }</span>|
-						<span class="position-posted">${ job.createDate }</span>|
-						<span class="position-type">${ job.type }</span>
+						<div class="position-name"><h3><a href="<%= viewURL %>">${ job.name }</a></h3></div>
+						<ul class="position-info">
+							<li class="position-category">${ job.category }</li>
+							<li class="position-location">${ job.location }</li>
+							<li class="position-posted">${ job.createDate }</li>
+							<li class="position-type">${ job.type }</li>
+						</ul>
+						
+						
 						<span class="position-applicants">
 							<liferay-ui:icon iconCssClass="icon-user" url="<%= applicantsURL %>" />
 						</span>
