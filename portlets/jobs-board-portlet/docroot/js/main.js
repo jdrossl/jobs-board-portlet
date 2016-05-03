@@ -15,7 +15,7 @@ AUI.add('jobs-board-portlet', function (A) {
       }, '.filters a');
       
       A.one(document).on('click', function(e) {
-        if (!e.target.ancestor('.filters')) {
+        if (!e.target.ancestor('.filters') && self.one('.filters-form')) {
           self.one('.filters-form').addClass('hidden');
         }
       });

@@ -28,18 +28,18 @@
 		<aui:col width="25">
 			<div class="share-box well">
 				<h3><liferay-ui:message key="share-title" /></h3>
-				<ul>
+				<ul class="social-buttons ">
 					<li>
-						<span class="share-button">FB</span>
+						<a href="#"><img src='<%= renderRequest.getContextPath() + "/images/facebook.svg" %>' /></a>
 					</li>
 					<li>
-						<span class="share-button">TW</span>
+						<a href="#"><img src='<%= renderRequest.getContextPath() + "/images/twitter.svg" %>' /></a>
 					</li>
 					<li>
-						<span class="share-button">IN</span>
+						<a href="#"><img src='<%= renderRequest.getContextPath() + "/images/linkedin.svg" %>' /></a>
 					</li>
 					<li>
-						<span class="share-button">@</span>
+						<a href="#"><span class="mail icon-envelope"></span></a>
 					</li>
 				</ul>
 			</div>
