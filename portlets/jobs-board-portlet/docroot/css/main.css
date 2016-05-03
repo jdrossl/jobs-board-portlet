@@ -1,36 +1,45 @@
-.nav-keyword-wrapper {
-	margin-bottom: 0 !important;
-	margin-top: 8px;
-	padding: 0 15px 0 15px;
-}
-
-.subscribe-form-control {
-	width: 95% !important;
-}
-
-.subscribe-form-button {
-	width: 100% !important;
-}
-
-.submit-form-group{
-	margin-bottom: 10px !important;
-}
-
-.sort-by-wrapper {
-    margin-bottom: 0 !important;
-    margin-top: 15px !important;
-}
-
-.sort-by-wrapper > .control-group {
-	margin-bottom: 0 !important;
-}
-
-#filters-form {
-	width: 65%;
-}
-
-// EDIT
-
-.edit-form-categories {
-	margin-bottom: 80px !important;
+.jobs-board-portlet {
+	
+	
+	.nav-keyword-wrapper {
+		margin-bottom: 0 !important;
+		margin-top: 8px;
+		padding: 0 15px 0 15px;
+	}
+	
+	.subscribe-form-control {
+		width: 95% !important;
+	}
+	
+	.subscribe-form-button {
+		width: 100% !important;
+	}
+	
+	.submit-form-group{
+		margin-bottom: 10px !important;
+	}
+	
+	.sort-by-wrapper {
+		margin-bottom: 0 !important;
+		margin-top: 15px !important;
+	}
+	
+	.sort-by-wrapper > .control-group {
+		margin-bottom: 0 !important;
+	}
+	
+	.filters-form {
+		display: block;
+		top: 38px;
+		&.hidden {
+			display: none;
+		}
+	}
+	
+	// EDIT
+	
+	.edit-form-categories {
+		margin-bottom: 80px !important;
+	}
+	
 }

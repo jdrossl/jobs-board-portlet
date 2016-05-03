@@ -14,3 +14,10 @@
 	String currentURL = PortalUtil.getCurrentURL(request);
 	String redirect = ParamUtil.getString(request, "redirect", currentURL);
 %>
+
+<aui:script use="jobs-board-portlet">
+	var jobs = new A.JobsBoard({
+    namespace: '<portlet:namespace />',
+    portletResourceUrl: '<portlet:resourceURL />'
+  });
+</aui:script>
