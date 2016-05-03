@@ -46,16 +46,21 @@
 			
 			<div class="apply-box well">
 				<h3><liferay-ui:message key="apply-title" /></h3>
-				<aui:form>
+				<portlet:actionURL name="applyToJob" var="applyURL">
+					<portlet:param name="jobId" value="${ job.jobId }"/>
+				</portlet:actionURL>
+				<aui:form action="<%= applyURL %>" enctype="multipart/form-data" method="POST">
 					<aui:fieldset>
 						<aui:field-wrapper cssClass="apply-box-group">
-							<aui:input name="name" label="" placeholder="full-name"/>
-							<aui:input name="email" label="" placeholder="email-address"/>
-							<aui:input name="confirm-email" label="" placeholder="confirm-email-address"/>
-							<aui:input name="phone" label="" placeholder="phone-number"/>
-							<aui:input name="cv" label="" placeholder="cv" type="file"/>
-							<aui:input name="info" label="" placeholder="additional-information" type="textarea"/>
-							<aui:button value="apply" cssClass="btn-primary apply-form-button" />
+							<aui:input name="name" label="" placeholder="full-name" required="true"/>
+							<aui:input name="email" label="" placeholder="email-address" required="true"/>
+							<aui:input name="confirm-email" label="" placeholder="confirm-email-address" required="true"/>
+							<aui:input name="phone" label="" placeholder="phone-number" required="true"/>
+							<aui:input name="cv" label="" placeholder="cv" type="file" required="true"/>
+							<aui:input name="info" label="" placeholder="additional-information" type="textarea" required="true"/>
+							<aui:button-row>
+								<aui:button value="apply" cssClass="btn-primary apply-form-button" />
+							</aui:button-row>
 						</aui:field-wrapper>
 					</aui:fieldset>
 				</aui:form>

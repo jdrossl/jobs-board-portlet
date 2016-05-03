@@ -54,6 +54,8 @@ public class JobsBoardPortlet extends MVCPortlet {
                 job.setCompanyId(themeDisplay.getCompanyId());
                 job.setGroupId(themeDisplay.getScopeGroupId());
                 job.setCreateDate(now);
+                job.setUserId(themeDisplay.getUserId());
+                job.setUserName(themeDisplay.getUser().getFullName());
             } else {
                 job = JobLocalServiceUtil.fetchJob(jobId);
             }
@@ -90,4 +92,14 @@ public class JobsBoardPortlet extends MVCPortlet {
         sendRedirect(req, res);
     }
 
+    public void applyToJob(ActionRequest req, ActionResponse res) throws IOException {
+        long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID);
+        try {
+            //TODO: Get values from request and add applicant.
+        } catch(Exception e) {
+            LOG.error("Error adding applicant to job:", e);
+        }
+        sendRedirect(req, res);
+    }
+    
 }

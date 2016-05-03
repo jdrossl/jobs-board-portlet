@@ -106,7 +106,7 @@
 							<li class="position-category">${ job.category }</li>
 							<li class="position-location">${ job.location }</li>
 							<li class="position-posted"><%= format.format(job.getCreateDate()) %></li>
-							<li class="position-type">${ job.type }</li>
+							<li class="position-type"><liferay-ui:message key="${ job.type }"/></li>
 						</ul>
 						<div class="list-item-actions">
 							<ul>
