@@ -56,7 +56,13 @@
 							<aui:input name="email" label="" placeholder="email-address" required="true"/>
 							<aui:input name="confirm-email" label="" placeholder="confirm-email-address" required="true"/>
 							<aui:input name="phone" label="" placeholder="phone-number" required="true"/>
-							<aui:input name="cv" label="" placeholder="cv" type="file" required="true"/>
+							<div class="file-field">
+								<aui:input name="cv" label="" placeholder="cv" type="file" required="true"/>
+								<div class="input-append">
+								  <input class="span10" id="appendedInputButtons" type="text">
+								  <button class="btn" type="button">CV</button>
+								</div>
+							</div>
 							<aui:input name="info" label="" placeholder="additional-information" type="textarea" required="true"/>
 							<aui:button-row>
 								<aui:button value="apply" cssClass="btn-primary apply-form-button" />

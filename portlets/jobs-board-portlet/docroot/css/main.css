@@ -128,7 +128,16 @@
 			}
 		}
 	}
-	
+	.file-field {
+		position: relative;
+		input[type="file"] {
+			position: absolute;
+	    opacity: 0;
+	    height: 50px;
+	    width: 100%;
+	    z-index: 1;
+		}
+	}
 	// EDIT
 	
 	.edit-form-categories {
