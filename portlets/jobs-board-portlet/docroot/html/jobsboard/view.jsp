@@ -81,6 +81,11 @@
 			<liferay-ui:search-container delta="3" emptyResultsMessage="no-jobs-found">
 				<liferay-ui:search-container-results results="<%= jobsList %>" total="<%= totalJobs %>" />
 				<liferay-ui:search-container-row className="com.rivetlogic.jobsboard.model.Job" modelVar="job">
+					<%
+						String category = AssetCategoryLocalServiceUtil.fetchCategory(job.getCategory()).getName();
+						String location = AssetCategoryLocalServiceUtil.fetchCategory(job.getLocation()).getName();
+						String type = AssetCategoryLocalServiceUtil.fetchCategory(job.getType()).getName();
+					%>
 					<portlet:renderURL var="viewURL">
 						<portlet:param name="mvcPath" value="/html/jobsboard/job-details.jsp"/>
 						<portlet:param name="redirect" value="<%= currentURL %>"/>
@@ -103,10 +108,10 @@
 					<div class="list-item">
 						<div class="position-name"><h3><a href="<%= viewURL %>">${ job.name }</a></h3></div>
 						<ul class="position-info">
-							<li class="position-category">${ job.category }</li>
-							<li class="position-location">${ job.location }</li>
+							<li class="position-category"><%= category %></li>
+							<li class="position-location"><%= location %></li>
 							<li class="position-posted"><%= format.format(job.getCreateDate()) %></li>
-							<li class="position-type"><liferay-ui:message key="${ job.type }"/></li>
+							<li class="position-type"><%= type %></li>
 						</ul>
 						<div class="list-item-actions">
 							<ul>

@@ -31,6 +31,8 @@
 						<aui:input name="active" label="is-active" />
 					</aui:field-wrapper>
 					<aui:field-wrapper cssClass="edit-form-categories">
+						<%-- TODO: Make each vocabulary required --%>
+						<%-- TODO: Fix style for buttons --%>
 						<liferay-ui:asset-categories-selector hiddenInput="categories" curCategoryIds="<%= currentCategories %>"
 							className="<%= Job.class.getName() %>" />
 					</aui:field-wrapper>

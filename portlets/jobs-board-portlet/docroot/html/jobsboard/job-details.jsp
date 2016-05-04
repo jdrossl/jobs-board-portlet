@@ -5,6 +5,9 @@
 	Job job = JobLocalServiceUtil.fetchJob(jobId);
 	pageContext.setAttribute("job", job);
 	SimpleDateFormat format = new SimpleDateFormat("d MMMM, yyyy");
+	String category = AssetCategoryLocalServiceUtil.fetchCategory(job.getCategory()).getName();
+	String location = AssetCategoryLocalServiceUtil.fetchCategory(job.getLocation()).getName();
+	String type = AssetCategoryLocalServiceUtil.fetchCategory(job.getType()).getName();
 %>
 
 <liferay-ui:header showBackURL="true" backURL="<%= redirect %>"  title="job-details" />
@@ -16,11 +19,11 @@
 				<h2 class="job-details-title">${ job.name }</h2>
 				<div class="job-details-meta">
 					<span><span class="icon icon-calendar"></span>&nbsp; <%= format.format(job.getCreateDate()) %></span>&nbsp;
-					<span><span class="icon icon-globe"></span>&nbsp; ${ job.location }</span>&nbsp;
+					<span><span class="icon icon-globe"></span>&nbsp; <%= location %></span>&nbsp;
 					<c:if test="${ job.salary != 0 }">
 					<span><span class="icon icon-money"></span>&nbsp; ${ job.salary }</span>&nbsp;
 					</c:if>
-					<span><span class="icon icon-time"></span>&nbsp; <liferay-ui:message key="${ job.type }"/></span>&nbsp;
+					<span><span class="icon icon-time"></span>&nbsp; <%= type %></span>&nbsp;
 				</div>
 				<div class="job-details-summary">
 					${ job.description }
@@ -51,14 +54,22 @@
 				<h3><liferay-ui:message key="apply-title" /></h3>
 				<portlet:actionURL name="applyToJob" var="applyURL">
 					<portlet:param name="jobId" value="${ job.jobId }"/>
+					<portlet:param name="redirect" value="<%= currentURL %>"/>
 				</portlet:actionURL>
 				<aui:form action="<%= applyURL %>" enctype="multipart/form-data" method="POST">
 					<aui:fieldset>
 						<aui:field-wrapper cssClass="apply-box-group">
 							<aui:input name="name" label="" placeholder="full-name" required="true"/>
-							<aui:input name="email" label="" placeholder="email-address" required="true"/>
-							<aui:input name="confirm-email" label="" placeholder="confirm-email-address" required="true"/>
-							<aui:input name="phone" label="" placeholder="phone-number" required="true"/>
+							<aui:input name="email" label="" placeholder="email-address" required="true">
+								<aui:validator name="email" />
+							</aui:input>
+							<aui:input name="confirm-email" label="" placeholder="confirm-email-address" required="true">
+								<aui:validator name="email" />
+								<aui:validator name="equalTo"><portlet:namespace/>email</aui:validator>
+							</aui:input>
+							<aui:input name="phone" label="" placeholder="phone-number" required="true">
+								<aui:validator name="digits" />
+							</aui:input>
 							<div class="file-field">
 								<aui:input name="cv" label="" placeholder="cv" type="file" required="true"/>
 								<div class="input-append">
@@ -66,9 +77,9 @@
 								  <button class="btn" type="button">CV</button>
 								</div>
 							</div>
-							<aui:input name="info" label="" placeholder="additional-information" type="textarea" required="true"/>
+							<aui:input name="info" label="" placeholder="additional-information" type="textarea"/>
 							<aui:button-row>
-								<aui:button value="apply" cssClass="btn-primary apply-form-button" />
+								<aui:button value="apply" cssClass="btn-primary apply-form-button" type="submit" />
 							</aui:button-row>
 						</aui:field-wrapper>
 					</aui:fieldset>

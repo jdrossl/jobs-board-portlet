@@ -275,6 +275,11 @@ public class ApplicantLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static com.rivetlogic.jobsboard.model.Applicant createApplicant()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().createApplicant();
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

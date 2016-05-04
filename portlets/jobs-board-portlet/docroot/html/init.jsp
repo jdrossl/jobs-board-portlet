@@ -10,6 +10,9 @@
 <%@ page import="com.liferay.portal.kernel.util.HttpUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.UnicodeFormatter" %>
 
+<%@ page import="com.liferay.portlet.asset.model.AssetCategory" %>
+<%@ page import="com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil" %>
+
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.text.SimpleDateFormat" %>

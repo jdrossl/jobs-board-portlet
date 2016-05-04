@@ -286,6 +286,12 @@ public class ApplicantLocalServiceWrapper implements ApplicantLocalService,
 			arguments);
 	}
 
+	@Override
+	public com.rivetlogic.jobsboard.model.Applicant createApplicant()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _applicantLocalService.createApplicant();
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

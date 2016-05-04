@@ -4,14 +4,13 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.model.AssetVocabulary;
-import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
-import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.rivetlogic.jobsboard.model.Applicant;
 import com.rivetlogic.jobsboard.model.Job;
 import com.rivetlogic.jobsboard.model.Subscription;
+import com.rivetlogic.jobsboard.service.ApplicantLocalServiceUtil;
 import com.rivetlogic.jobsboard.service.JobLocalServiceUtil;
 import com.rivetlogic.jobsboard.service.SubscriptionLocalServiceUtil;
 import com.rivetlogic.jobsboard.util.WebKeys;
@@ -80,6 +79,7 @@ public class JobsBoardPortlet extends MVCPortlet {
             List<AssetVocabulary> vocabularies = AssetVocabularyLocalServiceUtil
                     .getGroupVocabularies(themeDisplay.getScopeGroupId(), false);
             
+            // TODO: Make categories configurable by ID instead of name.
             for(AssetVocabulary v : vocabularies) {
                 long categoryId = ParamUtil.getLong(req, "categories_" + Long.toString(v.getVocabularyId()));
                 switch(v.getName()) {
@@ -103,7 +103,7 @@ public class JobsBoardPortlet extends MVCPortlet {
             job.setCategory(category);
             job.setLocation(location);
             
-            JobLocalServiceUtil.updateJob(job);
+            job.persist();
             SubscriptionLocalServiceUtil.notifySubscribers(job);
         } catch (Exception e) {
             LOG.error("Error adding new job:", e);
@@ -122,9 +122,31 @@ public class JobsBoardPortlet extends MVCPortlet {
     }
 
     public void applyToJob(ActionRequest req, ActionResponse res) throws IOException {
+        ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
         long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID);
         try {
             //TODO: Get values from request and add applicant.
+            Applicant applicant = ApplicantLocalServiceUtil.createApplicant();
+            
+            Date now = new Date();
+            
+            String name = ParamUtil.getString(req, WebKeys.PARAM_NAME);
+            String email = ParamUtil.getString(req, WebKeys.PARAM_EMAIL);
+            String phone = ParamUtil.getString(req, WebKeys.PARAM_PHONE);
+            String info = ParamUtil.getString(req, WebKeys.PARAM_INFO);
+            
+            applicant.setCreateDate(now);
+            applicant.setModifiedDate(now);
+            applicant.setCompanyId(themeDisplay.getCompanyId());
+            applicant.setGroupId(themeDisplay.getScopeGroupId());
+            
+            applicant.setJobId(jobId);
+            applicant.setName(name);
+            applicant.setEmail(email);
+            applicant.setPhone(phone);
+            applicant.setInfo(info);
+            
+            applicant.persist();
         } catch(Exception e) {
             LOG.error("Error adding applicant to job:", e);
         }

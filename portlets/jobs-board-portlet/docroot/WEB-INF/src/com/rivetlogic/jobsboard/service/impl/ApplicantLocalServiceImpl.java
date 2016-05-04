@@ -14,6 +14,8 @@
 
 package com.rivetlogic.jobsboard.service.impl;
 
+import com.liferay.portal.kernel.exception.SystemException;
+import com.rivetlogic.jobsboard.model.Applicant;
 import com.rivetlogic.jobsboard.service.base.ApplicantLocalServiceBaseImpl;
 
 /**
@@ -36,4 +38,10 @@ public class ApplicantLocalServiceImpl extends ApplicantLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.rivetlogic.jobsboard.service.ApplicantLocalServiceUtil} to access the applicant local service.
 	 */
+    
+    public Applicant createApplicant() throws SystemException {
+        long applicantId = counterLocalService.increment(Applicant.class.getName());
+        return super.createApplicant(applicantId);
+    }
+    
 }
