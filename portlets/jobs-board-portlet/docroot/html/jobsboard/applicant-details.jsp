@@ -3,6 +3,10 @@
 <%
 	long applicantId = ParamUtil.getLong(request, WebKeys.PARAM_APPLICANT_ID);
 	Applicant applicant = ApplicantLocalServiceUtil.fetchApplicant(applicantId);
+	DLFileEntry file = DLFileEntryServiceUtil.getFileEntry(applicant.getCv());
+	String url = themeDisplay.getPortalURL()  + "/c/document_library/get_file";
+	url = HttpUtil.addParameter(url, "uuid", file.getUuid());
+	url = HttpUtil.addParameter(url, "groupId", themeDisplay.getScopeGroupId());
 	pageContext.setAttribute("applicant", applicant);
 %>
 
@@ -51,7 +55,7 @@
 						<liferay-ui:message key="cv-file" />
 					</div>
 					<div class="blurb-title">
-						<aui:button value="download" />
+						<aui:button value="download" href="<%= url %>" />
 					</div>
 				</div>
 
