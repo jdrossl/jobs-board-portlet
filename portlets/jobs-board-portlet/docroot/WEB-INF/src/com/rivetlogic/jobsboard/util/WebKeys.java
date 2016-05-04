@@ -14,6 +14,10 @@ public interface WebKeys extends com.liferay.portal.kernel.util.WebKeys {
     String PARAM_PHONE = "phone";
     String PARAM_INFO = "info";
     
+    String PARAM_APPLICANT_ID = "applicantId";
+    String PARAM_STATUS = "status";
+    String PARAM_NOTES = "notes";
+    
     String PARAM_JOB_ID = "jobId";
     
 }

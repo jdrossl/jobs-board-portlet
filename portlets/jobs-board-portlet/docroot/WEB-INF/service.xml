@@ -97,6 +97,8 @@
         <column name="phone" type="String"></column>
         <column name="cv" type="long"></column>
         <column name="info" type="String"></column>
+        <column name="status" type="String"></column>
+        <column name="notes" type="String"></column>
         <finder name="CompanyGroupJob" return-type="Collection">
             <finder-column name="companyId"></finder-column>
             <finder-column name="groupId"></finder-column>

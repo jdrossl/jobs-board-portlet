@@ -930,6 +930,8 @@ public class ApplicantPersistenceImpl extends BasePersistenceImpl<Applicant>
 		applicantImpl.setPhone(applicant.getPhone());
 		applicantImpl.setCv(applicant.getCv());
 		applicantImpl.setInfo(applicant.getInfo());
+		applicantImpl.setStatus(applicant.getStatus());
+		applicantImpl.setNotes(applicant.getNotes());
 
 		return applicantImpl;
 	}

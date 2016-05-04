@@ -24,6 +24,8 @@
 			<basic name="phone" />
 			<basic name="cv" />
 			<basic name="info" />
+			<basic name="status" />
+			<basic name="notes" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />

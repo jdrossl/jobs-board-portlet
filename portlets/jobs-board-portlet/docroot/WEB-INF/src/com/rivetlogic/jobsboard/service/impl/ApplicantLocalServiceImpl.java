@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.rivetlogic.jobsboard.model.Applicant;
 import com.rivetlogic.jobsboard.service.base.ApplicantLocalServiceBaseImpl;
 
+import java.util.List;
+
 /**
  * The implementation of the applicant local service.
  *
@@ -42,6 +44,14 @@ public class ApplicantLocalServiceImpl extends ApplicantLocalServiceBaseImpl {
     public Applicant createApplicant() throws SystemException {
         long applicantId = counterLocalService.increment(Applicant.class.getName());
         return super.createApplicant(applicantId);
+    }
+    
+    public int countByCompanyGroupJob(long companyId, long groupId, long jobId) throws SystemException {
+        return applicantPersistence.countByCompanyGroupJob(companyId, groupId, jobId);
+    }
+    
+    public List<Applicant> findByCompanyGroupJob(long companyId, long groupId, long jobId) throws SystemException {
+        return applicantPersistence.findByCompanyGroupJob(companyId, groupId, jobId);
     }
     
 }

@@ -2,8 +2,10 @@ package com.rivetlogic.jobsboard.portlet;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.model.AssetVocabulary;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -115,6 +117,7 @@ public class JobsBoardPortlet extends MVCPortlet {
         long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID);
         try {
             JobLocalServiceUtil.deleteJob(jobId);
+            // TODO: Delete all job applicants?
         } catch(Exception e) {
             LOG.error("Error deleting job:", e);
         }
@@ -124,16 +127,17 @@ public class JobsBoardPortlet extends MVCPortlet {
     public void applyToJob(ActionRequest req, ActionResponse res) throws IOException {
         ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
         long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID);
+        UploadPortletRequest upload = PortalUtil.getUploadPortletRequest(req);
         try {
             //TODO: Get values from request and add applicant.
             Applicant applicant = ApplicantLocalServiceUtil.createApplicant();
             
             Date now = new Date();
             
-            String name = ParamUtil.getString(req, WebKeys.PARAM_NAME);
-            String email = ParamUtil.getString(req, WebKeys.PARAM_EMAIL);
-            String phone = ParamUtil.getString(req, WebKeys.PARAM_PHONE);
-            String info = ParamUtil.getString(req, WebKeys.PARAM_INFO);
+            String name = ParamUtil.getString(upload, WebKeys.PARAM_NAME);
+            String email = ParamUtil.getString(upload, WebKeys.PARAM_EMAIL);
+            String phone = ParamUtil.getString(upload, WebKeys.PARAM_PHONE);
+            String info = ParamUtil.getString(upload, WebKeys.PARAM_INFO);
             
             applicant.setCreateDate(now);
             applicant.setModifiedDate(now);
@@ -149,6 +153,35 @@ public class JobsBoardPortlet extends MVCPortlet {
             applicant.persist();
         } catch(Exception e) {
             LOG.error("Error adding applicant to job:", e);
+        }
+        sendRedirect(req, res);
+    }
+    
+    public void deleteApplicant(ActionRequest req, ActionResponse res) throws IOException {
+        long applicantId = ParamUtil.getLong(req, WebKeys.PARAM_APPLICANT_ID);
+        try {
+            ApplicantLocalServiceUtil.deleteApplicant(applicantId);
+        } catch(Exception e) {
+            LOG.error("Error deleting applicant:", e);
+        }
+        sendRedirect(req, res);
+    }
+    
+    public void updateApplicant(ActionRequest req, ActionResponse res) throws IOException {
+        long applicantId = ParamUtil.getLong(req, WebKeys.PARAM_APPLICANT_ID);
+        try {
+            Applicant applicant = ApplicantLocalServiceUtil.fetchApplicant(applicantId);
+            
+            String status = ParamUtil.getString(req, WebKeys.PARAM_STATUS);
+            String notes = ParamUtil.getString(req, WebKeys.PARAM_NOTES);
+            
+            applicant.setStatus(status);
+            applicant.setNotes(notes);
+            applicant.setModifiedDate(new Date());;
+            
+            applicant.persist();
+        } catch(Exception e) {
+            LOG.error("Error updating applicant:", e);
         }
         sendRedirect(req, res);
     }

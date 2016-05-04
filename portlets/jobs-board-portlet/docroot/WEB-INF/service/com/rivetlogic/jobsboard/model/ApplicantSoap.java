@@ -41,6 +41,8 @@ public class ApplicantSoap implements Serializable {
 		soapModel.setPhone(model.getPhone());
 		soapModel.setCv(model.getCv());
 		soapModel.setInfo(model.getInfo());
+		soapModel.setStatus(model.getStatus());
+		soapModel.setNotes(model.getNotes());
 
 		return soapModel;
 	}
@@ -181,6 +183,22 @@ public class ApplicantSoap implements Serializable {
 		_info = info;
 	}
 
+	public String getStatus() {
+		return _status;
+	}
+
+	public void setStatus(String status) {
+		_status = status;
+	}
+
+	public String getNotes() {
+		return _notes;
+	}
+
+	public void setNotes(String notes) {
+		_notes = notes;
+	}
+
 	private long _applicantId;
 	private long _jobId;
 	private long _groupId;
@@ -192,4 +210,6 @@ public class ApplicantSoap implements Serializable {
 	private String _phone;
 	private long _cv;
 	private String _info;
+	private String _status;
+	private String _notes;
 }

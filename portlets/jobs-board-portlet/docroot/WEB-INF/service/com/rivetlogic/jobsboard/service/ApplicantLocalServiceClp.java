@@ -117,6 +117,14 @@ public class ApplicantLocalServiceClp implements ApplicantLocalService {
 		_methodName19 = "createApplicant";
 
 		_methodParameterTypes19 = new String[] {  };
+
+		_methodName20 = "countByCompanyGroupJob";
+
+		_methodParameterTypes20 = new String[] { "long", "long", "long" };
+
+		_methodName21 = "findByCompanyGroupJob";
+
+		_methodParameterTypes21 = new String[] { "long", "long", "long" };
 	}
 
 	@Override
@@ -697,6 +705,65 @@ public class ApplicantLocalServiceClp implements ApplicantLocalService {
 		return (com.rivetlogic.jobsboard.model.Applicant)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public int countByCompanyGroupJob(long companyId, long groupId, long jobId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20,
+					new Object[] { companyId, groupId, jobId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByCompanyGroupJob(
+		long companyId, long groupId, long jobId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName21,
+					_methodParameterTypes21,
+					new Object[] { companyId, groupId, jobId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.rivetlogic.jobsboard.model.Applicant>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -736,4 +803,8 @@ public class ApplicantLocalServiceClp implements ApplicantLocalService {
 	private String[] _methodParameterTypes17;
 	private String _methodName19;
 	private String[] _methodParameterTypes19;
+	private String _methodName20;
+	private String[] _methodParameterTypes20;
+	private String _methodName21;
+	private String[] _methodParameterTypes21;
 }

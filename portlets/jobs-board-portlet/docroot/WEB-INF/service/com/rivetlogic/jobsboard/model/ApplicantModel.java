@@ -217,6 +217,36 @@ public interface ApplicantModel extends BaseModel<Applicant> {
 	 */
 	public void setInfo(String info);
 
+	/**
+	 * Returns the status of this applicant.
+	 *
+	 * @return the status of this applicant
+	 */
+	@AutoEscape
+	public String getStatus();
+
+	/**
+	 * Sets the status of this applicant.
+	 *
+	 * @param status the status of this applicant
+	 */
+	public void setStatus(String status);
+
+	/**
+	 * Returns the notes of this applicant.
+	 *
+	 * @return the notes of this applicant
+	 */
+	@AutoEscape
+	public String getNotes();
+
+	/**
+	 * Sets the notes of this applicant.
+	 *
+	 * @param notes the notes of this applicant
+	 */
+	public void setNotes(String notes);
+
 	@Override
 	public boolean isNew();
 

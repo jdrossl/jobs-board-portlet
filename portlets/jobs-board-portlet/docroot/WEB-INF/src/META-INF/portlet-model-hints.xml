@@ -13,6 +13,8 @@
 		<field name="phone" type="String" />
 		<field name="cv" type="long" />
 		<field name="info" type="String" />
+		<field name="status" type="String" />
+		<field name="notes" type="String" />
 	</model>
 	<model name="com.rivetlogic.jobsboard.model.Job">
 		<field name="jobId" type="long" />

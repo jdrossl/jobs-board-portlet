@@ -84,6 +84,8 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 		attributes.put("phone", getPhone());
 		attributes.put("cv", getCv());
 		attributes.put("info", getInfo());
+		attributes.put("status", getStatus());
+		attributes.put("notes", getNotes());
 
 		return attributes;
 	}
@@ -154,6 +156,18 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 
 		if (info != null) {
 			setInfo(info);
+		}
+
+		String status = (String)attributes.get("status");
+
+		if (status != null) {
+			setStatus(status);
+		}
+
+		String notes = (String)attributes.get("notes");
+
+		if (notes != null) {
+			setNotes(notes);
 		}
 	}
 
@@ -410,6 +424,52 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 		}
 	}
 
+	@Override
+	public String getStatus() {
+		return _status;
+	}
+
+	@Override
+	public void setStatus(String status) {
+		_status = status;
+
+		if (_applicantRemoteModel != null) {
+			try {
+				Class<?> clazz = _applicantRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setStatus", String.class);
+
+				method.invoke(_applicantRemoteModel, status);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public String getNotes() {
+		return _notes;
+	}
+
+	@Override
+	public void setNotes(String notes) {
+		_notes = notes;
+
+		if (_applicantRemoteModel != null) {
+			try {
+				Class<?> clazz = _applicantRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setNotes", String.class);
+
+				method.invoke(_applicantRemoteModel, notes);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
 	public BaseModel<?> getApplicantRemoteModel() {
 		return _applicantRemoteModel;
 	}
@@ -490,6 +550,8 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 		clone.setPhone(getPhone());
 		clone.setCv(getCv());
 		clone.setInfo(getInfo());
+		clone.setStatus(getStatus());
+		clone.setNotes(getNotes());
 
 		return clone;
 	}
@@ -542,7 +604,7 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{applicantId=");
 		sb.append(getApplicantId());
@@ -566,6 +628,10 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 		sb.append(getCv());
 		sb.append(", info=");
 		sb.append(getInfo());
+		sb.append(", status=");
+		sb.append(getStatus());
+		sb.append(", notes=");
+		sb.append(getNotes());
 		sb.append("}");
 
 		return sb.toString();
@@ -573,7 +639,7 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(43);
 
 		sb.append("<model><model-name>");
 		sb.append("com.rivetlogic.jobsboard.model.Applicant");
@@ -623,6 +689,14 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 			"<column><column-name>info</column-name><column-value><![CDATA[");
 		sb.append(getInfo());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>status</column-name><column-value><![CDATA[");
+		sb.append(getStatus());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>notes</column-name><column-value><![CDATA[");
+		sb.append(getNotes());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -640,6 +714,8 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 	private String _phone;
 	private long _cv;
 	private String _info;
+	private String _status;
+	private String _notes;
 	private BaseModel<?> _applicantRemoteModel;
 	private Class<?> _clpSerializerClass = com.rivetlogic.jobsboard.service.ClpSerializer.class;
 }

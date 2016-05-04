@@ -20,6 +20,8 @@
 		<property name="phone" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="cv" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="info" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="status" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="notes" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="com.rivetlogic.jobsboard.model.impl.JobImpl" table="rivetlogic_jobsboard_Job">
 		<cache usage="read-write" />

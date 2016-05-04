@@ -20,6 +20,8 @@
 <%@ page import="com.rivetlogic.jobsboard.util.WebKeys" %>
 <%@ page import="com.rivetlogic.jobsboard.model.Job" %>
 <%@ page import="com.rivetlogic.jobsboard.service.JobLocalServiceUtil" %>
+<%@ page import="com.rivetlogic.jobsboard.model.Applicant" %>
+<%@ page import="com.rivetlogic.jobsboard.service.ApplicantLocalServiceUtil" %>
 
 <portlet:defineObjects />
 <theme:defineObjects />

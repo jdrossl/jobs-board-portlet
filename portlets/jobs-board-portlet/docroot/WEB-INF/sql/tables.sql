@@ -9,7 +9,9 @@ create table rivetlogic_jobsboard_Applicant (
 	email VARCHAR(75) null,
 	phone VARCHAR(75) null,
 	cv LONG,
-	info VARCHAR(75) null
+	info VARCHAR(75) null,
+	status VARCHAR(75) null,
+	notes VARCHAR(75) null
 );
 
 create table rivetlogic_jobsboard_Job (

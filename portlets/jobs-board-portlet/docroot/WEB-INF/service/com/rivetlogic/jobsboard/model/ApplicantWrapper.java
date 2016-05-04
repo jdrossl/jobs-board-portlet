@@ -60,6 +60,8 @@ public class ApplicantWrapper implements Applicant, ModelWrapper<Applicant> {
 		attributes.put("phone", getPhone());
 		attributes.put("cv", getCv());
 		attributes.put("info", getInfo());
+		attributes.put("status", getStatus());
+		attributes.put("notes", getNotes());
 
 		return attributes;
 	}
@@ -130,6 +132,18 @@ public class ApplicantWrapper implements Applicant, ModelWrapper<Applicant> {
 
 		if (info != null) {
 			setInfo(info);
+		}
+
+		String status = (String)attributes.get("status");
+
+		if (status != null) {
+			setStatus(status);
+		}
+
+		String notes = (String)attributes.get("notes");
+
+		if (notes != null) {
+			setNotes(notes);
 		}
 	}
 
@@ -371,6 +385,46 @@ public class ApplicantWrapper implements Applicant, ModelWrapper<Applicant> {
 	@Override
 	public void setInfo(java.lang.String info) {
 		_applicant.setInfo(info);
+	}
+
+	/**
+	* Returns the status of this applicant.
+	*
+	* @return the status of this applicant
+	*/
+	@Override
+	public java.lang.String getStatus() {
+		return _applicant.getStatus();
+	}
+
+	/**
+	* Sets the status of this applicant.
+	*
+	* @param status the status of this applicant
+	*/
+	@Override
+	public void setStatus(java.lang.String status) {
+		_applicant.setStatus(status);
+	}
+
+	/**
+	* Returns the notes of this applicant.
+	*
+	* @return the notes of this applicant
+	*/
+	@Override
+	public java.lang.String getNotes() {
+		return _applicant.getNotes();
+	}
+
+	/**
+	* Sets the notes of this applicant.
+	*
+	* @param notes the notes of this applicant
+	*/
+	@Override
+	public void setNotes(java.lang.String notes) {
+		_applicant.setNotes(notes);
 	}
 
 	@Override

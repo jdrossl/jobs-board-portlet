@@ -256,4 +256,11 @@ public interface ApplicantLocalService extends BaseLocalService,
 
 	public com.rivetlogic.jobsboard.model.Applicant createApplicant()
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countByCompanyGroupJob(long companyId, long groupId, long jobId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByCompanyGroupJob(
+		long companyId, long groupId, long jobId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

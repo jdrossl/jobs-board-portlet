@@ -69,9 +69,11 @@ public class ApplicantModelImpl extends BaseModelImpl<Applicant>
 			{ "email", Types.VARCHAR },
 			{ "phone", Types.VARCHAR },
 			{ "cv", Types.BIGINT },
-			{ "info", Types.VARCHAR }
+			{ "info", Types.VARCHAR },
+			{ "status", Types.VARCHAR },
+			{ "notes", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table rivetlogic_jobsboard_Applicant (applicantId LONG not null primary key,jobId LONG,groupId LONG,companyId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,email VARCHAR(75) null,phone VARCHAR(75) null,cv LONG,info VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table rivetlogic_jobsboard_Applicant (applicantId LONG not null primary key,jobId LONG,groupId LONG,companyId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,email VARCHAR(75) null,phone VARCHAR(75) null,cv LONG,info VARCHAR(75) null,status VARCHAR(75) null,notes VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table rivetlogic_jobsboard_Applicant";
 	public static final String ORDER_BY_JPQL = " ORDER BY applicant.applicantId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY rivetlogic_jobsboard_Applicant.applicantId ASC";
@@ -142,6 +144,8 @@ public class ApplicantModelImpl extends BaseModelImpl<Applicant>
 		attributes.put("phone", getPhone());
 		attributes.put("cv", getCv());
 		attributes.put("info", getInfo());
+		attributes.put("status", getStatus());
+		attributes.put("notes", getNotes());
 
 		return attributes;
 	}
@@ -212,6 +216,18 @@ public class ApplicantModelImpl extends BaseModelImpl<Applicant>
 
 		if (info != null) {
 			setInfo(info);
+		}
+
+		String status = (String)attributes.get("status");
+
+		if (status != null) {
+			setStatus(status);
+		}
+
+		String notes = (String)attributes.get("notes");
+
+		if (notes != null) {
+			setNotes(notes);
 		}
 	}
 
@@ -381,6 +397,36 @@ public class ApplicantModelImpl extends BaseModelImpl<Applicant>
 		_info = info;
 	}
 
+	@Override
+	public String getStatus() {
+		if (_status == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _status;
+		}
+	}
+
+	@Override
+	public void setStatus(String status) {
+		_status = status;
+	}
+
+	@Override
+	public String getNotes() {
+		if (_notes == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _notes;
+		}
+	}
+
+	@Override
+	public void setNotes(String notes) {
+		_notes = notes;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -423,6 +469,8 @@ public class ApplicantModelImpl extends BaseModelImpl<Applicant>
 		applicantImpl.setPhone(getPhone());
 		applicantImpl.setCv(getCv());
 		applicantImpl.setInfo(getInfo());
+		applicantImpl.setStatus(getStatus());
+		applicantImpl.setNotes(getNotes());
 
 		applicantImpl.resetOriginalValues();
 
@@ -554,12 +602,28 @@ public class ApplicantModelImpl extends BaseModelImpl<Applicant>
 			applicantCacheModel.info = null;
 		}
 
+		applicantCacheModel.status = getStatus();
+
+		String status = applicantCacheModel.status;
+
+		if ((status != null) && (status.length() == 0)) {
+			applicantCacheModel.status = null;
+		}
+
+		applicantCacheModel.notes = getNotes();
+
+		String notes = applicantCacheModel.notes;
+
+		if ((notes != null) && (notes.length() == 0)) {
+			applicantCacheModel.notes = null;
+		}
+
 		return applicantCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{applicantId=");
 		sb.append(getApplicantId());
@@ -583,6 +647,10 @@ public class ApplicantModelImpl extends BaseModelImpl<Applicant>
 		sb.append(getCv());
 		sb.append(", info=");
 		sb.append(getInfo());
+		sb.append(", status=");
+		sb.append(getStatus());
+		sb.append(", notes=");
+		sb.append(getNotes());
 		sb.append("}");
 
 		return sb.toString();
@@ -590,7 +658,7 @@ public class ApplicantModelImpl extends BaseModelImpl<Applicant>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(43);
 
 		sb.append("<model><model-name>");
 		sb.append("com.rivetlogic.jobsboard.model.Applicant");
@@ -640,6 +708,14 @@ public class ApplicantModelImpl extends BaseModelImpl<Applicant>
 			"<column><column-name>info</column-name><column-value><![CDATA[");
 		sb.append(getInfo());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>status</column-name><column-value><![CDATA[");
+		sb.append(getStatus());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>notes</column-name><column-value><![CDATA[");
+		sb.append(getNotes());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -667,6 +743,8 @@ public class ApplicantModelImpl extends BaseModelImpl<Applicant>
 	private String _phone;
 	private long _cv;
 	private String _info;
+	private String _status;
+	private String _notes;
 	private long _columnBitmask;
 	private Applicant _escapedModel;
 }

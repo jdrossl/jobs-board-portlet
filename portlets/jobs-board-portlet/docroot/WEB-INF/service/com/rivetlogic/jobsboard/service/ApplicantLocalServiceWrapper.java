@@ -292,6 +292,21 @@ public class ApplicantLocalServiceWrapper implements ApplicantLocalService,
 		return _applicantLocalService.createApplicant();
 	}
 
+	@Override
+	public int countByCompanyGroupJob(long companyId, long groupId, long jobId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _applicantLocalService.countByCompanyGroupJob(companyId,
+			groupId, jobId);
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByCompanyGroupJob(
+		long companyId, long groupId, long jobId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _applicantLocalService.findByCompanyGroupJob(companyId, groupId,
+			jobId);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

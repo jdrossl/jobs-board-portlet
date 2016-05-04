@@ -1,15 +1,17 @@
 <%@ include file="/html/init.jsp" %>
 
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
-
 <%
-	List applicantsList = new ArrayList();
-	applicantsList.add(1);
-	applicantsList.add(1);
-	applicantsList.add(1);
-	applicantsList.add(1);
-	applicantsList.add(1);
+	long jobId = ParamUtil.getLong(request, WebKeys.PARAM_JOB_ID);
+	Job job = JobLocalServiceUtil.fetchJob(jobId);
+	int totalApplicants = 0;
+	List<Applicant> applicantsList = null;
+	try {
+	    applicantsList = ApplicantLocalServiceUtil.findByCompanyGroupJob(job.getCompanyId(), job.getGroupId(), jobId);
+	    totalApplicants = ApplicantLocalServiceUtil.countByCompanyGroupJob(job.getCompanyId(), job.getGroupId(), jobId);
+	} catch(Exception e) {
+	    applicantsList = new ArrayList<Applicant>();
+	}
+	SimpleDateFormat format = new SimpleDateFormat("MMMM-d-yyyy, hh:MM a");
 %>
 
 <aui:container>
@@ -46,31 +48,35 @@
 			<c:if test="<%= !applicantsList.isEmpty() %>">
 			<aui:row>
 				<aui:col>
-					<h2><liferay-ui:message key="x-applicants-for-x" arguments="<%= new Object[]{ 5, \"Position Name\" } %>" /></h2>
+					<h2><liferay-ui:message key="x-applicants-for-x" arguments="<%= new Object[]{ totalApplicants, job.getName() } %>" /></h2>
 				</aui:col>
 			</aui:row>
 			</c:if>
 			
-			<liferay-ui:search-container delta="3" emptyResultsMessage="no-applicants-found">
-				<liferay-ui:search-container-results results="<%= applicantsList %>" total="5" />
-				<liferay-ui:search-container-row className="Integer">
+			<liferay-ui:search-container delta="5" emptyResultsMessage="no-applicants-found">
+				<liferay-ui:search-container-results results="<%= applicantsList %>" total="<%= totalApplicants %>" />
+				<liferay-ui:search-container-row className="com.rivetlogic.jobsboard.model.Applicant" modelVar="applicant">
 					<portlet:renderURL var="viewURL">
 						<portlet:param name="mvcPath" value="/html/jobsboard/applicant-details.jsp"/>
 						<portlet:param name="redirect" value="<%= currentURL %>"/>
-						<portlet:param name="applicantId" value="1"/>
+						<portlet:param name="applicantId" value="${ applicant.applicantId }"/>
 					</portlet:renderURL>
 					<div class="list-item">
-						<div class="applicant-name"><h4><a href="<%= viewURL %>">Applicant Name</a></h4></div>
-						<span class="applicant-status"><liferay-ui:message key="status-on-board" /></span>
+						<div class="applicant-name"><h4><a href="<%= viewURL %>">${ applicant.name }</a></h4></div>
+						<span class="applicant-status"><liferay-ui:message key="status-${ applicant.status }" /></span>
 						
 						<div class="list-item-actions">
 						  <ul>
-								<li><span class="applicant-submitted">Submitted: Jul-12-2016, 3:30pm</span></li>
+								<li><span class="applicant-submitted">Submitted: <%= format.format(applicant.getCreateDate()) %></span></li>
 								<li class="applicant-delete">
-									<liferay-ui:icon iconCssClass="icon-trash" />
+									<portlet:actionURL name="deleteApplicant" var="deleteURL">
+										<portlet:param name="applicantId" value="${ applicant.applicantId }"/>
+										<portlet:param name="redirect" value="<%= currentURL %>"/>
+									</portlet:actionURL>
+									<liferay-ui:icon iconCssClass="icon-trash" url="<%= deleteURL %>" />
 								</li>
 								<li class="applicant-edit">
-									<liferay-ui:icon iconCssClass="icon-edit" />
+									<liferay-ui:icon iconCssClass="icon-edit" url="<%= viewURL %>"/>
 								</li>
 						  </ul>
 						</div>

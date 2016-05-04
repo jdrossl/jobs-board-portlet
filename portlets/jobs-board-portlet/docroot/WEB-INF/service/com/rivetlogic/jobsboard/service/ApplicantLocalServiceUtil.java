@@ -280,6 +280,17 @@ public class ApplicantLocalServiceUtil {
 		return getService().createApplicant();
 	}
 
+	public static int countByCompanyGroupJob(long companyId, long groupId,
+		long jobId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().countByCompanyGroupJob(companyId, groupId, jobId);
+	}
+
+	public static java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByCompanyGroupJob(
+		long companyId, long groupId, long jobId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().findByCompanyGroupJob(companyId, groupId, jobId);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

@@ -38,7 +38,7 @@ public class ApplicantCacheModel implements CacheModel<Applicant>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{applicantId=");
 		sb.append(applicantId);
@@ -62,6 +62,10 @@ public class ApplicantCacheModel implements CacheModel<Applicant>,
 		sb.append(cv);
 		sb.append(", info=");
 		sb.append(info);
+		sb.append(", status=");
+		sb.append(status);
+		sb.append(", notes=");
+		sb.append(notes);
 		sb.append("}");
 
 		return sb.toString();
@@ -120,6 +124,20 @@ public class ApplicantCacheModel implements CacheModel<Applicant>,
 			applicantImpl.setInfo(info);
 		}
 
+		if (status == null) {
+			applicantImpl.setStatus(StringPool.BLANK);
+		}
+		else {
+			applicantImpl.setStatus(status);
+		}
+
+		if (notes == null) {
+			applicantImpl.setNotes(StringPool.BLANK);
+		}
+		else {
+			applicantImpl.setNotes(notes);
+		}
+
 		applicantImpl.resetOriginalValues();
 
 		return applicantImpl;
@@ -138,6 +156,8 @@ public class ApplicantCacheModel implements CacheModel<Applicant>,
 		phone = objectInput.readUTF();
 		cv = objectInput.readLong();
 		info = objectInput.readUTF();
+		status = objectInput.readUTF();
+		notes = objectInput.readUTF();
 	}
 
 	@Override
@@ -179,6 +199,20 @@ public class ApplicantCacheModel implements CacheModel<Applicant>,
 		else {
 			objectOutput.writeUTF(info);
 		}
+
+		if (status == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(status);
+		}
+
+		if (notes == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(notes);
+		}
 	}
 
 	public long applicantId;
@@ -192,4 +226,6 @@ public class ApplicantCacheModel implements CacheModel<Applicant>,
 	public String phone;
 	public long cv;
 	public String info;
+	public String status;
+	public String notes;
 }
