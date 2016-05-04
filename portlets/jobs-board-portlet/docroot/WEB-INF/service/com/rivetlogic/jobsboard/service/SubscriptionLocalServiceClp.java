@@ -114,6 +114,12 @@ public class SubscriptionLocalServiceClp implements SubscriptionLocalService {
 		_methodName17 = "setBeanIdentifier";
 
 		_methodParameterTypes17 = new String[] { "java.lang.String" };
+
+		_methodName19 = "notifySubscribers";
+
+		_methodParameterTypes19 = new String[] {
+				"com.rivetlogic.jobsboard.model.Job"
+			};
 	}
 
 	@Override
@@ -670,6 +676,26 @@ public class SubscriptionLocalServiceClp implements SubscriptionLocalService {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public void notifySubscribers(com.rivetlogic.jobsboard.model.Job job) {
+		try {
+			_invokableLocalService.invokeMethod(_methodName19,
+				_methodParameterTypes19,
+				new Object[] { ClpSerializer.translateInput(job) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -707,4 +733,6 @@ public class SubscriptionLocalServiceClp implements SubscriptionLocalService {
 	private String[] _methodParameterTypes16;
 	private String _methodName17;
 	private String[] _methodParameterTypes17;
+	private String _methodName19;
+	private String[] _methodParameterTypes19;
 }

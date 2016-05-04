@@ -8,6 +8,7 @@
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>
 <%@ page import="com.liferay.portal.kernel.util.HttpUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.UnicodeFormatter" %>
 
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>

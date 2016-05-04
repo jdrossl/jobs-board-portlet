@@ -275,6 +275,10 @@ public class SubscriptionLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static void notifySubscribers(com.rivetlogic.jobsboard.model.Job job) {
+		getService().notifySubscribers(job);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

@@ -73,10 +73,10 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 			{ "category", Types.BIGINT },
 			{ "location", Types.BIGINT },
 			{ "type_", Types.VARCHAR },
-			{ "description", Types.VARCHAR },
+			{ "description", Types.CLOB },
 			{ "salary", Types.DOUBLE }
 		};
-	public static final String TABLE_SQL_CREATE = "create table rivetlogic_jobsboard_Job (jobId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,active_ BOOLEAN,category LONG,location LONG,type_ VARCHAR(75) null,description VARCHAR(75) null,salary DOUBLE)";
+	public static final String TABLE_SQL_CREATE = "create table rivetlogic_jobsboard_Job (jobId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,active_ BOOLEAN,category LONG,location LONG,type_ VARCHAR(75) null,description TEXT null,salary DOUBLE)";
 	public static final String TABLE_SQL_DROP = "drop table rivetlogic_jobsboard_Job";
 	public static final String ORDER_BY_JPQL = " ORDER BY job.createDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY rivetlogic_jobsboard_Job.createDate DESC";

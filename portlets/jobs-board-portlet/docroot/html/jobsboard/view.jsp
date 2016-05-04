@@ -96,13 +96,17 @@
 						<portlet:param name="redirect" value="<%= currentURL %>"/>
 						<portlet:param name="jobId" value="${ job.jobId }"/>
 					</portlet:renderURL>
+					<portlet:actionURL name="deleteJob" var="deleteURL">
+						<portlet:param name="redirect" value="<%= currentURL %>"/>
+						<portlet:param name="jobId" value="${ job.jobId }"/>
+					</portlet:actionURL>
 					<div class="list-item">
 						<div class="position-name"><h3><a href="<%= viewURL %>">${ job.name }</a></h3></div>
 						<ul class="position-info">
 							<li class="position-category">${ job.category }</li>
 							<li class="position-location">${ job.location }</li>
 							<li class="position-posted"><%= format.format(job.getCreateDate()) %></li>
-							<li class="position-type">${ job.type }</li>
+							<li class="position-type"><liferay-ui:message key="${ job.type }"/></li>
 						</ul>
 						<div class="list-item-actions">
 							<ul>
@@ -116,7 +120,7 @@
 									<liferay-ui:icon iconCssClass="icon-edit" url="<%= editURL %>" />
 								</li>
 								<li class="position-delete">
-									<liferay-ui:icon iconCssClass="icon-trash" />
+									<liferay-ui:icon iconCssClass="icon-trash" url="<%= deleteURL %>" />
 								</li>
 							</ul>
 						</div>
@@ -130,7 +134,10 @@
 		<aui:col width="25">
 			<div class="well">
 				<h4><liferay-ui:message key="subscribe-form-title" /></h4>
-				<aui:form>
+				<portlet:actionURL name="addSubscription" var="subscribeURL">
+					<portlet:param name="redirect" value="<%= currentURL %>" />
+				</portlet:actionURL>
+				<aui:form action="<%= subscribeURL %>">
 					<aui:fieldset>
 						<aui:field-wrapper cssClass="submit-form-group">
 							<aui:input name="name" placeholder="full-name" label="" cssClass="subscribe-form-control"/>

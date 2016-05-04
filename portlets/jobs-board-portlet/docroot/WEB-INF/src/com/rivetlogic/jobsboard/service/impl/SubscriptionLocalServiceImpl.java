@@ -14,7 +14,13 @@
 
 package com.rivetlogic.jobsboard.service.impl;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.rivetlogic.jobsboard.model.Job;
+import com.rivetlogic.jobsboard.model.Subscription;
 import com.rivetlogic.jobsboard.service.base.SubscriptionLocalServiceBaseImpl;
+
+import java.util.List;
 
 /**
  * The implementation of the subscription local service.
@@ -37,4 +43,21 @@ public class SubscriptionLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link com.rivetlogic.jobsboard.service.SubscriptionLocalServiceUtil} to access the subscription local service.
 	 */
+    
+    private static final Log LOG = LogFactoryUtil.getLog(SubscriptionLocalServiceImpl.class);
+    
+    public void notifySubscribers(Job job) {
+        LOG.debug("Sending notification to subscribers for " + job.getName());
+        try {
+            List<Subscription> subscriptions = 
+                    subscriptionPersistence.findByCompanyGroup(job.getCompanyId(), job.getGroupId());
+            for(Subscription subscription : subscriptions) {
+                LOG.debug("Sending notification for " + subscription.getEmailAddress());
+                //TODO: Implement mail service...
+            }
+        } catch(Exception e) {
+            LOG.error("Error finding subscriptions:", e);
+        }
+    }
+    
 }
