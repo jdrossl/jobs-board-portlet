@@ -7,6 +7,7 @@
 <%@ page import="com.liferay.portal.util.PortalUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>
+<%@ page import="com.liferay.portal.kernel.util.HttpUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.UnicodeFormatter" %>
 
 <%@ page import="java.util.List" %>
@@ -22,6 +23,7 @@
 
 <%
 	String currentURL = PortalUtil.getCurrentURL(request);
+	String completeCurrentURL = PortalUtil.getCurrentCompleteURL(request);
 	String redirect = ParamUtil.getString(request, "redirect", currentURL);
 %>
 

@@ -19,6 +19,11 @@ AUI.add('jobs-board-portlet', function (A) {
           self.one('.filters-form').addClass('hidden');
         }
       });
+      
+      this.one('.portlet-body').delegate('change', function(e) {
+          var val = (this.get('value').length) ? this.get('value').match(/[^\/\\]+$/)[0] : '';
+          this.ancestor('.file-field').one('input[type="text"]').set('value', val);
+      }, '.file-field input');
     }
     
   }, {

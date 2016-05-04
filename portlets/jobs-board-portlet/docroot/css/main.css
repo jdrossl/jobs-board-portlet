@@ -1,7 +1,18 @@
 @import "mixins";
 
 .aui .jobs-board-portlet {
+	.blurb {
+		margin-bottom: 20px;
+	}
 	
+	.blurb-sub {
+		color: #B1B0B0;
+	}
+	
+	.blurb-title {
+		line-height: 1;
+		margin-top: 0;
+	}
 	
 	.nav-keyword-wrapper {
 		margin-bottom: 0;
@@ -128,7 +139,24 @@
 			}
 		}
 	}
+	.file-field {
+		position: relative;
+		input[type="file"] {
+			position: absolute;
+	    opacity: 0;
+	    height: 50px;
+	    width: 100%;
+	    z-index: 1;
+		}
+	}
 	
+	.job-details-summary {
+		padding: 20px 0;
+	}
+	
+	button.save {
+		margin-top: 20px;
+	}
 	// EDIT
 	
 	.edit-form-categories {

@@ -12,34 +12,37 @@
 <aui:container>
 	<aui:row>
 		<aui:col width="75">
-			<h2>${ job.name }</h2>
-			<div>
-				<span><span class="icon icon-calendar"></span>&nbsp; <%= format.format(job.getCreateDate()) %></span>&nbsp;
-				<span><span class="icon icon-globe"></span>&nbsp; ${ job.location }</span>&nbsp;
-				<c:if test="${ job.salary != 0 }">
-				<span><span class="icon icon-money"></span>&nbsp; ${ job.salary }</span>&nbsp;
-				</c:if>
-				<span><span class="icon icon-time"></span>&nbsp; <liferay-ui:message key="${ job.type }"/></span>&nbsp;
+			<div class="job-details">
+				<h2 class="job-details-title">${ job.name }</h2>
+				<div class="job-details-meta">
+					<span><span class="icon icon-calendar"></span>&nbsp; <%= format.format(job.getCreateDate()) %></span>&nbsp;
+					<span><span class="icon icon-globe"></span>&nbsp; ${ job.location }</span>&nbsp;
+					<c:if test="${ job.salary != 0 }">
+					<span><span class="icon icon-money"></span>&nbsp; ${ job.salary }</span>&nbsp;
+					</c:if>
+					<span><span class="icon icon-time"></span>&nbsp; <liferay-ui:message key="${ job.type }"/></span>&nbsp;
+				</div>
+				<div class="job-details-summary">
+					${ job.description }
+				</div>
 			</div>
-			<div>
-				${ job.description }
-			</div>
+			
 		</aui:col>
 		<aui:col width="25">
 			<div class="share-box well">
 				<h3><liferay-ui:message key="share-title" /></h3>
 				<ul class="social-buttons ">
 					<li>
-						<a href="#"><img src='<%= renderRequest.getContextPath() + "/images/facebook.svg" %>' /></a>
+						<a href="http://www.facebook.com/sharer.php?u=<%=HttpUtil.encodeURL(completeCurrentURL) %>" target="_blank"><img src='<%= renderRequest.getContextPath() + "/images/facebook.svg" %>' /></a>
 					</li>
 					<li>
-						<a href="#"><img src='<%= renderRequest.getContextPath() + "/images/twitter.svg" %>' /></a>
+						<a href="https://twitter.com/intent/tweet?url=<%=HttpUtil.encodeURL(completeCurrentURL) %>" target="_blank"><img src='<%= renderRequest.getContextPath() + "/images/twitter.svg" %>' /></a>
 					</li>
 					<li>
-						<a href="#"><img src='<%= renderRequest.getContextPath() + "/images/linkedin.svg" %>' /></a>
+						<a href="http://www.linkedin.com/shareArticle?url=<%=HttpUtil.encodeURL(completeCurrentURL) %>" target="_blank"><img src='<%= renderRequest.getContextPath() + "/images/linkedin.svg" %>' /></a>
 					</li>
 					<li>
-						<a href="#"><span class="mail icon-envelope"></span></a>
+						<a href="mailto:someone@email.com?body=Job url <%=HttpUtil.encodeURL(completeCurrentURL) %>" target="_blank"><span class="mail icon-envelope"></span></a>
 					</li>
 				</ul>
 			</div>
@@ -56,7 +59,13 @@
 							<aui:input name="email" label="" placeholder="email-address" required="true"/>
 							<aui:input name="confirm-email" label="" placeholder="confirm-email-address" required="true"/>
 							<aui:input name="phone" label="" placeholder="phone-number" required="true"/>
-							<aui:input name="cv" label="" placeholder="cv" type="file" required="true"/>
+							<div class="file-field">
+								<aui:input name="cv" label="" placeholder="cv" type="file" required="true"/>
+								<div class="input-append">
+								  <input class="span10" id="appendedInputButtons" type="text">
+								  <button class="btn" type="button">CV</button>
+								</div>
+							</div>
 							<aui:input name="info" label="" placeholder="additional-information" type="textarea" required="true"/>
 							<aui:button-row>
 								<aui:button value="apply" cssClass="btn-primary apply-form-button" />
