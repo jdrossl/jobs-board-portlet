@@ -23,6 +23,7 @@
 
 <%
 	String currentURL = PortalUtil.getCurrentURL(request);
+	String completeCurrentURL = PortalUtil.getCurrentCompleteURL(request);
 	String redirect = ParamUtil.getString(request, "redirect", currentURL);
 %>
 
