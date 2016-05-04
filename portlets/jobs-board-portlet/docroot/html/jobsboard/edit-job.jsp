@@ -23,7 +23,7 @@
 
 <aui:container>
 	<aui:row>
-		<aui:col width="50">
+		<aui:col width="100">
 			<aui:form cssClass="well" action="<%= addURL %>">
 				<aui:fieldset>
 					<aui:input name="name" required="true" />

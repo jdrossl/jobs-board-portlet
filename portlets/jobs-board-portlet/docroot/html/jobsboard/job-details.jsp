@@ -12,18 +12,21 @@
 <aui:container>
 	<aui:row>
 		<aui:col width="75">
-			<h2>${ job.name }</h2>
-			<div>
-				<span><span class="icon icon-calendar"></span>&nbsp; <%= format.format(job.getCreateDate()) %></span>&nbsp;
-				<span><span class="icon icon-globe"></span>&nbsp; ${ job.location }</span>&nbsp;
-				<c:if test="${ job.salary != 0 }">
-				<span><span class="icon icon-money"></span>&nbsp; ${ job.salary }</span>&nbsp;
-				</c:if>
-				<span><span class="icon icon-time"></span>&nbsp; <liferay-ui:message key="${ job.type }"/></span>&nbsp;
+			<div class="job-details">
+				<h2 class="job-details-title">${ job.name }</h2>
+				<div class="job-details-meta">
+					<span><span class="icon icon-calendar"></span>&nbsp; <%= format.format(job.getCreateDate()) %></span>&nbsp;
+					<span><span class="icon icon-globe"></span>&nbsp; ${ job.location }</span>&nbsp;
+					<c:if test="${ job.salary != 0 }">
+					<span><span class="icon icon-money"></span>&nbsp; ${ job.salary }</span>&nbsp;
+					</c:if>
+					<span><span class="icon icon-time"></span>&nbsp; <liferay-ui:message key="${ job.type }"/></span>&nbsp;
+				</div>
+				<div class="job-details-summary">
+					${ job.description }
+				</div>
 			</div>
-			<div>
-				${ job.description }
-			</div>
+			
 		</aui:col>
 		<aui:col width="25">
 			<div class="share-box well">
