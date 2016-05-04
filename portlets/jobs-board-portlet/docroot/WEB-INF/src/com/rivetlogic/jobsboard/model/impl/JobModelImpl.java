@@ -72,11 +72,11 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 			{ "active_", Types.BOOLEAN },
 			{ "category", Types.BIGINT },
 			{ "location", Types.BIGINT },
-			{ "type_", Types.VARCHAR },
+			{ "type_", Types.BIGINT },
 			{ "description", Types.CLOB },
 			{ "salary", Types.DOUBLE }
 		};
-	public static final String TABLE_SQL_CREATE = "create table rivetlogic_jobsboard_Job (jobId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,active_ BOOLEAN,category LONG,location LONG,type_ VARCHAR(75) null,description TEXT null,salary DOUBLE)";
+	public static final String TABLE_SQL_CREATE = "create table rivetlogic_jobsboard_Job (jobId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,active_ BOOLEAN,category LONG,location LONG,type_ LONG,description TEXT null,salary DOUBLE)";
 	public static final String TABLE_SQL_DROP = "drop table rivetlogic_jobsboard_Job";
 	public static final String ORDER_BY_JPQL = " ORDER BY job.createDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY rivetlogic_jobsboard_Job.createDate DESC";
@@ -227,7 +227,7 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 			setLocation(location);
 		}
 
-		String type = (String)attributes.get("type");
+		Long type = (Long)attributes.get("type");
 
 		if (type != null) {
 			setType(type);
@@ -454,28 +454,25 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 	}
 
 	@Override
-	public String getType() {
-		if (_type == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _type;
-		}
+	public long getType() {
+		return _type;
 	}
 
 	@Override
-	public void setType(String type) {
+	public void setType(long type) {
 		_columnBitmask |= TYPE_COLUMN_BITMASK;
 
-		if (_originalType == null) {
+		if (!_setOriginalType) {
+			_setOriginalType = true;
+
 			_originalType = _type;
 		}
 
 		_type = type;
 	}
 
-	public String getOriginalType() {
-		return GetterUtil.getString(_originalType);
+	public long getOriginalType() {
+		return _originalType;
 	}
 
 	@Override
@@ -634,6 +631,8 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 
 		jobModelImpl._originalType = jobModelImpl._type;
 
+		jobModelImpl._setOriginalType = false;
+
 		jobModelImpl._originalDescription = jobModelImpl._description;
 
 		jobModelImpl._columnBitmask = 0;
@@ -692,12 +691,6 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 		jobCacheModel.location = getLocation();
 
 		jobCacheModel.type = getType();
-
-		String type = jobCacheModel.type;
-
-		if ((type != null) && (type.length() == 0)) {
-			jobCacheModel.type = null;
-		}
 
 		jobCacheModel.description = getDescription();
 
@@ -844,8 +837,9 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 	private long _location;
 	private long _originalLocation;
 	private boolean _setOriginalLocation;
-	private String _type;
-	private String _originalType;
+	private long _type;
+	private long _originalType;
+	private boolean _setOriginalType;
 	private String _description;
 	private String _originalDescription;
 	private double _salary;

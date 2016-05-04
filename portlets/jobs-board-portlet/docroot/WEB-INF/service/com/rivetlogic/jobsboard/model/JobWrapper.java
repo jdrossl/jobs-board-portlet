@@ -135,7 +135,7 @@ public class JobWrapper implements Job, ModelWrapper<Job> {
 			setLocation(location);
 		}
 
-		String type = (String)attributes.get("type");
+		Long type = (Long)attributes.get("type");
 
 		if (type != null) {
 			setType(type);
@@ -432,7 +432,7 @@ public class JobWrapper implements Job, ModelWrapper<Job> {
 	* @return the type of this job
 	*/
 	@Override
-	public java.lang.String getType() {
+	public long getType() {
 		return _job.getType();
 	}
 
@@ -442,7 +442,7 @@ public class JobWrapper implements Job, ModelWrapper<Job> {
 	* @param type the type of this job
 	*/
 	@Override
-	public void setType(java.lang.String type) {
+	public void setType(long type) {
 		_job.setType(type);
 	}
 

@@ -188,11 +188,11 @@ public class JobSoap implements Serializable {
 		_location = location;
 	}
 
-	public String getType() {
+	public long getType() {
 		return _type;
 	}
 
-	public void setType(String type) {
+	public void setType(long type) {
 		_type = type;
 	}
 
@@ -223,7 +223,7 @@ public class JobSoap implements Serializable {
 	private boolean _active;
 	private long _category;
 	private long _location;
-	private String _type;
+	private long _type;
 	private String _description;
 	private double _salary;
 }

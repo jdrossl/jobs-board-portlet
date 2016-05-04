@@ -258,15 +258,14 @@ public interface JobModel extends BaseModel<Job>, GroupedModel {
 	 *
 	 * @return the type of this job
 	 */
-	@AutoEscape
-	public String getType();
+	public long getType();
 
 	/**
 	 * Sets the type of this job.
 	 *
 	 * @param type the type of this job
 	 */
-	public void setType(String type);
+	public void setType(long type);
 
 	/**
 	 * Returns the description of this job.

@@ -201,8 +201,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
 		long companyId, long groupId, java.lang.String name, boolean active,
-		long category, long location, java.lang.String type,
-		java.lang.String description)
+		long category, long location, long type, java.lang.String description)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -227,8 +226,8 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
 		long companyId, long groupId, java.lang.String name, boolean active,
-		long category, long location, java.lang.String type,
-		java.lang.String description, int start, int end)
+		long category, long location, long type, java.lang.String description,
+		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -254,8 +253,8 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
 		long companyId, long groupId, java.lang.String name, boolean active,
-		long category, long location, java.lang.String type,
-		java.lang.String description, int start, int end,
+		long category, long location, long type, java.lang.String description,
+		int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
@@ -277,8 +276,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public com.rivetlogic.jobsboard.model.Job findByFilters_First(
 		long companyId, long groupId, java.lang.String name, boolean active,
-		long category, long location, java.lang.String type,
-		java.lang.String description,
+		long category, long location, long type, java.lang.String description,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.rivetlogic.jobsboard.NoSuchJobException;
@@ -300,8 +298,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public com.rivetlogic.jobsboard.model.Job fetchByFilters_First(
 		long companyId, long groupId, java.lang.String name, boolean active,
-		long category, long location, java.lang.String type,
-		java.lang.String description,
+		long category, long location, long type, java.lang.String description,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
@@ -323,8 +320,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public com.rivetlogic.jobsboard.model.Job findByFilters_Last(
 		long companyId, long groupId, java.lang.String name, boolean active,
-		long category, long location, java.lang.String type,
-		java.lang.String description,
+		long category, long location, long type, java.lang.String description,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.rivetlogic.jobsboard.NoSuchJobException;
@@ -346,8 +342,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public com.rivetlogic.jobsboard.model.Job fetchByFilters_Last(
 		long companyId, long groupId, java.lang.String name, boolean active,
-		long category, long location, java.lang.String type,
-		java.lang.String description,
+		long category, long location, long type, java.lang.String description,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
@@ -370,7 +365,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public com.rivetlogic.jobsboard.model.Job[] findByFilters_PrevAndNext(
 		long jobId, long companyId, long groupId, java.lang.String name,
-		boolean active, long category, long location, java.lang.String type,
+		boolean active, long category, long location, long type,
 		java.lang.String description,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
@@ -396,8 +391,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
 		long companyId, long groupId, java.lang.String[] names, boolean active,
-		long category, long location, java.lang.String type,
-		java.lang.String[] descriptions)
+		long category, long location, long type, java.lang.String[] descriptions)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -422,7 +416,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
 		long companyId, long groupId, java.lang.String[] names, boolean active,
-		long category, long location, java.lang.String type,
+		long category, long location, long type,
 		java.lang.String[] descriptions, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
@@ -449,7 +443,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
 		long companyId, long groupId, java.lang.String[] names, boolean active,
-		long category, long location, java.lang.String type,
+		long category, long location, long type,
 		java.lang.String[] descriptions, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
@@ -469,7 +463,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public void removeByFilters(long companyId, long groupId,
 		java.lang.String name, boolean active, long category, long location,
-		java.lang.String type, java.lang.String description)
+		long type, java.lang.String description)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -488,7 +482,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public int countByFilters(long companyId, long groupId,
 		java.lang.String name, boolean active, long category, long location,
-		java.lang.String type, java.lang.String description)
+		long type, java.lang.String description)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -507,7 +501,7 @@ public interface JobPersistence extends BasePersistence<Job> {
 	*/
 	public int countByFilters(long companyId, long groupId,
 		java.lang.String[] names, boolean active, long category, long location,
-		java.lang.String type, java.lang.String[] descriptions)
+		long type, java.lang.String[] descriptions)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

@@ -161,7 +161,7 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 			setLocation(location);
 		}
 
-		String type = (String)attributes.get("type");
+		Long type = (Long)attributes.get("type");
 
 		if (type != null) {
 			setType(type);
@@ -449,19 +449,19 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 	}
 
 	@Override
-	public String getType() {
+	public long getType() {
 		return _type;
 	}
 
 	@Override
-	public void setType(String type) {
+	public void setType(long type) {
 		_type = type;
 
 		if (_jobRemoteModel != null) {
 			try {
 				Class<?> clazz = _jobRemoteModel.getClass();
 
-				Method method = clazz.getMethod("setType", String.class);
+				Method method = clazz.getMethod("setType", long.class);
 
 				method.invoke(_jobRemoteModel, type);
 			}
@@ -769,7 +769,7 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 	private boolean _active;
 	private long _category;
 	private long _location;
-	private String _type;
+	private long _type;
 	private String _description;
 	private double _salary;
 	private BaseModel<?> _jobRemoteModel;

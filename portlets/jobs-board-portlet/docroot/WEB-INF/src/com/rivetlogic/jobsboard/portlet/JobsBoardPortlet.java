@@ -4,6 +4,11 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.asset.model.AssetTag;
+import com.liferay.portlet.asset.model.AssetVocabulary;
+import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.rivetlogic.jobsboard.model.Job;
 import com.rivetlogic.jobsboard.model.Subscription;
@@ -13,6 +18,7 @@ import com.rivetlogic.jobsboard.util.WebKeys;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -48,6 +54,7 @@ public class JobsBoardPortlet extends MVCPortlet {
         long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID, -1);
         Date now = new Date();
         Job job = null;
+        
         try {
             if(jobId == -1) {
                 job = JobLocalServiceUtil.createJob();
@@ -66,13 +73,35 @@ public class JobsBoardPortlet extends MVCPortlet {
             Boolean isActive = ParamUtil.getBoolean(req, WebKeys.PARAM_ACTIVE);
             String description = ParamUtil.getString(req, WebKeys.PARAM_DESC);
             Double salary = ParamUtil.getDouble(req, WebKeys.PARAM_SALARY);
-            String type = ParamUtil.getString(req, WebKeys.PARAM_TYPE);
+            long type = 0;
+            long category = 0;
+            long location = 0;
+            
+            List<AssetVocabulary> vocabularies = AssetVocabularyLocalServiceUtil
+                    .getGroupVocabularies(themeDisplay.getScopeGroupId(), false);
+            
+            for(AssetVocabulary v : vocabularies) {
+                long categoryId = ParamUtil.getLong(req, "categories_" + Long.toString(v.getVocabularyId()));
+                switch(v.getName()) {
+                    case "Job Category":
+                        category = categoryId;
+                        break;
+                    case "Job Location":
+                        location = categoryId;
+                        break;
+                    case "Job Type":
+                        type = categoryId;
+                        break;
+                }
+            }
             
             job.setName(name);
             job.setActive(isActive);
             job.setDescription(description);
             job.setSalary(salary);
             job.setType(type);
+            job.setCategory(category);
+            job.setLocation(location);
             
             JobLocalServiceUtil.updateJob(job);
             SubscriptionLocalServiceUtil.notifySubscribers(job);

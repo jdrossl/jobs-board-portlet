@@ -36,7 +36,7 @@
 		<property name="active" type="com.liferay.portal.dao.orm.hibernate.BooleanType" column="active_" />
 		<property name="category" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="location" type="com.liferay.portal.dao.orm.hibernate.LongType" />
-		<property name="type" type="com.liferay.portal.dao.orm.hibernate.StringType" column="type_" />
+		<property name="type" type="com.liferay.portal.dao.orm.hibernate.LongType" column="type_" />
 		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="salary" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
 	</class>

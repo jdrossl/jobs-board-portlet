@@ -112,13 +112,7 @@ public class JobCacheModel implements CacheModel<Job>, Externalizable {
 		jobImpl.setActive(active);
 		jobImpl.setCategory(category);
 		jobImpl.setLocation(location);
-
-		if (type == null) {
-			jobImpl.setType(StringPool.BLANK);
-		}
-		else {
-			jobImpl.setType(type);
-		}
+		jobImpl.setType(type);
 
 		if (description == null) {
 			jobImpl.setDescription(StringPool.BLANK);
@@ -147,7 +141,7 @@ public class JobCacheModel implements CacheModel<Job>, Externalizable {
 		active = objectInput.readBoolean();
 		category = objectInput.readLong();
 		location = objectInput.readLong();
-		type = objectInput.readUTF();
+		type = objectInput.readLong();
 		description = objectInput.readUTF();
 		salary = objectInput.readDouble();
 	}
@@ -180,13 +174,7 @@ public class JobCacheModel implements CacheModel<Job>, Externalizable {
 		objectOutput.writeBoolean(active);
 		objectOutput.writeLong(category);
 		objectOutput.writeLong(location);
-
-		if (type == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
-		}
-		else {
-			objectOutput.writeUTF(type);
-		}
+		objectOutput.writeLong(type);
 
 		if (description == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
@@ -209,7 +197,7 @@ public class JobCacheModel implements CacheModel<Job>, Externalizable {
 	public boolean active;
 	public long category;
 	public long location;
-	public String type;
+	public long type;
 	public String description;
 	public double salary;
 }

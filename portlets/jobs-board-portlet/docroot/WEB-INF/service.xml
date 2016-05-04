@@ -53,7 +53,7 @@
 		<!-- Audit fields -->
         <column name="category" type="long"></column>
         <column name="location" type="long"></column>
-        <column name="type" type="String"></column>
+        <column name="type" type="long"></column>
         <column name="description" type="String"></column>
         <column name="salary" type="double"></column>
         <order by="desc">

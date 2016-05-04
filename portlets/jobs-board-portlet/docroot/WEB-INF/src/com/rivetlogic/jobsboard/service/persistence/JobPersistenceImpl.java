@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -622,8 +621,8 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Boolean.class.getName(),
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName(), String.class.getName(),
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				String.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
@@ -634,8 +633,8 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Boolean.class.getName(),
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName(), String.class.getName()
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				String.class.getName()
 			});
 
 	/**
@@ -654,7 +653,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public List<Job> findByFilters(long companyId, long groupId, String name,
-		boolean active, long category, long location, String type,
+		boolean active, long category, long location, long type,
 		String description) throws SystemException {
 		return findByFilters(companyId, groupId, name, active, category,
 			location, type, description, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -683,7 +682,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public List<Job> findByFilters(long companyId, long groupId, String name,
-		boolean active, long category, long location, String type,
+		boolean active, long category, long location, long type,
 		String description, int start, int end) throws SystemException {
 		return findByFilters(companyId, groupId, name, active, category,
 			location, type, description, start, end, null);
@@ -712,7 +711,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public List<Job> findByFilters(long companyId, long groupId, String name,
-		boolean active, long category, long location, String type,
+		boolean active, long category, long location, long type,
 		String description, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -740,7 +739,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 						(active != job.getActive()) ||
 						(category != job.getCategory()) ||
 						(location != job.getLocation()) ||
-						!Validator.equals(type, job.getType()) ||
+						(type != job.getType()) ||
 						!StringUtil.wildcardMatches(job.getDescription(),
 							description, CharPool.UNDERLINE, CharPool.PERCENT,
 							CharPool.BACK_SLASH, true)) {
@@ -788,19 +787,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 
 			query.append(_FINDER_COLUMN_FILTERS_LOCATION_2);
 
-			boolean bindType = false;
-
-			if (type == null) {
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_1);
-			}
-			else if (type.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_3);
-			}
-			else {
-				bindType = true;
-
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_2);
-			}
+			query.append(_FINDER_COLUMN_FILTERS_TYPE_2);
 
 			boolean bindDescription = false;
 
@@ -850,9 +837,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 
 				qPos.add(location);
 
-				if (bindType) {
-					qPos.add(type);
-				}
+				qPos.add(type);
 
 				if (bindDescription) {
 					qPos.add(description);
@@ -905,7 +890,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public Job findByFilters_First(long companyId, long groupId, String name,
-		boolean active, long category, long location, String type,
+		boolean active, long category, long location, long type,
 		String description, OrderByComparator orderByComparator)
 		throws NoSuchJobException, SystemException {
 		Job job = fetchByFilters_First(companyId, groupId, name, active,
@@ -965,7 +950,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public Job fetchByFilters_First(long companyId, long groupId, String name,
-		boolean active, long category, long location, String type,
+		boolean active, long category, long location, long type,
 		String description, OrderByComparator orderByComparator)
 		throws SystemException {
 		List<Job> list = findByFilters(companyId, groupId, name, active,
@@ -996,7 +981,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public Job findByFilters_Last(long companyId, long groupId, String name,
-		boolean active, long category, long location, String type,
+		boolean active, long category, long location, long type,
 		String description, OrderByComparator orderByComparator)
 		throws NoSuchJobException, SystemException {
 		Job job = fetchByFilters_Last(companyId, groupId, name, active,
@@ -1056,7 +1041,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public Job fetchByFilters_Last(long companyId, long groupId, String name,
-		boolean active, long category, long location, String type,
+		boolean active, long category, long location, long type,
 		String description, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByFilters(companyId, groupId, name, active, category,
@@ -1097,7 +1082,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	@Override
 	public Job[] findByFilters_PrevAndNext(long jobId, long companyId,
 		long groupId, String name, boolean active, long category,
-		long location, String type, String description,
+		long location, long type, String description,
 		OrderByComparator orderByComparator)
 		throws NoSuchJobException, SystemException {
 		Job job = findByPrimaryKey(jobId);
@@ -1131,7 +1116,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 
 	protected Job getByFilters_PrevAndNext(Session session, Job job,
 		long companyId, long groupId, String name, boolean active,
-		long category, long location, String type, String description,
+		long category, long location, long type, String description,
 		OrderByComparator orderByComparator, boolean previous) {
 		StringBundler query = null;
 
@@ -1169,19 +1154,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 
 		query.append(_FINDER_COLUMN_FILTERS_LOCATION_2);
 
-		boolean bindType = false;
-
-		if (type == null) {
-			query.append(_FINDER_COLUMN_FILTERS_TYPE_1);
-		}
-		else if (type.equals(StringPool.BLANK)) {
-			query.append(_FINDER_COLUMN_FILTERS_TYPE_3);
-		}
-		else {
-			bindType = true;
-
-			query.append(_FINDER_COLUMN_FILTERS_TYPE_2);
-		}
+		query.append(_FINDER_COLUMN_FILTERS_TYPE_2);
 
 		boolean bindDescription = false;
 
@@ -1279,9 +1252,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 
 		qPos.add(location);
 
-		if (bindType) {
-			qPos.add(type);
-		}
+		qPos.add(type);
 
 		if (bindDescription) {
 			qPos.add(description);
@@ -1326,7 +1297,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	@Override
 	public List<Job> findByFilters(long companyId, long groupId,
 		String[] names, boolean active, long category, long location,
-		String type, String[] descriptions) throws SystemException {
+		long type, String[] descriptions) throws SystemException {
 		return findByFilters(companyId, groupId, names, active, category,
 			location, type, descriptions, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
 			null);
@@ -1355,7 +1326,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	@Override
 	public List<Job> findByFilters(long companyId, long groupId,
 		String[] names, boolean active, long category, long location,
-		String type, String[] descriptions, int start, int end)
+		long type, String[] descriptions, int start, int end)
 		throws SystemException {
 		return findByFilters(companyId, groupId, names, active, category,
 			location, type, descriptions, start, end, null);
@@ -1385,7 +1356,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	@Override
 	public List<Job> findByFilters(long companyId, long groupId,
 		String[] names, boolean active, long category, long location,
-		String type, String[] descriptions, int start, int end,
+		long type, String[] descriptions, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		if ((names != null) && (names.length == 1) && (descriptions != null) &&
 				(descriptions.length == 1)) {
@@ -1425,7 +1396,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 						(active != job.getActive()) ||
 						(category != job.getCategory()) ||
 						(location != job.getLocation()) ||
-						!Validator.equals(type, job.getType()) ||
+						(type != job.getType()) ||
 						!ArrayUtil.contains(descriptions, job.getDescription())) {
 					list = null;
 
@@ -1515,19 +1486,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 				query.append(WHERE_AND);
 			}
 
-			boolean bindType = false;
-
-			if (type == null) {
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_4);
-			}
-			else if (type.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_6);
-			}
-			else {
-				bindType = true;
-
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_5);
-			}
+			query.append(_FINDER_COLUMN_FILTERS_TYPE_5);
 
 			conjunctionable = true;
 
@@ -1595,9 +1554,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 
 				qPos.add(location);
 
-				if (bindType) {
-					qPos.add(type);
-				}
+				qPos.add(type);
 
 				if (descriptions != null) {
 					qPos.add(descriptions);
@@ -1649,7 +1606,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public void removeByFilters(long companyId, long groupId, String name,
-		boolean active, long category, long location, String type,
+		boolean active, long category, long location, long type,
 		String description) throws SystemException {
 		for (Job job : findByFilters(companyId, groupId, name, active,
 				category, location, type, description, QueryUtil.ALL_POS,
@@ -1674,7 +1631,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public int countByFilters(long companyId, long groupId, String name,
-		boolean active, long category, long location, String type,
+		boolean active, long category, long location, long type,
 		String description) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_FILTERS;
 
@@ -1715,19 +1672,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 
 			query.append(_FINDER_COLUMN_FILTERS_LOCATION_2);
 
-			boolean bindType = false;
-
-			if (type == null) {
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_1);
-			}
-			else if (type.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_3);
-			}
-			else {
-				bindType = true;
-
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_2);
-			}
+			query.append(_FINDER_COLUMN_FILTERS_TYPE_2);
 
 			boolean bindDescription = false;
 
@@ -1768,9 +1713,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 
 				qPos.add(location);
 
-				if (bindType) {
-					qPos.add(type);
-				}
+				qPos.add(type);
 
 				if (bindDescription) {
 					qPos.add(description);
@@ -1809,7 +1752,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public int countByFilters(long companyId, long groupId, String[] names,
-		boolean active, long category, long location, String type,
+		boolean active, long category, long location, long type,
 		String[] descriptions) throws SystemException {
 		Object[] finderArgs = new Object[] {
 				companyId, groupId, StringUtil.merge(names), active, category,
@@ -1900,19 +1843,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 				query.append(WHERE_AND);
 			}
 
-			boolean bindType = false;
-
-			if (type == null) {
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_4);
-			}
-			else if (type.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_6);
-			}
-			else {
-				bindType = true;
-
-				query.append(_FINDER_COLUMN_FILTERS_TYPE_5);
-			}
+			query.append(_FINDER_COLUMN_FILTERS_TYPE_5);
 
 			conjunctionable = true;
 
@@ -1971,9 +1902,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 
 				qPos.add(location);
 
-				if (bindType) {
-					qPos.add(type);
-				}
+				qPos.add(type);
 
 				if (descriptions != null) {
 					qPos.add(descriptions);
@@ -2022,15 +1951,9 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	private static final String _FINDER_COLUMN_FILTERS_LOCATION_2 = "job.location = ? AND ";
 	private static final String _FINDER_COLUMN_FILTERS_LOCATION_5 = "(" +
 		removeConjunction(_FINDER_COLUMN_FILTERS_LOCATION_2) + ")";
-	private static final String _FINDER_COLUMN_FILTERS_TYPE_1 = "job.type IS NULL AND ";
 	private static final String _FINDER_COLUMN_FILTERS_TYPE_2 = "job.type = ? AND ";
-	private static final String _FINDER_COLUMN_FILTERS_TYPE_3 = "(job.type IS NULL OR job.type = '') AND ";
-	private static final String _FINDER_COLUMN_FILTERS_TYPE_4 = "(" +
-		removeConjunction(_FINDER_COLUMN_FILTERS_TYPE_1) + ")";
 	private static final String _FINDER_COLUMN_FILTERS_TYPE_5 = "(" +
 		removeConjunction(_FINDER_COLUMN_FILTERS_TYPE_2) + ")";
-	private static final String _FINDER_COLUMN_FILTERS_TYPE_6 = "(" +
-		removeConjunction(_FINDER_COLUMN_FILTERS_TYPE_3) + ")";
 	private static final String _FINDER_COLUMN_FILTERS_DESCRIPTION_1 = "job.description LIKE NULL";
 	private static final String _FINDER_COLUMN_FILTERS_DESCRIPTION_2 = "job.description LIKE ?";
 	private static final String _FINDER_COLUMN_FILTERS_DESCRIPTION_3 = "(job.description IS NULL OR job.description LIKE '')";
