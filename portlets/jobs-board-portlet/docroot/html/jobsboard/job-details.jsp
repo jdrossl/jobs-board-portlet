@@ -30,16 +30,16 @@
 				<h3><liferay-ui:message key="share-title" /></h3>
 				<ul class="social-buttons ">
 					<li>
-						<a href="#"><img src='<%= renderRequest.getContextPath() + "/images/facebook.svg" %>' /></a>
+						<a href="<%=HttpUtil.encodeURL(currentURL) %>"b><img src='<%= renderRequest.getContextPath() + "/images/facebook.svg" %>' /></a>
 					</li>
 					<li>
-						<a href="#"><img src='<%= renderRequest.getContextPath() + "/images/twitter.svg" %>' /></a>
+						<a href="<%=HttpUtil.encodeURL(currentURL) %>"><img src='<%= renderRequest.getContextPath() + "/images/twitter.svg" %>' /></a>
 					</li>
 					<li>
-						<a href="#"><img src='<%= renderRequest.getContextPath() + "/images/linkedin.svg" %>' /></a>
+						<a href="<%=HttpUtil.encodeURL(currentURL) %>"><img src='<%= renderRequest.getContextPath() + "/images/linkedin.svg" %>' /></a>
 					</li>
 					<li>
-						<a href="#"><span class="mail icon-envelope"></span></a>
+						<a href="mailto:someone@email.com?body=Job url <%=HttpUtil.encodeURL(currentURL) %>"><span class="mail icon-envelope"></span></a>
 					</li>
 				</ul>
 			</div>
