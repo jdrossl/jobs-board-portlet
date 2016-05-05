@@ -299,6 +299,76 @@ public class JobLocalServiceWrapper implements JobLocalService,
 		return _jobLocalService.findByCompanyGroup(companyId, groupId);
 	}
 
+	@Override
+	public int countByFilters(long companyId, long groupId,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _jobLocalService.countByFilters(companyId, groupId, keywords,
+			status, location, category, type);
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _jobLocalService.findByFilters(companyId, groupId, keywords,
+			status, location, category, type, start, end);
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _jobLocalService.findByFilters(companyId, groupId, keywords,
+			status, location, category, type, start, end, orderBy);
+	}
+
+	@Override
+	public int countByBookmarks(long companyId, long groupId,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, java.lang.String bookmarks)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _jobLocalService.countByBookmarks(companyId, groupId, keywords,
+			status, location, category, type, bookmarks);
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByBookmarks(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		java.lang.String bookmarks, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _jobLocalService.findByBookmarks(companyId, groupId, keywords,
+			status, location, category, type, bookmarks, start, end, orderBy);
+	}
+
+	@Override
+	public int count(com.liferay.portal.theme.ThemeDisplay themeDisplay,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, boolean bookmaked)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _jobLocalService.count(themeDisplay, keywords, status, location,
+			category, type, bookmaked);
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> find(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, boolean bookmaked, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _jobLocalService.find(themeDisplay, keywords, status, location,
+			category, type, bookmaked, start, end, orderBy);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

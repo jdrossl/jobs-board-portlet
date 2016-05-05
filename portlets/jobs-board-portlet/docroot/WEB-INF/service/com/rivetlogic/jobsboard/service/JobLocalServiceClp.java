@@ -125,6 +125,58 @@ public class JobLocalServiceClp implements JobLocalService {
 		_methodName21 = "findByCompanyGroup";
 
 		_methodParameterTypes21 = new String[] { "long", "long" };
+
+		_methodName22 = "countByFilters";
+
+		_methodParameterTypes22 = new String[] {
+				"long", "long", "java.lang.String", "boolean[][]", "long[][]",
+				"long[][]", "long[][]"
+			};
+
+		_methodName23 = "findByFilters";
+
+		_methodParameterTypes23 = new String[] {
+				"long", "long", "java.lang.String", "boolean[][]", "long[][]",
+				"long[][]", "long[][]", "int", "int"
+			};
+
+		_methodName24 = "findByFilters";
+
+		_methodParameterTypes24 = new String[] {
+				"long", "long", "java.lang.String", "boolean[][]", "long[][]",
+				"long[][]", "long[][]", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName25 = "countByBookmarks";
+
+		_methodParameterTypes25 = new String[] {
+				"long", "long", "java.lang.String", "boolean[][]", "long[][]",
+				"long[][]", "long[][]", "java.lang.String"
+			};
+
+		_methodName26 = "findByBookmarks";
+
+		_methodParameterTypes26 = new String[] {
+				"long", "long", "java.lang.String", "boolean[][]", "long[][]",
+				"long[][]", "long[][]", "java.lang.String", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName27 = "count";
+
+		_methodParameterTypes27 = new String[] {
+				"com.liferay.portal.theme.ThemeDisplay", "java.lang.String",
+				"boolean[][]", "long[][]", "long[][]", "long[][]", "boolean"
+			};
+
+		_methodName28 = "find";
+
+		_methodParameterTypes28 = new String[] {
+				"com.liferay.portal.theme.ThemeDisplay", "java.lang.String",
+				"boolean[][]", "long[][]", "long[][]", "long[][]", "boolean",
+				"int", "int", "com.liferay.portal.kernel.util.OrderByComparator"
+			};
 	}
 
 	@Override
@@ -758,6 +810,354 @@ public class JobLocalServiceClp implements JobLocalService {
 		return (java.util.List<com.rivetlogic.jobsboard.model.Job>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public int countByFilters(long companyId, long groupId,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22,
+					new Object[] {
+						companyId,
+						
+					groupId,
+						
+					ClpSerializer.translateInput(keywords),
+						
+					ClpSerializer.translateInput(status),
+						
+					ClpSerializer.translateInput(location),
+						
+					ClpSerializer.translateInput(category),
+						
+					ClpSerializer.translateInput(type)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23,
+					new Object[] {
+						companyId,
+						
+					groupId,
+						
+					ClpSerializer.translateInput(keywords),
+						
+					ClpSerializer.translateInput(status),
+						
+					ClpSerializer.translateInput(location),
+						
+					ClpSerializer.translateInput(category),
+						
+					ClpSerializer.translateInput(type),
+						
+					start,
+						
+					end
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.rivetlogic.jobsboard.model.Job>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24,
+					new Object[] {
+						companyId,
+						
+					groupId,
+						
+					ClpSerializer.translateInput(keywords),
+						
+					ClpSerializer.translateInput(status),
+						
+					ClpSerializer.translateInput(location),
+						
+					ClpSerializer.translateInput(category),
+						
+					ClpSerializer.translateInput(type),
+						
+					start,
+						
+					end,
+						
+					ClpSerializer.translateInput(orderBy)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.rivetlogic.jobsboard.model.Job>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public int countByBookmarks(long companyId, long groupId,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, java.lang.String bookmarks)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25,
+					new Object[] {
+						companyId,
+						
+					groupId,
+						
+					ClpSerializer.translateInput(keywords),
+						
+					ClpSerializer.translateInput(status),
+						
+					ClpSerializer.translateInput(location),
+						
+					ClpSerializer.translateInput(category),
+						
+					ClpSerializer.translateInput(type),
+						
+					ClpSerializer.translateInput(bookmarks)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByBookmarks(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		java.lang.String bookmarks, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26,
+					new Object[] {
+						companyId,
+						
+					groupId,
+						
+					ClpSerializer.translateInput(keywords),
+						
+					ClpSerializer.translateInput(status),
+						
+					ClpSerializer.translateInput(location),
+						
+					ClpSerializer.translateInput(category),
+						
+					ClpSerializer.translateInput(type),
+						
+					ClpSerializer.translateInput(bookmarks),
+						
+					start,
+						
+					end,
+						
+					ClpSerializer.translateInput(orderBy)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.rivetlogic.jobsboard.model.Job>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public int count(com.liferay.portal.theme.ThemeDisplay themeDisplay,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, boolean bookmaked)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27,
+					new Object[] {
+						ClpSerializer.translateInput(themeDisplay),
+						
+					ClpSerializer.translateInput(keywords),
+						
+					ClpSerializer.translateInput(status),
+						
+					ClpSerializer.translateInput(location),
+						
+					ClpSerializer.translateInput(category),
+						
+					ClpSerializer.translateInput(type),
+						
+					bookmaked
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> find(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, boolean bookmaked, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28,
+					new Object[] {
+						ClpSerializer.translateInput(themeDisplay),
+						
+					ClpSerializer.translateInput(keywords),
+						
+					ClpSerializer.translateInput(status),
+						
+					ClpSerializer.translateInput(location),
+						
+					ClpSerializer.translateInput(category),
+						
+					ClpSerializer.translateInput(type),
+						
+					bookmaked,
+						
+					start,
+						
+					end,
+						
+					ClpSerializer.translateInput(orderBy)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.rivetlogic.jobsboard.model.Job>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -801,4 +1201,18 @@ public class JobLocalServiceClp implements JobLocalService {
 	private String[] _methodParameterTypes20;
 	private String _methodName21;
 	private String[] _methodParameterTypes21;
+	private String _methodName22;
+	private String[] _methodParameterTypes22;
+	private String _methodName23;
+	private String[] _methodParameterTypes23;
+	private String _methodName24;
+	private String[] _methodParameterTypes24;
+	private String _methodName25;
+	private String[] _methodParameterTypes25;
+	private String _methodName26;
+	private String[] _methodParameterTypes26;
+	private String _methodName27;
+	private String[] _methodParameterTypes27;
+	private String _methodName28;
+	private String[] _methodParameterTypes28;
 }

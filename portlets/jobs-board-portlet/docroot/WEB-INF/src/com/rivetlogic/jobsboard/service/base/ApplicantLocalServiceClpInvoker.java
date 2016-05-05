@@ -125,6 +125,19 @@ public class ApplicantLocalServiceClpInvoker {
 		_methodName48 = "findByCompanyGroupJob";
 
 		_methodParameterTypes48 = new String[] { "long", "long", "long" };
+
+		_methodName49 = "countByFilters";
+
+		_methodParameterTypes49 = new String[] {
+				"long", "long", "long", "java.lang.String", "java.lang.String"
+			};
+
+		_methodName50 = "findByFilters";
+
+		_methodParameterTypes50 = new String[] {
+				"long", "long", "long", "java.lang.String", "java.lang.String",
+				"int", "int"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -247,6 +260,24 @@ public class ApplicantLocalServiceClpInvoker {
 				((Long)arguments[2]).longValue());
 		}
 
+		if (_methodName49.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
+			return ApplicantLocalServiceUtil.countByFilters(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue(),
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
+		}
+
+		if (_methodName50.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+			return ApplicantLocalServiceUtil.findByFilters(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue(),
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
+				((Integer)arguments[5]).intValue(),
+				((Integer)arguments[6]).intValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -292,4 +323,8 @@ public class ApplicantLocalServiceClpInvoker {
 	private String[] _methodParameterTypes47;
 	private String _methodName48;
 	private String[] _methodParameterTypes48;
+	private String _methodName49;
+	private String[] _methodParameterTypes49;
+	private String _methodName50;
+	private String[] _methodParameterTypes50;
 }

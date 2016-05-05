@@ -33,6 +33,7 @@
 			<hint-collection name="CLOB" />
 		</field>
 		<field name="salary" type="double" />
+		<field name="bookmarks" type="String" />
 	</model>
 	<model name="com.rivetlogic.jobsboard.model.Subscription">
 		<field name="emailAddress" type="String" />

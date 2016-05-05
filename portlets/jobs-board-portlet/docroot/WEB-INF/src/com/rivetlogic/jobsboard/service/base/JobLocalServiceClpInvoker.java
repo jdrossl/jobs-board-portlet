@@ -125,6 +125,58 @@ public class JobLocalServiceClpInvoker {
 		_methodName48 = "findByCompanyGroup";
 
 		_methodParameterTypes48 = new String[] { "long", "long" };
+
+		_methodName49 = "countByFilters";
+
+		_methodParameterTypes49 = new String[] {
+				"long", "long", "java.lang.String", "boolean[][]", "long[][]",
+				"long[][]", "long[][]"
+			};
+
+		_methodName50 = "findByFilters";
+
+		_methodParameterTypes50 = new String[] {
+				"long", "long", "java.lang.String", "boolean[][]", "long[][]",
+				"long[][]", "long[][]", "int", "int"
+			};
+
+		_methodName51 = "findByFilters";
+
+		_methodParameterTypes51 = new String[] {
+				"long", "long", "java.lang.String", "boolean[][]", "long[][]",
+				"long[][]", "long[][]", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName52 = "countByBookmarks";
+
+		_methodParameterTypes52 = new String[] {
+				"long", "long", "java.lang.String", "boolean[][]", "long[][]",
+				"long[][]", "long[][]", "java.lang.String"
+			};
+
+		_methodName53 = "findByBookmarks";
+
+		_methodParameterTypes53 = new String[] {
+				"long", "long", "java.lang.String", "boolean[][]", "long[][]",
+				"long[][]", "long[][]", "java.lang.String", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName54 = "count";
+
+		_methodParameterTypes54 = new String[] {
+				"com.liferay.portal.theme.ThemeDisplay", "java.lang.String",
+				"boolean[][]", "long[][]", "long[][]", "long[][]", "boolean"
+			};
+
+		_methodName55 = "find";
+
+		_methodParameterTypes55 = new String[] {
+				"com.liferay.portal.theme.ThemeDisplay", "java.lang.String",
+				"boolean[][]", "long[][]", "long[][]", "long[][]", "boolean",
+				"int", "int", "com.liferay.portal.kernel.util.OrderByComparator"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -245,6 +297,75 @@ public class JobLocalServiceClpInvoker {
 				((Long)arguments[1]).longValue());
 		}
 
+		if (_methodName49.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
+			return JobLocalServiceUtil.countByFilters(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(java.lang.String)arguments[2], (boolean[])arguments[3],
+				(long[])arguments[4], (long[])arguments[5], (long[])arguments[6]);
+		}
+
+		if (_methodName50.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+			return JobLocalServiceUtil.findByFilters(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(java.lang.String)arguments[2], (boolean[])arguments[3],
+				(long[])arguments[4], (long[])arguments[5],
+				(long[])arguments[6], ((Integer)arguments[7]).intValue(),
+				((Integer)arguments[8]).intValue());
+		}
+
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+			return JobLocalServiceUtil.findByFilters(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(java.lang.String)arguments[2], (boolean[])arguments[3],
+				(long[])arguments[4], (long[])arguments[5],
+				(long[])arguments[6], ((Integer)arguments[7]).intValue(),
+				((Integer)arguments[8]).intValue(),
+				(com.liferay.portal.kernel.util.OrderByComparator)arguments[9]);
+		}
+
+		if (_methodName52.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
+			return JobLocalServiceUtil.countByBookmarks(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(java.lang.String)arguments[2], (boolean[])arguments[3],
+				(long[])arguments[4], (long[])arguments[5],
+				(long[])arguments[6], (java.lang.String)arguments[7]);
+		}
+
+		if (_methodName53.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
+			return JobLocalServiceUtil.findByBookmarks(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(java.lang.String)arguments[2], (boolean[])arguments[3],
+				(long[])arguments[4], (long[])arguments[5],
+				(long[])arguments[6], (java.lang.String)arguments[7],
+				((Integer)arguments[8]).intValue(),
+				((Integer)arguments[9]).intValue(),
+				(com.liferay.portal.kernel.util.OrderByComparator)arguments[10]);
+		}
+
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
+			return JobLocalServiceUtil.count((com.liferay.portal.theme.ThemeDisplay)arguments[0],
+				(java.lang.String)arguments[1], (boolean[])arguments[2],
+				(long[])arguments[3], (long[])arguments[4],
+				(long[])arguments[5], ((Boolean)arguments[6]).booleanValue());
+		}
+
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
+			return JobLocalServiceUtil.find((com.liferay.portal.theme.ThemeDisplay)arguments[0],
+				(java.lang.String)arguments[1], (boolean[])arguments[2],
+				(long[])arguments[3], (long[])arguments[4],
+				(long[])arguments[5], ((Boolean)arguments[6]).booleanValue(),
+				((Integer)arguments[7]).intValue(),
+				((Integer)arguments[8]).intValue(),
+				(com.liferay.portal.kernel.util.OrderByComparator)arguments[9]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -290,4 +411,18 @@ public class JobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes47;
 	private String _methodName48;
 	private String[] _methodParameterTypes48;
+	private String _methodName49;
+	private String[] _methodParameterTypes49;
+	private String _methodName50;
+	private String[] _methodParameterTypes50;
+	private String _methodName51;
+	private String[] _methodParameterTypes51;
+	private String _methodName52;
+	private String[] _methodParameterTypes52;
+	private String _methodName53;
+	private String[] _methodParameterTypes53;
+	private String _methodName54;
+	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
 }

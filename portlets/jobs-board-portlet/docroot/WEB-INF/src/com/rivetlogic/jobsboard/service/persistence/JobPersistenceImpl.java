@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -102,8 +103,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyGroup",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			JobModelImpl.COMPANYID_COLUMN_BITMASK |
-			JobModelImpl.GROUPID_COLUMN_BITMASK |
-			JobModelImpl.CREATEDATE_COLUMN_BITMASK);
+			JobModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYGROUP = new FinderPath(JobModelImpl.ENTITY_CACHE_ENABLED,
 			JobModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyGroup",
@@ -735,14 +735,14 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 						(groupId != job.getGroupId()) ||
 						!StringUtil.wildcardMatches(job.getName(), name,
 							CharPool.UNDERLINE, CharPool.PERCENT,
-							CharPool.BACK_SLASH, true) ||
+							CharPool.BACK_SLASH, false) ||
 						(active != job.getActive()) ||
 						(category != job.getCategory()) ||
 						(location != job.getLocation()) ||
 						(type != job.getType()) ||
 						!StringUtil.wildcardMatches(job.getDescription(),
 							description, CharPool.UNDERLINE, CharPool.PERCENT,
-							CharPool.BACK_SLASH, true)) {
+							CharPool.BACK_SLASH, false)) {
 					list = null;
 
 					break;
@@ -828,7 +828,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 				qPos.add(groupId);
 
 				if (bindName) {
-					qPos.add(name);
+					qPos.add(name.toLowerCase());
 				}
 
 				qPos.add(active);
@@ -840,7 +840,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 				qPos.add(type);
 
 				if (bindDescription) {
-					qPos.add(description);
+					qPos.add(description.toLowerCase());
 				}
 
 				if (!pagination) {
@@ -1243,7 +1243,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 		qPos.add(groupId);
 
 		if (bindName) {
-			qPos.add(name);
+			qPos.add(name.toLowerCase());
 		}
 
 		qPos.add(active);
@@ -1255,7 +1255,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 		qPos.add(type);
 
 		if (bindDescription) {
-			qPos.add(description);
+			qPos.add(description.toLowerCase());
 		}
 
 		if (orderByComparator != null) {
@@ -1277,7 +1277,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	}
 
 	/**
-	 * Returns all the jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE all &#63;.
+	 * Returns all the jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = any &#63; and category = any &#63; and location = any &#63; and type = any &#63; and description LIKE all &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.JobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -1286,25 +1286,25 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 * @param companyId the company ID
 	 * @param groupId the group ID
 	 * @param names the names
-	 * @param active the active
-	 * @param category the category
-	 * @param location the location
-	 * @param type the type
+	 * @param actives the actives
+	 * @param categories the categories
+	 * @param locations the locations
+	 * @param types the types
 	 * @param descriptions the descriptions
 	 * @return the matching jobs
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public List<Job> findByFilters(long companyId, long groupId,
-		String[] names, boolean active, long category, long location,
-		long type, String[] descriptions) throws SystemException {
-		return findByFilters(companyId, groupId, names, active, category,
-			location, type, descriptions, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			null);
+		String[] names, boolean[] actives, long[] categories, long[] locations,
+		long[] types, String[] descriptions) throws SystemException {
+		return findByFilters(companyId, groupId, names, actives, categories,
+			locations, types, descriptions, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE all &#63;.
+	 * Returns a range of all the jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = any &#63; and category = any &#63; and location = any &#63; and type = any &#63; and description LIKE all &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.JobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -1313,10 +1313,10 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 * @param companyId the company ID
 	 * @param groupId the group ID
 	 * @param names the names
-	 * @param active the active
-	 * @param category the category
-	 * @param location the location
-	 * @param type the type
+	 * @param actives the actives
+	 * @param categories the categories
+	 * @param locations the locations
+	 * @param types the types
 	 * @param descriptions the descriptions
 	 * @param start the lower bound of the range of jobs
 	 * @param end the upper bound of the range of jobs (not inclusive)
@@ -1325,15 +1325,15 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public List<Job> findByFilters(long companyId, long groupId,
-		String[] names, boolean active, long category, long location,
-		long type, String[] descriptions, int start, int end)
+		String[] names, boolean[] actives, long[] categories, long[] locations,
+		long[] types, String[] descriptions, int start, int end)
 		throws SystemException {
-		return findByFilters(companyId, groupId, names, active, category,
-			location, type, descriptions, start, end, null);
+		return findByFilters(companyId, groupId, names, actives, categories,
+			locations, types, descriptions, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE all &#63;.
+	 * Returns an ordered range of all the jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = any &#63; and category = any &#63; and location = any &#63; and type = any &#63; and description LIKE all &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.JobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -1342,10 +1342,10 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 * @param companyId the company ID
 	 * @param groupId the group ID
 	 * @param names the names
-	 * @param active the active
-	 * @param category the category
-	 * @param location the location
-	 * @param type the type
+	 * @param actives the actives
+	 * @param categories the categories
+	 * @param locations the locations
+	 * @param types the types
 	 * @param descriptions the descriptions
 	 * @param start the lower bound of the range of jobs
 	 * @param end the upper bound of the range of jobs (not inclusive)
@@ -1355,14 +1355,18 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	 */
 	@Override
 	public List<Job> findByFilters(long companyId, long groupId,
-		String[] names, boolean active, long category, long location,
-		long type, String[] descriptions, int start, int end,
+		String[] names, boolean[] actives, long[] categories, long[] locations,
+		long[] types, String[] descriptions, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		if ((names != null) && (names.length == 1) && (descriptions != null) &&
+		if ((names != null) && (names.length == 1) && (actives != null) &&
+				(actives.length == 1) && (categories != null) &&
+				(categories.length == 1) && (locations != null) &&
+				(locations.length == 1) && (types != null) &&
+				(types.length == 1) && (descriptions != null) &&
 				(descriptions.length == 1)) {
-			return findByFilters(companyId, groupId, names[0], active,
-				category, location, type, descriptions[0], start, end,
-				orderByComparator);
+			return findByFilters(companyId, groupId, names[0], actives[0],
+				categories[0], locations[0], types[0], descriptions[0], start,
+				end, orderByComparator);
 		}
 
 		boolean pagination = true;
@@ -1372,14 +1376,18 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 				(orderByComparator == null)) {
 			pagination = false;
 			finderArgs = new Object[] {
-					companyId, groupId, StringUtil.merge(names), active,
-					category, location, type, StringUtil.merge(descriptions)
+					companyId, groupId, StringUtil.merge(names),
+					StringUtil.merge(actives), StringUtil.merge(categories),
+					StringUtil.merge(locations), StringUtil.merge(types),
+					StringUtil.merge(descriptions)
 				};
 		}
 		else {
 			finderArgs = new Object[] {
-					companyId, groupId, StringUtil.merge(names), active,
-					category, location, type, StringUtil.merge(descriptions),
+					companyId, groupId, StringUtil.merge(names),
+					StringUtil.merge(actives), StringUtil.merge(categories),
+					StringUtil.merge(locations), StringUtil.merge(types),
+					StringUtil.merge(descriptions),
 					
 					start, end, orderByComparator
 				};
@@ -1393,10 +1401,10 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 				if ((companyId != job.getCompanyId()) ||
 						(groupId != job.getGroupId()) ||
 						!ArrayUtil.contains(names, job.getName()) ||
-						(active != job.getActive()) ||
-						(category != job.getCategory()) ||
-						(location != job.getLocation()) ||
-						(type != job.getType()) ||
+						!ArrayUtil.contains(actives, job.getActive()) ||
+						!ArrayUtil.contains(categories, job.getCategory()) ||
+						!ArrayUtil.contains(locations, job.getLocation()) ||
+						!ArrayUtil.contains(types, job.getType()) ||
 						!ArrayUtil.contains(descriptions, job.getDescription())) {
 					list = null;
 
@@ -1458,37 +1466,85 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 				conjunctionable = true;
 			}
 
-			if (conjunctionable) {
-				query.append(WHERE_AND);
+			if ((actives == null) || (actives.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < actives.length; i++) {
+					query.append(_FINDER_COLUMN_FILTERS_ACTIVE_5);
+
+					if ((i + 1) < actives.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
 			}
 
-			query.append(_FINDER_COLUMN_FILTERS_ACTIVE_5);
+			if ((categories == null) || (categories.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
 
-			conjunctionable = true;
+				query.append(StringPool.OPEN_PARENTHESIS);
 
-			if (conjunctionable) {
-				query.append(WHERE_AND);
+				for (int i = 0; i < categories.length; i++) {
+					query.append(_FINDER_COLUMN_FILTERS_CATEGORY_5);
+
+					if ((i + 1) < categories.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
 			}
 
-			query.append(_FINDER_COLUMN_FILTERS_CATEGORY_5);
+			if ((locations == null) || (locations.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
 
-			conjunctionable = true;
+				query.append(StringPool.OPEN_PARENTHESIS);
 
-			if (conjunctionable) {
-				query.append(WHERE_AND);
+				for (int i = 0; i < locations.length; i++) {
+					query.append(_FINDER_COLUMN_FILTERS_LOCATION_5);
+
+					if ((i + 1) < locations.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
 			}
 
-			query.append(_FINDER_COLUMN_FILTERS_LOCATION_5);
+			if ((types == null) || (types.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
 
-			conjunctionable = true;
+				query.append(StringPool.OPEN_PARENTHESIS);
 
-			if (conjunctionable) {
-				query.append(WHERE_AND);
+				for (int i = 0; i < types.length; i++) {
+					query.append(_FINDER_COLUMN_FILTERS_TYPE_5);
+
+					if ((i + 1) < types.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
 			}
-
-			query.append(_FINDER_COLUMN_FILTERS_TYPE_5);
-
-			conjunctionable = true;
 
 			if ((descriptions == null) || (descriptions.length > 0)) {
 				if (conjunctionable) {
@@ -1548,13 +1604,21 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 					qPos.add(names);
 				}
 
-				qPos.add(active);
+				if (actives != null) {
+					qPos.add(actives);
+				}
 
-				qPos.add(category);
+				if (categories != null) {
+					qPos.add(categories);
+				}
 
-				qPos.add(location);
+				if (locations != null) {
+					qPos.add(locations);
+				}
 
-				qPos.add(type);
+				if (types != null) {
+					qPos.add(types);
+				}
 
 				if (descriptions != null) {
 					qPos.add(descriptions);
@@ -1704,7 +1768,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 				qPos.add(groupId);
 
 				if (bindName) {
-					qPos.add(name);
+					qPos.add(name.toLowerCase());
 				}
 
 				qPos.add(active);
@@ -1716,7 +1780,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 				qPos.add(type);
 
 				if (bindDescription) {
-					qPos.add(description);
+					qPos.add(description.toLowerCase());
 				}
 
 				count = (Long)q.uniqueResult();
@@ -1737,26 +1801,28 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	}
 
 	/**
-	 * Returns the number of jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE all &#63;.
+	 * Returns the number of jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = any &#63; and category = any &#63; and location = any &#63; and type = any &#63; and description LIKE all &#63;.
 	 *
 	 * @param companyId the company ID
 	 * @param groupId the group ID
 	 * @param names the names
-	 * @param active the active
-	 * @param category the category
-	 * @param location the location
-	 * @param type the type
+	 * @param actives the actives
+	 * @param categories the categories
+	 * @param locations the locations
+	 * @param types the types
 	 * @param descriptions the descriptions
 	 * @return the number of matching jobs
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public int countByFilters(long companyId, long groupId, String[] names,
-		boolean active, long category, long location, long type,
+		boolean[] actives, long[] categories, long[] locations, long[] types,
 		String[] descriptions) throws SystemException {
 		Object[] finderArgs = new Object[] {
-				companyId, groupId, StringUtil.merge(names), active, category,
-				location, type, StringUtil.merge(descriptions)
+				companyId, groupId, StringUtil.merge(names),
+				StringUtil.merge(actives), StringUtil.merge(categories),
+				StringUtil.merge(locations), StringUtil.merge(types),
+				StringUtil.merge(descriptions)
 			};
 
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_FILTERS,
@@ -1815,37 +1881,85 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 				conjunctionable = true;
 			}
 
-			if (conjunctionable) {
-				query.append(WHERE_AND);
+			if ((actives == null) || (actives.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < actives.length; i++) {
+					query.append(_FINDER_COLUMN_FILTERS_ACTIVE_5);
+
+					if ((i + 1) < actives.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
 			}
 
-			query.append(_FINDER_COLUMN_FILTERS_ACTIVE_5);
+			if ((categories == null) || (categories.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
 
-			conjunctionable = true;
+				query.append(StringPool.OPEN_PARENTHESIS);
 
-			if (conjunctionable) {
-				query.append(WHERE_AND);
+				for (int i = 0; i < categories.length; i++) {
+					query.append(_FINDER_COLUMN_FILTERS_CATEGORY_5);
+
+					if ((i + 1) < categories.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
 			}
 
-			query.append(_FINDER_COLUMN_FILTERS_CATEGORY_5);
+			if ((locations == null) || (locations.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
 
-			conjunctionable = true;
+				query.append(StringPool.OPEN_PARENTHESIS);
 
-			if (conjunctionable) {
-				query.append(WHERE_AND);
+				for (int i = 0; i < locations.length; i++) {
+					query.append(_FINDER_COLUMN_FILTERS_LOCATION_5);
+
+					if ((i + 1) < locations.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
 			}
 
-			query.append(_FINDER_COLUMN_FILTERS_LOCATION_5);
+			if ((types == null) || (types.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
 
-			conjunctionable = true;
+				query.append(StringPool.OPEN_PARENTHESIS);
 
-			if (conjunctionable) {
-				query.append(WHERE_AND);
+				for (int i = 0; i < types.length; i++) {
+					query.append(_FINDER_COLUMN_FILTERS_TYPE_5);
+
+					if ((i + 1) < types.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
 			}
-
-			query.append(_FINDER_COLUMN_FILTERS_TYPE_5);
-
-			conjunctionable = true;
 
 			if ((descriptions == null) || (descriptions.length > 0)) {
 				if (conjunctionable) {
@@ -1896,13 +2010,21 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 					qPos.add(names);
 				}
 
-				qPos.add(active);
+				if (actives != null) {
+					qPos.add(actives);
+				}
 
-				qPos.add(category);
+				if (categories != null) {
+					qPos.add(categories);
+				}
 
-				qPos.add(location);
+				if (locations != null) {
+					qPos.add(locations);
+				}
 
-				qPos.add(type);
+				if (types != null) {
+					qPos.add(types);
+				}
 
 				if (descriptions != null) {
 					qPos.add(descriptions);
@@ -1934,7 +2056,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	private static final String _FINDER_COLUMN_FILTERS_GROUPID_5 = "(" +
 		removeConjunction(_FINDER_COLUMN_FILTERS_GROUPID_2) + ")";
 	private static final String _FINDER_COLUMN_FILTERS_NAME_1 = "job.name LIKE NULL AND ";
-	private static final String _FINDER_COLUMN_FILTERS_NAME_2 = "job.name LIKE ? AND ";
+	private static final String _FINDER_COLUMN_FILTERS_NAME_2 = "lower(job.name) LIKE ? AND ";
 	private static final String _FINDER_COLUMN_FILTERS_NAME_3 = "(job.name IS NULL OR job.name LIKE '') AND ";
 	private static final String _FINDER_COLUMN_FILTERS_NAME_4 = "(" +
 		removeConjunction(_FINDER_COLUMN_FILTERS_NAME_1) + ")";
@@ -1955,7 +2077,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 	private static final String _FINDER_COLUMN_FILTERS_TYPE_5 = "(" +
 		removeConjunction(_FINDER_COLUMN_FILTERS_TYPE_2) + ")";
 	private static final String _FINDER_COLUMN_FILTERS_DESCRIPTION_1 = "job.description LIKE NULL";
-	private static final String _FINDER_COLUMN_FILTERS_DESCRIPTION_2 = "job.description LIKE ?";
+	private static final String _FINDER_COLUMN_FILTERS_DESCRIPTION_2 = "lower(job.description) LIKE ?";
 	private static final String _FINDER_COLUMN_FILTERS_DESCRIPTION_3 = "(job.description IS NULL OR job.description LIKE '')";
 	private static final String _FINDER_COLUMN_FILTERS_DESCRIPTION_4 = "(" +
 		removeConjunction(_FINDER_COLUMN_FILTERS_DESCRIPTION_1) + ")";
@@ -1963,6 +2085,1612 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 		removeConjunction(_FINDER_COLUMN_FILTERS_DESCRIPTION_2) + ")";
 	private static final String _FINDER_COLUMN_FILTERS_DESCRIPTION_6 = "(" +
 		removeConjunction(_FINDER_COLUMN_FILTERS_DESCRIPTION_3) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_BOOKMARKS =
+		new FinderPath(JobModelImpl.ENTITY_CACHE_ENABLED,
+			JobModelImpl.FINDER_CACHE_ENABLED, JobImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByBookmarks",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), Boolean.class.getName(),
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				String.class.getName(), String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_BOOKMARKS =
+		new FinderPath(JobModelImpl.ENTITY_CACHE_ENABLED,
+			JobModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByBookmarks",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), Boolean.class.getName(),
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				String.class.getName(), String.class.getName()
+			});
+
+	/**
+	 * Returns all the jobs where companyId = &#63; and groupId = &#63; and name LIKE &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE &#63; and bookmarks LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param active the active
+	 * @param category the category
+	 * @param location the location
+	 * @param type the type
+	 * @param description the description
+	 * @param bookmarks the bookmarks
+	 * @return the matching jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Job> findByBookmarks(long companyId, long groupId, String name,
+		boolean active, long category, long location, long type,
+		String description, String bookmarks) throws SystemException {
+		return findByBookmarks(companyId, groupId, name, active, category,
+			location, type, description, bookmarks, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the jobs where companyId = &#63; and groupId = &#63; and name LIKE &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE &#63; and bookmarks LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.JobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param active the active
+	 * @param category the category
+	 * @param location the location
+	 * @param type the type
+	 * @param description the description
+	 * @param bookmarks the bookmarks
+	 * @param start the lower bound of the range of jobs
+	 * @param end the upper bound of the range of jobs (not inclusive)
+	 * @return the range of matching jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Job> findByBookmarks(long companyId, long groupId, String name,
+		boolean active, long category, long location, long type,
+		String description, String bookmarks, int start, int end)
+		throws SystemException {
+		return findByBookmarks(companyId, groupId, name, active, category,
+			location, type, description, bookmarks, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the jobs where companyId = &#63; and groupId = &#63; and name LIKE &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE &#63; and bookmarks LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.JobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param active the active
+	 * @param category the category
+	 * @param location the location
+	 * @param type the type
+	 * @param description the description
+	 * @param bookmarks the bookmarks
+	 * @param start the lower bound of the range of jobs
+	 * @param end the upper bound of the range of jobs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Job> findByBookmarks(long companyId, long groupId, String name,
+		boolean active, long category, long location, long type,
+		String description, String bookmarks, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_BOOKMARKS;
+		finderArgs = new Object[] {
+				companyId, groupId, name, active, category, location, type,
+				description, bookmarks,
+				
+				start, end, orderByComparator
+			};
+
+		List<Job> list = (List<Job>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Job job : list) {
+				if ((companyId != job.getCompanyId()) ||
+						(groupId != job.getGroupId()) ||
+						!StringUtil.wildcardMatches(job.getName(), name,
+							CharPool.UNDERLINE, CharPool.PERCENT,
+							CharPool.BACK_SLASH, false) ||
+						(active != job.getActive()) ||
+						(category != job.getCategory()) ||
+						(location != job.getLocation()) ||
+						(type != job.getType()) ||
+						!StringUtil.wildcardMatches(job.getDescription(),
+							description, CharPool.UNDERLINE, CharPool.PERCENT,
+							CharPool.BACK_SLASH, false) ||
+						!StringUtil.wildcardMatches(job.getBookmarks(),
+							bookmarks, CharPool.UNDERLINE, CharPool.PERCENT,
+							CharPool.BACK_SLASH, false)) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(11 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(11);
+			}
+
+			query.append(_SQL_SELECT_JOB_WHERE);
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_GROUPID_2);
+
+			boolean bindName = false;
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_NAME_1);
+			}
+			else if (name.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_NAME_3);
+			}
+			else {
+				bindName = true;
+
+				query.append(_FINDER_COLUMN_BOOKMARKS_NAME_2);
+			}
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_ACTIVE_2);
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_CATEGORY_2);
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_LOCATION_2);
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_TYPE_2);
+
+			boolean bindDescription = false;
+
+			if (description == null) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_1);
+			}
+			else if (description.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_3);
+			}
+			else {
+				bindDescription = true;
+
+				query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_2);
+			}
+
+			boolean bindBookmarks = false;
+
+			if (bookmarks == null) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_1);
+			}
+			else if (bookmarks.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_3);
+			}
+			else {
+				bindBookmarks = true;
+
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(JobModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(groupId);
+
+				if (bindName) {
+					qPos.add(name.toLowerCase());
+				}
+
+				qPos.add(active);
+
+				qPos.add(category);
+
+				qPos.add(location);
+
+				qPos.add(type);
+
+				if (bindDescription) {
+					qPos.add(description.toLowerCase());
+				}
+
+				if (bindBookmarks) {
+					qPos.add(bookmarks.toLowerCase());
+				}
+
+				if (!pagination) {
+					list = (List<Job>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Job>(list);
+				}
+				else {
+					list = (List<Job>)QueryUtil.list(q, getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first job in the ordered set where companyId = &#63; and groupId = &#63; and name LIKE &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE &#63; and bookmarks LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param active the active
+	 * @param category the category
+	 * @param location the location
+	 * @param type the type
+	 * @param description the description
+	 * @param bookmarks the bookmarks
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching job
+	 * @throws com.rivetlogic.jobsboard.NoSuchJobException if a matching job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Job findByBookmarks_First(long companyId, long groupId, String name,
+		boolean active, long category, long location, long type,
+		String description, String bookmarks,
+		OrderByComparator orderByComparator)
+		throws NoSuchJobException, SystemException {
+		Job job = fetchByBookmarks_First(companyId, groupId, name, active,
+				category, location, type, description, bookmarks,
+				orderByComparator);
+
+		if (job != null) {
+			return job;
+		}
+
+		StringBundler msg = new StringBundler(20);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", groupId=");
+		msg.append(groupId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(", active=");
+		msg.append(active);
+
+		msg.append(", category=");
+		msg.append(category);
+
+		msg.append(", location=");
+		msg.append(location);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(", description=");
+		msg.append(description);
+
+		msg.append(", bookmarks=");
+		msg.append(bookmarks);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchJobException(msg.toString());
+	}
+
+	/**
+	 * Returns the first job in the ordered set where companyId = &#63; and groupId = &#63; and name LIKE &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE &#63; and bookmarks LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param active the active
+	 * @param category the category
+	 * @param location the location
+	 * @param type the type
+	 * @param description the description
+	 * @param bookmarks the bookmarks
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching job, or <code>null</code> if a matching job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Job fetchByBookmarks_First(long companyId, long groupId,
+		String name, boolean active, long category, long location, long type,
+		String description, String bookmarks,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Job> list = findByBookmarks(companyId, groupId, name, active,
+				category, location, type, description, bookmarks, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last job in the ordered set where companyId = &#63; and groupId = &#63; and name LIKE &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE &#63; and bookmarks LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param active the active
+	 * @param category the category
+	 * @param location the location
+	 * @param type the type
+	 * @param description the description
+	 * @param bookmarks the bookmarks
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching job
+	 * @throws com.rivetlogic.jobsboard.NoSuchJobException if a matching job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Job findByBookmarks_Last(long companyId, long groupId, String name,
+		boolean active, long category, long location, long type,
+		String description, String bookmarks,
+		OrderByComparator orderByComparator)
+		throws NoSuchJobException, SystemException {
+		Job job = fetchByBookmarks_Last(companyId, groupId, name, active,
+				category, location, type, description, bookmarks,
+				orderByComparator);
+
+		if (job != null) {
+			return job;
+		}
+
+		StringBundler msg = new StringBundler(20);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", groupId=");
+		msg.append(groupId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(", active=");
+		msg.append(active);
+
+		msg.append(", category=");
+		msg.append(category);
+
+		msg.append(", location=");
+		msg.append(location);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(", description=");
+		msg.append(description);
+
+		msg.append(", bookmarks=");
+		msg.append(bookmarks);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchJobException(msg.toString());
+	}
+
+	/**
+	 * Returns the last job in the ordered set where companyId = &#63; and groupId = &#63; and name LIKE &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE &#63; and bookmarks LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param active the active
+	 * @param category the category
+	 * @param location the location
+	 * @param type the type
+	 * @param description the description
+	 * @param bookmarks the bookmarks
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching job, or <code>null</code> if a matching job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Job fetchByBookmarks_Last(long companyId, long groupId, String name,
+		boolean active, long category, long location, long type,
+		String description, String bookmarks,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByBookmarks(companyId, groupId, name, active,
+				category, location, type, description, bookmarks);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Job> list = findByBookmarks(companyId, groupId, name, active,
+				category, location, type, description, bookmarks, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the jobs before and after the current job in the ordered set where companyId = &#63; and groupId = &#63; and name LIKE &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE &#63; and bookmarks LIKE &#63;.
+	 *
+	 * @param jobId the primary key of the current job
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param active the active
+	 * @param category the category
+	 * @param location the location
+	 * @param type the type
+	 * @param description the description
+	 * @param bookmarks the bookmarks
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next job
+	 * @throws com.rivetlogic.jobsboard.NoSuchJobException if a job with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Job[] findByBookmarks_PrevAndNext(long jobId, long companyId,
+		long groupId, String name, boolean active, long category,
+		long location, long type, String description, String bookmarks,
+		OrderByComparator orderByComparator)
+		throws NoSuchJobException, SystemException {
+		Job job = findByPrimaryKey(jobId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Job[] array = new JobImpl[3];
+
+			array[0] = getByBookmarks_PrevAndNext(session, job, companyId,
+					groupId, name, active, category, location, type,
+					description, bookmarks, orderByComparator, true);
+
+			array[1] = job;
+
+			array[2] = getByBookmarks_PrevAndNext(session, job, companyId,
+					groupId, name, active, category, location, type,
+					description, bookmarks, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Job getByBookmarks_PrevAndNext(Session session, Job job,
+		long companyId, long groupId, String name, boolean active,
+		long category, long location, long type, String description,
+		String bookmarks, OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_JOB_WHERE);
+
+		query.append(_FINDER_COLUMN_BOOKMARKS_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_BOOKMARKS_GROUPID_2);
+
+		boolean bindName = false;
+
+		if (name == null) {
+			query.append(_FINDER_COLUMN_BOOKMARKS_NAME_1);
+		}
+		else if (name.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_BOOKMARKS_NAME_3);
+		}
+		else {
+			bindName = true;
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_NAME_2);
+		}
+
+		query.append(_FINDER_COLUMN_BOOKMARKS_ACTIVE_2);
+
+		query.append(_FINDER_COLUMN_BOOKMARKS_CATEGORY_2);
+
+		query.append(_FINDER_COLUMN_BOOKMARKS_LOCATION_2);
+
+		query.append(_FINDER_COLUMN_BOOKMARKS_TYPE_2);
+
+		boolean bindDescription = false;
+
+		if (description == null) {
+			query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_1);
+		}
+		else if (description.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_3);
+		}
+		else {
+			bindDescription = true;
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_2);
+		}
+
+		boolean bindBookmarks = false;
+
+		if (bookmarks == null) {
+			query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_1);
+		}
+		else if (bookmarks.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_3);
+		}
+		else {
+			bindBookmarks = true;
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(JobModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		qPos.add(groupId);
+
+		if (bindName) {
+			qPos.add(name.toLowerCase());
+		}
+
+		qPos.add(active);
+
+		qPos.add(category);
+
+		qPos.add(location);
+
+		qPos.add(type);
+
+		if (bindDescription) {
+			qPos.add(description.toLowerCase());
+		}
+
+		if (bindBookmarks) {
+			qPos.add(bookmarks.toLowerCase());
+		}
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(job);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<Job> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = any &#63; and category = any &#63; and location = any &#63; and type = any &#63; and description LIKE all &#63; and bookmarks LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.JobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param names the names
+	 * @param actives the actives
+	 * @param categories the categories
+	 * @param locations the locations
+	 * @param types the types
+	 * @param descriptions the descriptions
+	 * @param bookmarks the bookmarks
+	 * @return the matching jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Job> findByBookmarks(long companyId, long groupId,
+		String[] names, boolean[] actives, long[] categories, long[] locations,
+		long[] types, String[] descriptions, String bookmarks)
+		throws SystemException {
+		return findByBookmarks(companyId, groupId, names, actives, categories,
+			locations, types, descriptions, bookmarks, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = any &#63; and category = any &#63; and location = any &#63; and type = any &#63; and description LIKE all &#63; and bookmarks LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.JobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param names the names
+	 * @param actives the actives
+	 * @param categories the categories
+	 * @param locations the locations
+	 * @param types the types
+	 * @param descriptions the descriptions
+	 * @param bookmarks the bookmarks
+	 * @param start the lower bound of the range of jobs
+	 * @param end the upper bound of the range of jobs (not inclusive)
+	 * @return the range of matching jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Job> findByBookmarks(long companyId, long groupId,
+		String[] names, boolean[] actives, long[] categories, long[] locations,
+		long[] types, String[] descriptions, String bookmarks, int start,
+		int end) throws SystemException {
+		return findByBookmarks(companyId, groupId, names, actives, categories,
+			locations, types, descriptions, bookmarks, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = any &#63; and category = any &#63; and location = any &#63; and type = any &#63; and description LIKE all &#63; and bookmarks LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.JobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param names the names
+	 * @param actives the actives
+	 * @param categories the categories
+	 * @param locations the locations
+	 * @param types the types
+	 * @param descriptions the descriptions
+	 * @param bookmarks the bookmarks
+	 * @param start the lower bound of the range of jobs
+	 * @param end the upper bound of the range of jobs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Job> findByBookmarks(long companyId, long groupId,
+		String[] names, boolean[] actives, long[] categories, long[] locations,
+		long[] types, String[] descriptions, String bookmarks, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		if ((names != null) && (names.length == 1) && (actives != null) &&
+				(actives.length == 1) && (categories != null) &&
+				(categories.length == 1) && (locations != null) &&
+				(locations.length == 1) && (types != null) &&
+				(types.length == 1) && (descriptions != null) &&
+				(descriptions.length == 1)) {
+			return findByBookmarks(companyId, groupId, names[0], actives[0],
+				categories[0], locations[0], types[0], descriptions[0],
+				bookmarks, start, end, orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderArgs = new Object[] {
+					companyId, groupId, StringUtil.merge(names),
+					StringUtil.merge(actives), StringUtil.merge(categories),
+					StringUtil.merge(locations), StringUtil.merge(types),
+					StringUtil.merge(descriptions), bookmarks
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					companyId, groupId, StringUtil.merge(names),
+					StringUtil.merge(actives), StringUtil.merge(categories),
+					StringUtil.merge(locations), StringUtil.merge(types),
+					StringUtil.merge(descriptions), bookmarks,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Job> list = (List<Job>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_BOOKMARKS,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Job job : list) {
+				if ((companyId != job.getCompanyId()) ||
+						(groupId != job.getGroupId()) ||
+						!ArrayUtil.contains(names, job.getName()) ||
+						!ArrayUtil.contains(actives, job.getActive()) ||
+						!ArrayUtil.contains(categories, job.getCategory()) ||
+						!ArrayUtil.contains(locations, job.getLocation()) ||
+						!ArrayUtil.contains(types, job.getType()) ||
+						!ArrayUtil.contains(descriptions, job.getDescription()) ||
+						!Validator.equals(bookmarks, job.getBookmarks())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_JOB_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_COMPANYID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_GROUPID_5);
+
+			conjunctionable = true;
+
+			if ((names == null) || (names.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < names.length; i++) {
+					String name = names[i];
+
+					if (name == null) {
+						query.append(_FINDER_COLUMN_BOOKMARKS_NAME_4);
+					}
+					else if (name.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_BOOKMARKS_NAME_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_BOOKMARKS_NAME_5);
+					}
+
+					if ((i + 1) < names.length) {
+						query.append(WHERE_AND);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if ((actives == null) || (actives.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < actives.length; i++) {
+					query.append(_FINDER_COLUMN_BOOKMARKS_ACTIVE_5);
+
+					if ((i + 1) < actives.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if ((categories == null) || (categories.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < categories.length; i++) {
+					query.append(_FINDER_COLUMN_BOOKMARKS_CATEGORY_5);
+
+					if ((i + 1) < categories.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if ((locations == null) || (locations.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < locations.length; i++) {
+					query.append(_FINDER_COLUMN_BOOKMARKS_LOCATION_5);
+
+					if ((i + 1) < locations.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if ((types == null) || (types.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < types.length; i++) {
+					query.append(_FINDER_COLUMN_BOOKMARKS_TYPE_5);
+
+					if ((i + 1) < types.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if ((descriptions == null) || (descriptions.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < descriptions.length; i++) {
+					String description = descriptions[i];
+
+					if (description == null) {
+						query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_4);
+					}
+					else if (description.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_5);
+					}
+
+					if ((i + 1) < descriptions.length) {
+						query.append(WHERE_AND);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			if (bookmarks == null) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_4);
+			}
+			else if (bookmarks.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_6);
+			}
+			else {
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_5);
+			}
+
+			conjunctionable = true;
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(JobModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(groupId);
+
+				if (names != null) {
+					qPos.add(names);
+				}
+
+				if (actives != null) {
+					qPos.add(actives);
+				}
+
+				if (categories != null) {
+					qPos.add(categories);
+				}
+
+				if (locations != null) {
+					qPos.add(locations);
+				}
+
+				if (types != null) {
+					qPos.add(types);
+				}
+
+				if (descriptions != null) {
+					qPos.add(descriptions);
+				}
+
+				if (bookmarks != null) {
+					qPos.add(bookmarks);
+				}
+
+				if (!pagination) {
+					list = (List<Job>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Job>(list);
+				}
+				else {
+					list = (List<Job>)QueryUtil.list(q, getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_BOOKMARKS,
+					finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_BOOKMARKS,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the jobs where companyId = &#63; and groupId = &#63; and name LIKE &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE &#63; and bookmarks LIKE &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param active the active
+	 * @param category the category
+	 * @param location the location
+	 * @param type the type
+	 * @param description the description
+	 * @param bookmarks the bookmarks
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void removeByBookmarks(long companyId, long groupId, String name,
+		boolean active, long category, long location, long type,
+		String description, String bookmarks) throws SystemException {
+		for (Job job : findByBookmarks(companyId, groupId, name, active,
+				category, location, type, description, bookmarks,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(job);
+		}
+	}
+
+	/**
+	 * Returns the number of jobs where companyId = &#63; and groupId = &#63; and name LIKE &#63; and active = &#63; and category = &#63; and location = &#63; and type = &#63; and description LIKE &#63; and bookmarks LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param active the active
+	 * @param category the category
+	 * @param location the location
+	 * @param type the type
+	 * @param description the description
+	 * @param bookmarks the bookmarks
+	 * @return the number of matching jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByBookmarks(long companyId, long groupId, String name,
+		boolean active, long category, long location, long type,
+		String description, String bookmarks) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_BOOKMARKS;
+
+		Object[] finderArgs = new Object[] {
+				companyId, groupId, name, active, category, location, type,
+				description, bookmarks
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(10);
+
+			query.append(_SQL_COUNT_JOB_WHERE);
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_GROUPID_2);
+
+			boolean bindName = false;
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_NAME_1);
+			}
+			else if (name.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_NAME_3);
+			}
+			else {
+				bindName = true;
+
+				query.append(_FINDER_COLUMN_BOOKMARKS_NAME_2);
+			}
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_ACTIVE_2);
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_CATEGORY_2);
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_LOCATION_2);
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_TYPE_2);
+
+			boolean bindDescription = false;
+
+			if (description == null) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_1);
+			}
+			else if (description.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_3);
+			}
+			else {
+				bindDescription = true;
+
+				query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_2);
+			}
+
+			boolean bindBookmarks = false;
+
+			if (bookmarks == null) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_1);
+			}
+			else if (bookmarks.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_3);
+			}
+			else {
+				bindBookmarks = true;
+
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(groupId);
+
+				if (bindName) {
+					qPos.add(name.toLowerCase());
+				}
+
+				qPos.add(active);
+
+				qPos.add(category);
+
+				qPos.add(location);
+
+				qPos.add(type);
+
+				if (bindDescription) {
+					qPos.add(description.toLowerCase());
+				}
+
+				if (bindBookmarks) {
+					qPos.add(bookmarks.toLowerCase());
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of jobs where companyId = &#63; and groupId = &#63; and name LIKE all &#63; and active = any &#63; and category = any &#63; and location = any &#63; and type = any &#63; and description LIKE all &#63; and bookmarks LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param names the names
+	 * @param actives the actives
+	 * @param categories the categories
+	 * @param locations the locations
+	 * @param types the types
+	 * @param descriptions the descriptions
+	 * @param bookmarks the bookmarks
+	 * @return the number of matching jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByBookmarks(long companyId, long groupId, String[] names,
+		boolean[] actives, long[] categories, long[] locations, long[] types,
+		String[] descriptions, String bookmarks) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				companyId, groupId, StringUtil.merge(names),
+				StringUtil.merge(actives), StringUtil.merge(categories),
+				StringUtil.merge(locations), StringUtil.merge(types),
+				StringUtil.merge(descriptions), bookmarks
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_BOOKMARKS,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_JOB_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_COMPANYID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_BOOKMARKS_GROUPID_5);
+
+			conjunctionable = true;
+
+			if ((names == null) || (names.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < names.length; i++) {
+					String name = names[i];
+
+					if (name == null) {
+						query.append(_FINDER_COLUMN_BOOKMARKS_NAME_4);
+					}
+					else if (name.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_BOOKMARKS_NAME_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_BOOKMARKS_NAME_5);
+					}
+
+					if ((i + 1) < names.length) {
+						query.append(WHERE_AND);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if ((actives == null) || (actives.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < actives.length; i++) {
+					query.append(_FINDER_COLUMN_BOOKMARKS_ACTIVE_5);
+
+					if ((i + 1) < actives.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if ((categories == null) || (categories.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < categories.length; i++) {
+					query.append(_FINDER_COLUMN_BOOKMARKS_CATEGORY_5);
+
+					if ((i + 1) < categories.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if ((locations == null) || (locations.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < locations.length; i++) {
+					query.append(_FINDER_COLUMN_BOOKMARKS_LOCATION_5);
+
+					if ((i + 1) < locations.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if ((types == null) || (types.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < types.length; i++) {
+					query.append(_FINDER_COLUMN_BOOKMARKS_TYPE_5);
+
+					if ((i + 1) < types.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if ((descriptions == null) || (descriptions.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < descriptions.length; i++) {
+					String description = descriptions[i];
+
+					if (description == null) {
+						query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_4);
+					}
+					else if (description.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_5);
+					}
+
+					if ((i + 1) < descriptions.length) {
+						query.append(WHERE_AND);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			if (bookmarks == null) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_4);
+			}
+			else if (bookmarks.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_6);
+			}
+			else {
+				query.append(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_5);
+			}
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(groupId);
+
+				if (names != null) {
+					qPos.add(names);
+				}
+
+				if (actives != null) {
+					qPos.add(actives);
+				}
+
+				if (categories != null) {
+					qPos.add(categories);
+				}
+
+				if (locations != null) {
+					qPos.add(locations);
+				}
+
+				if (types != null) {
+					qPos.add(types);
+				}
+
+				if (descriptions != null) {
+					qPos.add(descriptions);
+				}
+
+				if (bookmarks != null) {
+					qPos.add(bookmarks);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_BOOKMARKS,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_BOOKMARKS,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_BOOKMARKS_COMPANYID_2 = "job.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_COMPANYID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_COMPANYID_2) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_GROUPID_2 = "job.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_NAME_1 = "job.name LIKE NULL AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_NAME_2 = "lower(job.name) LIKE ? AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_NAME_3 = "(job.name IS NULL OR job.name LIKE '') AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_NAME_4 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_NAME_1) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_NAME_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_NAME_2) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_NAME_6 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_NAME_3) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_ACTIVE_2 = "job.active = ? AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_ACTIVE_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_ACTIVE_2) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_CATEGORY_2 = "job.category = ? AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_CATEGORY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_CATEGORY_2) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_LOCATION_2 = "job.location = ? AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_LOCATION_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_LOCATION_2) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_TYPE_2 = "job.type = ? AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_TYPE_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_TYPE_2) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_DESCRIPTION_1 = "job.description LIKE NULL AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_DESCRIPTION_2 = "lower(job.description) LIKE ? AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_DESCRIPTION_3 = "(job.description IS NULL OR job.description LIKE '') AND ";
+	private static final String _FINDER_COLUMN_BOOKMARKS_DESCRIPTION_4 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_1) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_DESCRIPTION_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_2) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_DESCRIPTION_6 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_DESCRIPTION_3) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_BOOKMARKS_1 = "job.bookmarks LIKE NULL";
+	private static final String _FINDER_COLUMN_BOOKMARKS_BOOKMARKS_2 = "lower(job.bookmarks) LIKE ?";
+	private static final String _FINDER_COLUMN_BOOKMARKS_BOOKMARKS_3 = "(job.bookmarks IS NULL OR job.bookmarks LIKE '')";
+	private static final String _FINDER_COLUMN_BOOKMARKS_BOOKMARKS_4 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_1) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_BOOKMARKS_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_2) + ")";
+	private static final String _FINDER_COLUMN_BOOKMARKS_BOOKMARKS_6 = "(" +
+		removeConjunction(_FINDER_COLUMN_BOOKMARKS_BOOKMARKS_3) + ")";
 
 	public JobPersistenceImpl() {
 		setModelClass(Job.class);
@@ -2236,6 +3964,7 @@ public class JobPersistenceImpl extends BasePersistenceImpl<Job>
 		jobImpl.setType(job.getType());
 		jobImpl.setDescription(job.getDescription());
 		jobImpl.setSalary(job.getSalary());
+		jobImpl.setBookmarks(job.getBookmarks());
 
 		return jobImpl;
 	}

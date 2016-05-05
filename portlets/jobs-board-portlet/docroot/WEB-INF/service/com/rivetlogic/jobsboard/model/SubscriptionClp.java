@@ -369,10 +369,6 @@ public class SubscriptionClp extends BaseModelImpl<Subscription>
 		}
 	}
 
-	public Class<?> getClpSerializerClass() {
-		return _clpSerializerClass;
-	}
-
 	@Override
 	public int hashCode() {
 		return getPrimaryKey().hashCode();
@@ -444,5 +440,4 @@ public class SubscriptionClp extends BaseModelImpl<Subscription>
 	private Date _createDate;
 	private Date _modifiedDate;
 	private BaseModel<?> _subscriptionRemoteModel;
-	private Class<?> _clpSerializerClass = com.rivetlogic.jobsboard.service.ClpSerializer.class;
 }

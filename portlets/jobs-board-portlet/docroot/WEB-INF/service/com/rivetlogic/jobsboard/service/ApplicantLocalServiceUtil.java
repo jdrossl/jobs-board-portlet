@@ -291,6 +291,22 @@ public class ApplicantLocalServiceUtil {
 		return getService().findByCompanyGroupJob(companyId, groupId, jobId);
 	}
 
+	public static int countByFilters(long companyId, long groupId, long jobId,
+		java.lang.String status, java.lang.String keywords)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .countByFilters(companyId, groupId, jobId, status, keywords);
+	}
+
+	public static java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByFilters(
+		long companyId, long groupId, long jobId, java.lang.String status,
+		java.lang.String keywords, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .findByFilters(companyId, groupId, jobId, status, keywords,
+			start, end);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

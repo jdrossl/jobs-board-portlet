@@ -302,6 +302,325 @@ public class ApplicantUtil {
 	}
 
 	/**
+	* Returns all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param name the name
+	* @param status the status
+	* @return the matching applicants
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByFilters(
+		long companyId, long groupId, long jobId, java.lang.String name,
+		java.lang.String status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByFilters(companyId, groupId, jobId, name, status);
+	}
+
+	/**
+	* Returns a range of all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.ApplicantModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param name the name
+	* @param status the status
+	* @param start the lower bound of the range of applicants
+	* @param end the upper bound of the range of applicants (not inclusive)
+	* @return the range of matching applicants
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByFilters(
+		long companyId, long groupId, long jobId, java.lang.String name,
+		java.lang.String status, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByFilters(companyId, groupId, jobId, name, status,
+			start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.ApplicantModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param name the name
+	* @param status the status
+	* @param start the lower bound of the range of applicants
+	* @param end the upper bound of the range of applicants (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching applicants
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByFilters(
+		long companyId, long groupId, long jobId, java.lang.String name,
+		java.lang.String status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByFilters(companyId, groupId, jobId, name, status,
+			start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first applicant in the ordered set where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param name the name
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching applicant
+	* @throws com.rivetlogic.jobsboard.NoSuchApplicantException if a matching applicant could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.rivetlogic.jobsboard.model.Applicant findByFilters_First(
+		long companyId, long groupId, long jobId, java.lang.String name,
+		java.lang.String status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.rivetlogic.jobsboard.NoSuchApplicantException {
+		return getPersistence()
+				   .findByFilters_First(companyId, groupId, jobId, name,
+			status, orderByComparator);
+	}
+
+	/**
+	* Returns the first applicant in the ordered set where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param name the name
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching applicant, or <code>null</code> if a matching applicant could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.rivetlogic.jobsboard.model.Applicant fetchByFilters_First(
+		long companyId, long groupId, long jobId, java.lang.String name,
+		java.lang.String status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByFilters_First(companyId, groupId, jobId, name,
+			status, orderByComparator);
+	}
+
+	/**
+	* Returns the last applicant in the ordered set where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param name the name
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching applicant
+	* @throws com.rivetlogic.jobsboard.NoSuchApplicantException if a matching applicant could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.rivetlogic.jobsboard.model.Applicant findByFilters_Last(
+		long companyId, long groupId, long jobId, java.lang.String name,
+		java.lang.String status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.rivetlogic.jobsboard.NoSuchApplicantException {
+		return getPersistence()
+				   .findByFilters_Last(companyId, groupId, jobId, name, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last applicant in the ordered set where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param name the name
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching applicant, or <code>null</code> if a matching applicant could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.rivetlogic.jobsboard.model.Applicant fetchByFilters_Last(
+		long companyId, long groupId, long jobId, java.lang.String name,
+		java.lang.String status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByFilters_Last(companyId, groupId, jobId, name,
+			status, orderByComparator);
+	}
+
+	/**
+	* Returns the applicants before and after the current applicant in the ordered set where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	*
+	* @param applicantId the primary key of the current applicant
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param name the name
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next applicant
+	* @throws com.rivetlogic.jobsboard.NoSuchApplicantException if a applicant with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.rivetlogic.jobsboard.model.Applicant[] findByFilters_PrevAndNext(
+		long applicantId, long companyId, long groupId, long jobId,
+		java.lang.String name, java.lang.String status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.rivetlogic.jobsboard.NoSuchApplicantException {
+		return getPersistence()
+				   .findByFilters_PrevAndNext(applicantId, companyId, groupId,
+			jobId, name, status, orderByComparator);
+	}
+
+	/**
+	* Returns all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE all &#63; and status LIKE &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.ApplicantModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param names the names
+	* @param status the status
+	* @return the matching applicants
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByFilters(
+		long companyId, long groupId, long jobId, java.lang.String[] names,
+		java.lang.String status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByFilters(companyId, groupId, jobId, names, status);
+	}
+
+	/**
+	* Returns a range of all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE all &#63; and status LIKE &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.ApplicantModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param names the names
+	* @param status the status
+	* @param start the lower bound of the range of applicants
+	* @param end the upper bound of the range of applicants (not inclusive)
+	* @return the range of matching applicants
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByFilters(
+		long companyId, long groupId, long jobId, java.lang.String[] names,
+		java.lang.String status, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByFilters(companyId, groupId, jobId, names, status,
+			start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE all &#63; and status LIKE &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.ApplicantModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param names the names
+	* @param status the status
+	* @param start the lower bound of the range of applicants
+	* @param end the upper bound of the range of applicants (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching applicants
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByFilters(
+		long companyId, long groupId, long jobId, java.lang.String[] names,
+		java.lang.String status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByFilters(companyId, groupId, jobId, names, status,
+			start, end, orderByComparator);
+	}
+
+	/**
+	* Removes all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param name the name
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByFilters(long companyId, long groupId,
+		long jobId, java.lang.String name, java.lang.String status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByFilters(companyId, groupId, jobId, name, status);
+	}
+
+	/**
+	* Returns the number of applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param name the name
+	* @param status the status
+	* @return the number of matching applicants
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByFilters(long companyId, long groupId, long jobId,
+		java.lang.String name, java.lang.String status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByFilters(companyId, groupId, jobId, name, status);
+	}
+
+	/**
+	* Returns the number of applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE all &#63; and status LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param jobId the job ID
+	* @param names the names
+	* @param status the status
+	* @return the number of matching applicants
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByFilters(long companyId, long groupId, long jobId,
+		java.lang.String[] names, java.lang.String status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByFilters(companyId, groupId, jobId, names, status);
+	}
+
+	/**
 	* Caches the applicant in the entity cache if it is enabled.
 	*
 	* @param applicant the applicant

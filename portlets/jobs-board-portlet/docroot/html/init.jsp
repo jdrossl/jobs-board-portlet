@@ -9,9 +9,14 @@
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>
 <%@ page import="com.liferay.portal.kernel.util.HttpUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.UnicodeFormatter" %>
+<%@ page import="com.liferay.portal.kernel.util.Validator" %>
+<%@ page import="com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil"%>
+<%@ page import="com.liferay.portal.kernel.util.OrderByComparator"%>
 
 <%@ page import="com.liferay.portlet.asset.model.AssetCategory" %>
 <%@ page import="com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil" %>
+<%@ page import="com.liferay.portlet.asset.model.AssetVocabulary" %>
+<%@ page import="com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil" %>
 
 <%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryServiceUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
@@ -20,10 +25,15 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 
+<%@ page import="javax.portlet.PortletURL" %>
+
 <%@ page import="com.rivetlogic.jobsboard.util.WebKeys" %>
+<%@ page import="com.rivetlogic.jobsboard.util.ApplicantStatus" %>
+<%@ page import="com.rivetlogic.jobsboard.util.FiltersUtil" %>
 <%@ page import="com.rivetlogic.jobsboard.model.Job" %>
 <%@ page import="com.rivetlogic.jobsboard.service.JobLocalServiceUtil" %>
 <%@ page import="com.rivetlogic.jobsboard.model.Applicant" %>
+<%@ page import="com.rivetlogic.jobsboard.model.impl.JobModelImpl"%>
 <%@ page import="com.rivetlogic.jobsboard.service.ApplicantLocalServiceUtil" %>
 
 <portlet:defineObjects />

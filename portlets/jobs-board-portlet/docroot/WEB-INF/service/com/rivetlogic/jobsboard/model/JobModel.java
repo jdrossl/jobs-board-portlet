@@ -296,6 +296,21 @@ public interface JobModel extends BaseModel<Job>, GroupedModel {
 	 */
 	public void setSalary(double salary);
 
+	/**
+	 * Returns the bookmarks of this job.
+	 *
+	 * @return the bookmarks of this job
+	 */
+	@AutoEscape
+	public String getBookmarks();
+
+	/**
+	 * Sets the bookmarks of this job.
+	 *
+	 * @param bookmarks the bookmarks of this job
+	 */
+	public void setBookmarks(String bookmarks);
+
 	@Override
 	public boolean isNew();
 
@@ -333,19 +348,19 @@ public interface JobModel extends BaseModel<Job>, GroupedModel {
 	public Object clone();
 
 	@Override
-	public int compareTo(com.rivetlogic.jobsboard.model.Job job);
+	public int compareTo(Job job);
 
 	@Override
 	public int hashCode();
 
 	@Override
-	public CacheModel<com.rivetlogic.jobsboard.model.Job> toCacheModel();
+	public CacheModel<Job> toCacheModel();
 
 	@Override
-	public com.rivetlogic.jobsboard.model.Job toEscapedModel();
+	public Job toEscapedModel();
 
 	@Override
-	public com.rivetlogic.jobsboard.model.Job toUnescapedModel();
+	public Job toUnescapedModel();
 
 	@Override
 	public String toString();

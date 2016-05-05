@@ -8,6 +8,8 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -24,6 +26,7 @@ import com.rivetlogic.jobsboard.model.Subscription;
 import com.rivetlogic.jobsboard.service.ApplicantLocalServiceUtil;
 import com.rivetlogic.jobsboard.service.JobLocalServiceUtil;
 import com.rivetlogic.jobsboard.service.SubscriptionLocalServiceUtil;
+import com.rivetlogic.jobsboard.util.ApplicantStatus;
 import com.rivetlogic.jobsboard.util.WebKeys;
 
 import java.io.File;
@@ -43,6 +46,10 @@ import javax.portlet.ActionResponse;
 public class JobsBoardPortlet extends MVCPortlet {
 
     private static final Log LOG = LogFactoryUtil.getLog(JobsBoardPortlet.class);
+
+    public static final String DEFAULT_FILE_NAME = "CV - ";
+    public static final String DEFAULT_FOLDER_NAME = "Jobs Board - CVs";
+    public static final String DEFAULT_FOLFER_DESC = "Uploaded Files By Applicants";
     
     public void addSubscription(ActionRequest req, ActionResponse res) throws IOException {
         String name = ParamUtil.getString(req, WebKeys.PARAM_NAME);
@@ -136,6 +143,20 @@ public class JobsBoardPortlet extends MVCPortlet {
         }
         sendRedirect(req, res);
     }
+    
+    public void bookmarkJob(ActionRequest req, ActionResponse res) throws IOException {
+        ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
+        long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID);
+        long userId = themeDisplay.getUserId();
+        try {
+            Job job = JobLocalServiceUtil.fetchJob(jobId);
+            job.setBookmarks(StringUtil.merge(new Object[]{ job.getBookmarks(), userId }));
+            job.persist();
+        } catch(Exception e) {
+            LOG.error("Error bookmarking job:", e);
+        }
+        sendRedirect(req, res);
+    }
 
     public void applyToJob(ActionRequest req, ActionResponse res) throws IOException {
         ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
@@ -164,6 +185,7 @@ public class JobsBoardPortlet extends MVCPortlet {
             applicant.setPhone(phone);
             applicant.setInfo(info);
             applicant.setCv(cv);
+            applicant.setStatus(ApplicantStatus.PENDING);
             
             applicant.persist();
             
@@ -176,22 +198,26 @@ public class JobsBoardPortlet extends MVCPortlet {
     private long storeFile(UploadPortletRequest upload, ThemeDisplay themeDisplay) throws PortalException, SystemException, FileNotFoundException {
         long groupId = themeDisplay.getScopeGroupId();
         long parent = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
-        String folderName = "Jobs Board - Applicant CVs";
-        String name = upload.getFileName(WebKeys.PARAM_CV);
+        String applicantName = ParamUtil.getString(upload, WebKeys.PARAM_NAME);
+        String name = DEFAULT_FILE_NAME + applicantName;
         File file = upload.getFile(WebKeys.PARAM_CV);
         String contentType = upload.getContentType(WebKeys.PARAM_CV);
-        String description = "Applicant X CV for Position Name";
         ServiceContext serviceContext = ServiceContextFactory.getInstance(DLFileEntry.class.getName(), upload);
         InputStream is = new FileInputStream(file);
         Folder folder = null;
         try {
-            folder = DLAppServiceUtil.getFolder(groupId, parent, folderName);
+            LOG.debug("Looking for CV Uploads forlder");
+            folder = DLAppServiceUtil.getFolder(groupId, parent, DEFAULT_FOLDER_NAME);
+            LOG.debug("Folder already exists");
         } catch(Exception e) {
-            folder = DLAppServiceUtil.addFolder(groupId, parent, folderName, "", serviceContext);
+            LOG.debug("Folder does not exist");
+            folder = DLAppServiceUtil.addFolder(groupId, parent, DEFAULT_FOLDER_NAME, DEFAULT_FOLFER_DESC, serviceContext);
+            LOG.debug("Folder created");
         }
+        LOG.debug("Adding CV file to folder");
         FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
-                groupId, folder.getFolderId(), name, contentType, name, description, "", is, file.getTotalSpace(), serviceContext);
-        
+                groupId, folder.getFolderId(), name, contentType, name, StringPool.BLANK, StringPool.BLANK, is, file.getTotalSpace(), serviceContext);
+        LOG.debug("File added");
         return fileEntry.getFileEntryId();
     }
     

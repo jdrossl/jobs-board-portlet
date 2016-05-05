@@ -182,20 +182,19 @@ public interface SubscriptionModel extends BaseModel<Subscription> {
 	public Object clone();
 
 	@Override
-	public int compareTo(
-		com.rivetlogic.jobsboard.model.Subscription subscription);
+	public int compareTo(Subscription subscription);
 
 	@Override
 	public int hashCode();
 
 	@Override
-	public CacheModel<com.rivetlogic.jobsboard.model.Subscription> toCacheModel();
+	public CacheModel<Subscription> toCacheModel();
 
 	@Override
-	public com.rivetlogic.jobsboard.model.Subscription toEscapedModel();
+	public Subscription toEscapedModel();
 
 	@Override
-	public com.rivetlogic.jobsboard.model.Subscription toUnescapedModel();
+	public Subscription toUnescapedModel();
 
 	@Override
 	public String toString();

@@ -56,9 +56,7 @@
         <column name="type" type="long"></column>
         <column name="description" type="String"></column>
         <column name="salary" type="double"></column>
-        <order by="desc">
-            <order-column name="createDate" order-by="desc"></order-column>
-        </order>
+        <column name="bookmarks" type="String"></column>
         <finder name="CompanyGroup" return-type="Collection">
             <finder-column name="companyId"></finder-column>
             <finder-column name="groupId"></finder-column>
@@ -66,12 +64,23 @@
         <finder name="Filters" return-type="Collection">
             <finder-column name="companyId"></finder-column>
             <finder-column name="groupId"></finder-column>
-            <finder-column name="name" comparator="LIKE" arrayable-operator="AND"></finder-column>
-            <finder-column name="active"></finder-column>
-            <finder-column name="category"></finder-column>
-            <finder-column name="location"></finder-column>
-            <finder-column name="type"></finder-column>
-            <finder-column name="description" comparator="LIKE" arrayable-operator="AND"></finder-column>
+            <finder-column name="name" comparator="LIKE" arrayable-operator="AND" case-sensitive="false"></finder-column>
+            <finder-column name="active" arrayable-operator="OR"></finder-column>
+            <finder-column name="category" arrayable-operator="OR"></finder-column>
+            <finder-column name="location" arrayable-operator="OR"></finder-column>
+            <finder-column name="type" arrayable-operator="OR"></finder-column>
+            <finder-column name="description" comparator="LIKE" arrayable-operator="AND" case-sensitive="false"></finder-column>
+        </finder>
+        <finder name="Bookmarks" return-type="Collection">
+            <finder-column name="companyId"></finder-column>
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="name" comparator="LIKE" arrayable-operator="AND" case-sensitive="false"></finder-column>
+            <finder-column name="active" arrayable-operator="OR"></finder-column>
+            <finder-column name="category" arrayable-operator="OR"></finder-column>
+            <finder-column name="location" arrayable-operator="OR"></finder-column>
+            <finder-column name="type" arrayable-operator="OR"></finder-column>
+            <finder-column name="description" comparator="LIKE" arrayable-operator="AND" case-sensitive="false"></finder-column>
+            <finder-column name="bookmarks" comparator="LIKE" case-sensitive="false"></finder-column>
         </finder>
 	</entity>
 	<entity name="Applicant" remote-service="false"
@@ -99,10 +108,20 @@
         <column name="info" type="String"></column>
         <column name="status" type="String"></column>
         <column name="notes" type="String"></column>
+        <order by="desc">
+            <order-column name="createDate" order-by="desc"></order-column>
+        </order>
         <finder name="CompanyGroupJob" return-type="Collection">
             <finder-column name="companyId"></finder-column>
             <finder-column name="groupId"></finder-column>
             <finder-column name="jobId"></finder-column>
+        </finder>
+        <finder name="Filters" return-type="Collection">
+            <finder-column name="companyId"></finder-column>
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="jobId"></finder-column>
+            <finder-column name="name" comparator="LIKE" arrayable-operator="AND" case-sensitive="false"></finder-column>
+            <finder-column name="status" comparator="LIKE" case-sensitive="false"></finder-column>
         </finder>
 	</entity>
 </service-builder>

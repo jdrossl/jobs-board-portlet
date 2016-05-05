@@ -55,6 +55,7 @@
 			</basic>
 			<basic name="description" />
 			<basic name="salary" />
+			<basic name="bookmarks" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />

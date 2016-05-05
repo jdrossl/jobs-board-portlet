@@ -41,6 +41,7 @@
 		<property name="type" type="com.liferay.portal.dao.orm.hibernate.LongType" column="type_" />
 		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="salary" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property name="bookmarks" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="com.rivetlogic.jobsboard.model.impl.SubscriptionImpl" table="rivetlogic_jobsboard_Subscription">
 		<cache usage="read-write" />

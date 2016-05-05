@@ -16,7 +16,6 @@ package com.rivetlogic.jobsboard.model;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
@@ -89,6 +88,7 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 		attributes.put("type", getType());
 		attributes.put("description", getDescription());
 		attributes.put("salary", getSalary());
+		attributes.put("bookmarks", getBookmarks());
 
 		return attributes;
 	}
@@ -177,6 +177,12 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 
 		if (salary != null) {
 			setSalary(salary);
+		}
+
+		String bookmarks = (String)attributes.get("bookmarks");
+
+		if (bookmarks != null) {
+			setBookmarks(bookmarks);
 		}
 	}
 
@@ -517,6 +523,29 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 		}
 	}
 
+	@Override
+	public String getBookmarks() {
+		return _bookmarks;
+	}
+
+	@Override
+	public void setBookmarks(String bookmarks) {
+		_bookmarks = bookmarks;
+
+		if (_jobRemoteModel != null) {
+			try {
+				Class<?> clazz = _jobRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setBookmarks", String.class);
+
+				method.invoke(_jobRemoteModel, bookmarks);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
 	public BaseModel<?> getJobRemoteModel() {
 		return _jobRemoteModel;
 	}
@@ -600,23 +629,24 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 		clone.setType(getType());
 		clone.setDescription(getDescription());
 		clone.setSalary(getSalary());
+		clone.setBookmarks(getBookmarks());
 
 		return clone;
 	}
 
 	@Override
 	public int compareTo(Job job) {
-		int value = 0;
+		long primaryKey = job.getPrimaryKey();
 
-		value = DateUtil.compareTo(getCreateDate(), job.getCreateDate());
-
-		value = value * -1;
-
-		if (value != 0) {
-			return value;
+		if (getPrimaryKey() < primaryKey) {
+			return -1;
 		}
-
-		return 0;
+		else if (getPrimaryKey() > primaryKey) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
 	}
 
 	@Override
@@ -641,10 +671,6 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 		}
 	}
 
-	public Class<?> getClpSerializerClass() {
-		return _clpSerializerClass;
-	}
-
 	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
@@ -652,7 +678,7 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{jobId=");
 		sb.append(getJobId());
@@ -682,6 +708,8 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 		sb.append(getDescription());
 		sb.append(", salary=");
 		sb.append(getSalary());
+		sb.append(", bookmarks=");
+		sb.append(getBookmarks());
 		sb.append("}");
 
 		return sb.toString();
@@ -689,7 +717,7 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(46);
+		StringBundler sb = new StringBundler(49);
 
 		sb.append("<model><model-name>");
 		sb.append("com.rivetlogic.jobsboard.model.Job");
@@ -751,6 +779,10 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 			"<column><column-name>salary</column-name><column-value><![CDATA[");
 		sb.append(getSalary());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>bookmarks</column-name><column-value><![CDATA[");
+		sb.append(getBookmarks());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -772,6 +804,6 @@ public class JobClp extends BaseModelImpl<Job> implements Job {
 	private long _type;
 	private String _description;
 	private double _salary;
+	private String _bookmarks;
 	private BaseModel<?> _jobRemoteModel;
-	private Class<?> _clpSerializerClass = com.rivetlogic.jobsboard.service.ClpSerializer.class;
 }

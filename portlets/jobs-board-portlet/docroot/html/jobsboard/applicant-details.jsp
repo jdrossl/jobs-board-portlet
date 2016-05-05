@@ -68,9 +68,11 @@
 				</portlet:actionURL>
 				<aui:form action="<%= updateURL %>" method="post">
 					<aui:select name="status">
-						<aui:option label="status-pending" value="pending" />
-						<aui:option label="status-scheduled" value="scheduled" />
-						<aui:option label="status-on-board" value="on-board" />
+						<aui:option label="<%= ApplicantStatus.PENDING %>" value="<%= ApplicantStatus.PENDING %>" />
+						<aui:option label="<%= ApplicantStatus.SCHEDULED %>" value="<%= ApplicantStatus.SCHEDULED %>" />
+						<aui:option label="<%= ApplicantStatus.ELEGIBLE %>" value="<%= ApplicantStatus.ELEGIBLE %>" />
+						<aui:option label="<%= ApplicantStatus.NON_ELEGIBLE %>" value="<%= ApplicantStatus.NON_ELEGIBLE %>" />
+						<aui:option label="<%= ApplicantStatus.ON_BOARD %>" value="<%= ApplicantStatus.ON_BOARD %>" />
 					</aui:select>
 					<liferay-ui:input-editor name="notes" initMethod="initEditor" />
 					<aui:button value="save" cssClass="btn-primary save" type="submit"/>

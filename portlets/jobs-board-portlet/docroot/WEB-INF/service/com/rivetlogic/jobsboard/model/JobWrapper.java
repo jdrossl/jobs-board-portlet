@@ -63,6 +63,7 @@ public class JobWrapper implements Job, ModelWrapper<Job> {
 		attributes.put("type", getType());
 		attributes.put("description", getDescription());
 		attributes.put("salary", getSalary());
+		attributes.put("bookmarks", getBookmarks());
 
 		return attributes;
 	}
@@ -151,6 +152,12 @@ public class JobWrapper implements Job, ModelWrapper<Job> {
 
 		if (salary != null) {
 			setSalary(salary);
+		}
+
+		String bookmarks = (String)attributes.get("bookmarks");
+
+		if (bookmarks != null) {
+			setBookmarks(bookmarks);
 		}
 	}
 
@@ -484,6 +491,26 @@ public class JobWrapper implements Job, ModelWrapper<Job> {
 	@Override
 	public void setSalary(double salary) {
 		_job.setSalary(salary);
+	}
+
+	/**
+	* Returns the bookmarks of this job.
+	*
+	* @return the bookmarks of this job
+	*/
+	@Override
+	public java.lang.String getBookmarks() {
+		return _job.getBookmarks();
+	}
+
+	/**
+	* Sets the bookmarks of this job.
+	*
+	* @param bookmarks the bookmarks of this job
+	*/
+	@Override
+	public void setBookmarks(java.lang.String bookmarks) {
+		_job.setBookmarks(bookmarks);
 	}
 
 	@Override

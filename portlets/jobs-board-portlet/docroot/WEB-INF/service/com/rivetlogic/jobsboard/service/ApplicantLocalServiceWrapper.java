@@ -307,6 +307,23 @@ public class ApplicantLocalServiceWrapper implements ApplicantLocalService,
 			jobId);
 	}
 
+	@Override
+	public int countByFilters(long companyId, long groupId, long jobId,
+		java.lang.String status, java.lang.String keywords)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _applicantLocalService.countByFilters(companyId, groupId, jobId,
+			status, keywords);
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByFilters(
+		long companyId, long groupId, long jobId, java.lang.String status,
+		java.lang.String keywords, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _applicantLocalService.findByFilters(companyId, groupId, jobId,
+			status, keywords, start, end);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

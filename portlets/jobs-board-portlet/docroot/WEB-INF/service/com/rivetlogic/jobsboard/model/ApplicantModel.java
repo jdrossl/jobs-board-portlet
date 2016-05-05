@@ -284,19 +284,19 @@ public interface ApplicantModel extends BaseModel<Applicant> {
 	public Object clone();
 
 	@Override
-	public int compareTo(com.rivetlogic.jobsboard.model.Applicant applicant);
+	public int compareTo(Applicant applicant);
 
 	@Override
 	public int hashCode();
 
 	@Override
-	public CacheModel<com.rivetlogic.jobsboard.model.Applicant> toCacheModel();
+	public CacheModel<Applicant> toCacheModel();
 
 	@Override
-	public com.rivetlogic.jobsboard.model.Applicant toEscapedModel();
+	public Applicant toEscapedModel();
 
 	@Override
-	public com.rivetlogic.jobsboard.model.Applicant toUnescapedModel();
+	public Applicant toUnescapedModel();
 
 	@Override
 	public String toString();

@@ -1,15 +1,32 @@
 <%@ include file="/html/init.jsp" %>
 
 <%
-	int totalJobs = 0;
-	List<Job> jobsList = null;
-	try {
-		jobsList = JobLocalServiceUtil.findByCompanyGroup(themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId());
-		totalJobs = JobLocalServiceUtil.countByCompanyGroup(themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId());
-	} catch(Exception e) {
-	    jobsList = new ArrayList<Job>();
-	}
+	String userId = Long.toString(themeDisplay.getUserId());
 	SimpleDateFormat format = new SimpleDateFormat("d MMMM, yyyy");
+	
+	// -- CATEGORIES --s
+	List<AssetCategory> categories = FiltersUtil.getCategories(themeDisplay, "Job Category");
+	List<AssetCategory> locations = FiltersUtil.getCategories(themeDisplay, "Job Location");
+	List<AssetCategory> types = FiltersUtil.getCategories(themeDisplay, "Job Type");
+	// -- CATEGORIES --
+	
+	// --- FILTERS ---
+	String keywords = ParamUtil.getString(renderRequest, "keywords");
+	long[] category = FiltersUtil.getFilter(renderRequest, "category", categories);
+	long[] location = FiltersUtil.getFilter(renderRequest, "location", locations);
+	long[] type = FiltersUtil.getFilter(renderRequest, "type", types);
+	boolean[] status = FiltersUtil.getStatus(renderRequest);
+	boolean bookmarked = ParamUtil.getBoolean(request, "only-bookmarked", false);
+	// --- FILTERS ---
+	
+	// --- SORT ---
+	String sortBy = ParamUtil.getString(request, "sort-by", "createDate");
+	OrderByComparator orderBy = OrderByComparatorFactoryUtil.create(JobModelImpl.TABLE_NAME, sortBy, Validator.equals(sortBy, "name"));
+	// --- SORT ---
+	
+	int totalJobs = JobLocalServiceUtil.count(themeDisplay, keywords, status, location, category, type, bookmarked);
+	
+	PortletURL iteratorURL = renderResponse.createRenderURL();
 %>
 
 <portlet:renderURL var="addURL">
@@ -20,41 +37,61 @@
 <aui:container>
 	<aui:row>
 		<aui:col width="75">
+			<c:if test="<%= Validator.isNull(categories) || Validator.isNull(locations) || Validator.isNull(types) || categories.isEmpty() || locations.isEmpty() || types.isEmpty() %>">
+				<div class="alert alert-danger">
+					<liferay-ui:message key="categories-not-configured-alert" />
+				</div>
+			</c:if>
+			<aui:form action="<%= iteratorURL %>">
 			<aui:nav-bar>
 				<aui:nav>
 					<aui:nav-item cssClass="filters" label="filters" iconCssClass="icon-chevron-down">
 						<div class="filters-form popover bottom hidden">
 							<div class="arrow"></div>
 							<div class="popover-content">
-								<aui:form>
-									<aui:fieldset>
-										<div class="row-fluid">
-											<div class="span6">
-												<aui:select name="location" inlineField="true">
-												</aui:select>
-												<aui:select name="type" inlineField="true">
-												</aui:select>
-											</div>
-											<div class="span6">
-												<aui:select name="category" inlineField="true">
-												</aui:select>
-												<aui:select name="status" inlineField="true">
-													<aui:option label="all" value="" />
-													<aui:option label="active" value="active" />
-													<aui:option label="inactive" value="inactive" />
-												</aui:select>
-											</div>
+								<aui:fieldset>
+									<div class="row-fluid">
+										<div class="span6">
+											<aui:select name="location" inlineField="true">
+												<aui:option label="all" value="all" />
+												<c:forEach items="<%= locations %>" var="location">
+													<aui:option label="${ location.name }" value="${ location.categoryId }" />
+												</c:forEach>
+											</aui:select>
+											<aui:select name="type" inlineField="true">
+												<aui:option label="all" value="all" />
+												<c:forEach items="<%= types %>" var="type">
+													<aui:option label="${ type.name }" value="${ type.categoryId }" />
+												</c:forEach>
+											</aui:select>
 										</div>
-										<aui:input name="only-bookmarked" type="checkbox" />
-									</aui:fieldset>
-								</aui:form>
+										<div class="span6">
+											<aui:select name="category" inlineField="true">
+												<aui:option label="all" value="all" />
+												<c:forEach items="<%= categories %>" var="category">
+													<aui:option label="${ category.name }" value="${ category.categoryId }" />
+												</c:forEach>
+											</aui:select>
+											<aui:select name="status" inlineField="true">
+												<aui:option label="all" value="all" />
+												<aui:option label="active" value="true" />
+												<aui:option label="inactive" value="false" />
+											</aui:select>
+										</div>
+									</div>
+									<aui:input name="only-bookmarked" type="checkbox" />
+								</aui:fieldset>
 							</div>
 						</div>
 					</aui:nav-item>
 					<aui:nav-item>
 						<aui:field-wrapper cssClass="nav-keyword-wrapper">
-							<aui:input name="keywords" label="" placeholder="keywords" />
+							<aui:input name="keywords" label="" placeholder="keywords" value="<%= keywords %>" />
 						</aui:field-wrapper>
+					</aui:nav-item>
+					<%-- TODO: Submit form on any input change --%>
+					<aui:nav-item>
+						<aui:button type="submit"/>
 					</aui:nav-item>
 					<aui:nav-item label="clear-search" />
 					<aui:nav-item label="add" iconCssClass="icon-plus" href="<%= addURL %>"/>
@@ -63,7 +100,7 @@
 			
 			
 			
-			<c:if test="<%= !jobsList.isEmpty() %>">
+			<c:if test="<%= totalJobs > 0 %>">
 			<aui:row>
 				<aui:col width="50">
 					<h2><liferay-ui:message key="x-total-jobs" arguments="<%= totalJobs %>" /></h2>
@@ -71,20 +108,24 @@
 				<aui:col width="50">
 					<aui:field-wrapper cssClass="sort-by-wrapper pull-right">
 						<aui:select name="sort-by" >
+							<aui:option label="date" value="createDate" />
 							<aui:option label="name" value="name" />
 						</aui:select>
 					</aui:field-wrapper>
 				</aui:col>
 			</aui:row>
 			</c:if>
+			</aui:form>
 			
-			<liferay-ui:search-container delta="3" emptyResultsMessage="no-jobs-found">
-				<liferay-ui:search-container-results results="<%= jobsList %>" total="<%= totalJobs %>" />
+			<liferay-ui:search-container emptyResultsMessage="no-jobs-found">
+				<liferay-ui:search-container-results
+					results="<%= JobLocalServiceUtil.find(themeDisplay, keywords, status, location, category, type, bookmarked, searchContainer.getStart(), searchContainer.getEnd(), orderBy) %>"
+					total="<%= totalJobs %>" />
 				<liferay-ui:search-container-row className="com.rivetlogic.jobsboard.model.Job" modelVar="job">
 					<%
-						String category = AssetCategoryLocalServiceUtil.fetchCategory(job.getCategory()).getName();
-						String location = AssetCategoryLocalServiceUtil.fetchCategory(job.getLocation()).getName();
-						String type = AssetCategoryLocalServiceUtil.fetchCategory(job.getType()).getName();
+						String cat = AssetCategoryLocalServiceUtil.fetchCategory(job.getCategory()).getName();
+						String loc = AssetCategoryLocalServiceUtil.fetchCategory(job.getLocation()).getName();
+						String typ = AssetCategoryLocalServiceUtil.fetchCategory(job.getType()).getName();
 					%>
 					<portlet:renderURL var="viewURL">
 						<portlet:param name="mvcPath" value="/html/jobsboard/job-details.jsp"/>
@@ -105,13 +146,17 @@
 						<portlet:param name="redirect" value="<%= currentURL %>"/>
 						<portlet:param name="jobId" value="${ job.jobId }"/>
 					</portlet:actionURL>
+					<portlet:actionURL name="bookmarkJob" var="bookmarkURL">
+						<portlet:param name="redirect" value="<%= currentURL %>"/>
+						<portlet:param name="jobId" value="${ job.jobId }"/>
+					</portlet:actionURL>
 					<div class="list-item">
 						<div class="position-name"><h3><a href="<%= viewURL %>">${ job.name }</a></h3></div>
 						<ul class="position-info">
-							<li class="position-category"><%= category %></li>
-							<li class="position-location"><%= location %></li>
+							<li class="position-category"><%= cat %></li>
+							<li class="position-location"><%= loc %></li>
 							<li class="position-posted"><%= format.format(job.getCreateDate()) %></li>
-							<li class="position-type"><%= type %></li>
+							<li class="position-type"><%= typ %></li>
 						</ul>
 						<div class="list-item-actions">
 							<ul>
@@ -119,7 +164,7 @@
 									<liferay-ui:icon iconCssClass="icon-user" url="<%= applicantsURL %>" />
 								</li>
 								<li class="position-bookmark">
-									<liferay-ui:icon iconCssClass="icon-bookmark" />
+									<liferay-ui:icon iconCssClass="<%= (job.getBookmarks().contains(userId))? \"icon-star\":\"icon-star-empty\" %>" url="<%= bookmarkURL %>" />
 								</li>
 								<li class="position-edit">
 									<liferay-ui:icon iconCssClass="icon-edit" url="<%= editURL %>" />

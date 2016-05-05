@@ -37,7 +37,7 @@ import java.util.Date;
 public class JobCacheModel implements CacheModel<Job>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{jobId=");
 		sb.append(jobId);
@@ -67,6 +67,8 @@ public class JobCacheModel implements CacheModel<Job>, Externalizable {
 		sb.append(description);
 		sb.append(", salary=");
 		sb.append(salary);
+		sb.append(", bookmarks=");
+		sb.append(bookmarks);
 		sb.append("}");
 
 		return sb.toString();
@@ -123,6 +125,13 @@ public class JobCacheModel implements CacheModel<Job>, Externalizable {
 
 		jobImpl.setSalary(salary);
 
+		if (bookmarks == null) {
+			jobImpl.setBookmarks(StringPool.BLANK);
+		}
+		else {
+			jobImpl.setBookmarks(bookmarks);
+		}
+
 		jobImpl.resetOriginalValues();
 
 		return jobImpl;
@@ -144,6 +153,7 @@ public class JobCacheModel implements CacheModel<Job>, Externalizable {
 		type = objectInput.readLong();
 		description = objectInput.readUTF();
 		salary = objectInput.readDouble();
+		bookmarks = objectInput.readUTF();
 	}
 
 	@Override
@@ -184,6 +194,13 @@ public class JobCacheModel implements CacheModel<Job>, Externalizable {
 		}
 
 		objectOutput.writeDouble(salary);
+
+		if (bookmarks == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(bookmarks);
+		}
 	}
 
 	public long jobId;
@@ -200,4 +217,5 @@ public class JobCacheModel implements CacheModel<Job>, Externalizable {
 	public long type;
 	public String description;
 	public double salary;
+	public String bookmarks;
 }

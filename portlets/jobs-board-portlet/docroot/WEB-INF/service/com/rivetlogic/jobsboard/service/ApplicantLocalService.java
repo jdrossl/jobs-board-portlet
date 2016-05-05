@@ -16,7 +16,6 @@ package com.rivetlogic.jobsboard.service;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -53,7 +52,6 @@ public interface ApplicantLocalService extends BaseLocalService,
 	* @return the applicant that was added
 	* @throws SystemException if a system exception occurred
 	*/
-	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.REINDEX)
 	public com.rivetlogic.jobsboard.model.Applicant addApplicant(
 		com.rivetlogic.jobsboard.model.Applicant applicant)
 		throws com.liferay.portal.kernel.exception.SystemException;
@@ -75,7 +73,6 @@ public interface ApplicantLocalService extends BaseLocalService,
 	* @throws PortalException if a applicant with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.DELETE)
 	public com.rivetlogic.jobsboard.model.Applicant deleteApplicant(
 		long applicantId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -88,7 +85,6 @@ public interface ApplicantLocalService extends BaseLocalService,
 	* @return the applicant that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.DELETE)
 	public com.rivetlogic.jobsboard.model.Applicant deleteApplicant(
 		com.rivetlogic.jobsboard.model.Applicant applicant)
 		throws com.liferay.portal.kernel.exception.SystemException;
@@ -230,7 +226,6 @@ public interface ApplicantLocalService extends BaseLocalService,
 	* @return the applicant that was updated
 	* @throws SystemException if a system exception occurred
 	*/
-	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.REINDEX)
 	public com.rivetlogic.jobsboard.model.Applicant updateApplicant(
 		com.rivetlogic.jobsboard.model.Applicant applicant)
 		throws com.liferay.portal.kernel.exception.SystemException;
@@ -262,5 +257,14 @@ public interface ApplicantLocalService extends BaseLocalService,
 
 	public java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByCompanyGroupJob(
 		long companyId, long groupId, long jobId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countByFilters(long companyId, long groupId, long jobId,
+		java.lang.String status, java.lang.String keywords)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.rivetlogic.jobsboard.model.Applicant> findByFilters(
+		long companyId, long groupId, long jobId, java.lang.String status,
+		java.lang.String keywords, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 }

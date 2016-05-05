@@ -25,6 +25,8 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -34,6 +36,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -101,7 +104,8 @@ public class ApplicantPersistenceImpl extends BasePersistenceImpl<Applicant>
 			},
 			ApplicantModelImpl.COMPANYID_COLUMN_BITMASK |
 			ApplicantModelImpl.GROUPID_COLUMN_BITMASK |
-			ApplicantModelImpl.JOBID_COLUMN_BITMASK);
+			ApplicantModelImpl.JOBID_COLUMN_BITMASK |
+			ApplicantModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYGROUPJOB = new FinderPath(ApplicantModelImpl.ENTITY_CACHE_ENABLED,
 			ApplicantModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -651,6 +655,1128 @@ public class ApplicantPersistenceImpl extends BasePersistenceImpl<Applicant>
 	private static final String _FINDER_COLUMN_COMPANYGROUPJOB_COMPANYID_2 = "applicant.companyId = ? AND ";
 	private static final String _FINDER_COLUMN_COMPANYGROUPJOB_GROUPID_2 = "applicant.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_COMPANYGROUPJOB_JOBID_2 = "applicant.jobId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_FILTERS = new FinderPath(ApplicantModelImpl.ENTITY_CACHE_ENABLED,
+			ApplicantModelImpl.FINDER_CACHE_ENABLED, ApplicantImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByFilters",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				String.class.getName(), String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_FILTERS = new FinderPath(ApplicantModelImpl.ENTITY_CACHE_ENABLED,
+			ApplicantModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByFilters",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				String.class.getName(), String.class.getName()
+			});
+
+	/**
+	 * Returns all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param name the name
+	 * @param status the status
+	 * @return the matching applicants
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Applicant> findByFilters(long companyId, long groupId,
+		long jobId, String name, String status) throws SystemException {
+		return findByFilters(companyId, groupId, jobId, name, status,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.ApplicantModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param name the name
+	 * @param status the status
+	 * @param start the lower bound of the range of applicants
+	 * @param end the upper bound of the range of applicants (not inclusive)
+	 * @return the range of matching applicants
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Applicant> findByFilters(long companyId, long groupId,
+		long jobId, String name, String status, int start, int end)
+		throws SystemException {
+		return findByFilters(companyId, groupId, jobId, name, status, start,
+			end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.ApplicantModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param name the name
+	 * @param status the status
+	 * @param start the lower bound of the range of applicants
+	 * @param end the upper bound of the range of applicants (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching applicants
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Applicant> findByFilters(long companyId, long groupId,
+		long jobId, String name, String status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_FILTERS;
+		finderArgs = new Object[] {
+				companyId, groupId, jobId, name, status,
+				
+				start, end, orderByComparator
+			};
+
+		List<Applicant> list = (List<Applicant>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Applicant applicant : list) {
+				if ((companyId != applicant.getCompanyId()) ||
+						(groupId != applicant.getGroupId()) ||
+						(jobId != applicant.getJobId()) ||
+						!StringUtil.wildcardMatches(applicant.getName(), name,
+							CharPool.UNDERLINE, CharPool.PERCENT,
+							CharPool.BACK_SLASH, false) ||
+						!StringUtil.wildcardMatches(applicant.getStatus(),
+							status, CharPool.UNDERLINE, CharPool.PERCENT,
+							CharPool.BACK_SLASH, false)) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(7 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(7);
+			}
+
+			query.append(_SQL_SELECT_APPLICANT_WHERE);
+
+			query.append(_FINDER_COLUMN_FILTERS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_FILTERS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_FILTERS_JOBID_2);
+
+			boolean bindName = false;
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_FILTERS_NAME_1);
+			}
+			else if (name.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_FILTERS_NAME_3);
+			}
+			else {
+				bindName = true;
+
+				query.append(_FINDER_COLUMN_FILTERS_NAME_2);
+			}
+
+			boolean bindStatus = false;
+
+			if (status == null) {
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_1);
+			}
+			else if (status.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_3);
+			}
+			else {
+				bindStatus = true;
+
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(ApplicantModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(groupId);
+
+				qPos.add(jobId);
+
+				if (bindName) {
+					qPos.add(name.toLowerCase());
+				}
+
+				if (bindStatus) {
+					qPos.add(status.toLowerCase());
+				}
+
+				if (!pagination) {
+					list = (List<Applicant>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Applicant>(list);
+				}
+				else {
+					list = (List<Applicant>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first applicant in the ordered set where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param name the name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching applicant
+	 * @throws com.rivetlogic.jobsboard.NoSuchApplicantException if a matching applicant could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Applicant findByFilters_First(long companyId, long groupId,
+		long jobId, String name, String status,
+		OrderByComparator orderByComparator)
+		throws NoSuchApplicantException, SystemException {
+		Applicant applicant = fetchByFilters_First(companyId, groupId, jobId,
+				name, status, orderByComparator);
+
+		if (applicant != null) {
+			return applicant;
+		}
+
+		StringBundler msg = new StringBundler(12);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", groupId=");
+		msg.append(groupId);
+
+		msg.append(", jobId=");
+		msg.append(jobId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchApplicantException(msg.toString());
+	}
+
+	/**
+	 * Returns the first applicant in the ordered set where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param name the name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching applicant, or <code>null</code> if a matching applicant could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Applicant fetchByFilters_First(long companyId, long groupId,
+		long jobId, String name, String status,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Applicant> list = findByFilters(companyId, groupId, jobId, name,
+				status, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last applicant in the ordered set where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param name the name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching applicant
+	 * @throws com.rivetlogic.jobsboard.NoSuchApplicantException if a matching applicant could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Applicant findByFilters_Last(long companyId, long groupId,
+		long jobId, String name, String status,
+		OrderByComparator orderByComparator)
+		throws NoSuchApplicantException, SystemException {
+		Applicant applicant = fetchByFilters_Last(companyId, groupId, jobId,
+				name, status, orderByComparator);
+
+		if (applicant != null) {
+			return applicant;
+		}
+
+		StringBundler msg = new StringBundler(12);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", groupId=");
+		msg.append(groupId);
+
+		msg.append(", jobId=");
+		msg.append(jobId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchApplicantException(msg.toString());
+	}
+
+	/**
+	 * Returns the last applicant in the ordered set where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param name the name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching applicant, or <code>null</code> if a matching applicant could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Applicant fetchByFilters_Last(long companyId, long groupId,
+		long jobId, String name, String status,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByFilters(companyId, groupId, jobId, name, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Applicant> list = findByFilters(companyId, groupId, jobId, name,
+				status, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the applicants before and after the current applicant in the ordered set where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	 *
+	 * @param applicantId the primary key of the current applicant
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param name the name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next applicant
+	 * @throws com.rivetlogic.jobsboard.NoSuchApplicantException if a applicant with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Applicant[] findByFilters_PrevAndNext(long applicantId,
+		long companyId, long groupId, long jobId, String name, String status,
+		OrderByComparator orderByComparator)
+		throws NoSuchApplicantException, SystemException {
+		Applicant applicant = findByPrimaryKey(applicantId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Applicant[] array = new ApplicantImpl[3];
+
+			array[0] = getByFilters_PrevAndNext(session, applicant, companyId,
+					groupId, jobId, name, status, orderByComparator, true);
+
+			array[1] = applicant;
+
+			array[2] = getByFilters_PrevAndNext(session, applicant, companyId,
+					groupId, jobId, name, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Applicant getByFilters_PrevAndNext(Session session,
+		Applicant applicant, long companyId, long groupId, long jobId,
+		String name, String status, OrderByComparator orderByComparator,
+		boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_APPLICANT_WHERE);
+
+		query.append(_FINDER_COLUMN_FILTERS_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_FILTERS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_FILTERS_JOBID_2);
+
+		boolean bindName = false;
+
+		if (name == null) {
+			query.append(_FINDER_COLUMN_FILTERS_NAME_1);
+		}
+		else if (name.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_FILTERS_NAME_3);
+		}
+		else {
+			bindName = true;
+
+			query.append(_FINDER_COLUMN_FILTERS_NAME_2);
+		}
+
+		boolean bindStatus = false;
+
+		if (status == null) {
+			query.append(_FINDER_COLUMN_FILTERS_STATUS_1);
+		}
+		else if (status.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_FILTERS_STATUS_3);
+		}
+		else {
+			bindStatus = true;
+
+			query.append(_FINDER_COLUMN_FILTERS_STATUS_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(ApplicantModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		qPos.add(groupId);
+
+		qPos.add(jobId);
+
+		if (bindName) {
+			qPos.add(name.toLowerCase());
+		}
+
+		if (bindStatus) {
+			qPos.add(status.toLowerCase());
+		}
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(applicant);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<Applicant> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE all &#63; and status LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.ApplicantModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param names the names
+	 * @param status the status
+	 * @return the matching applicants
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Applicant> findByFilters(long companyId, long groupId,
+		long jobId, String[] names, String status) throws SystemException {
+		return findByFilters(companyId, groupId, jobId, names, status,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE all &#63; and status LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.ApplicantModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param names the names
+	 * @param status the status
+	 * @param start the lower bound of the range of applicants
+	 * @param end the upper bound of the range of applicants (not inclusive)
+	 * @return the range of matching applicants
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Applicant> findByFilters(long companyId, long groupId,
+		long jobId, String[] names, String status, int start, int end)
+		throws SystemException {
+		return findByFilters(companyId, groupId, jobId, names, status, start,
+			end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE all &#63; and status LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.rivetlogic.jobsboard.model.impl.ApplicantModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param names the names
+	 * @param status the status
+	 * @param start the lower bound of the range of applicants
+	 * @param end the upper bound of the range of applicants (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching applicants
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Applicant> findByFilters(long companyId, long groupId,
+		long jobId, String[] names, String status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		if ((names != null) && (names.length == 1)) {
+			return findByFilters(companyId, groupId, jobId, names[0], status,
+				start, end, orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderArgs = new Object[] {
+					companyId, groupId, jobId, StringUtil.merge(names), status
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					companyId, groupId, jobId, StringUtil.merge(names), status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Applicant> list = (List<Applicant>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_FILTERS,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Applicant applicant : list) {
+				if ((companyId != applicant.getCompanyId()) ||
+						(groupId != applicant.getGroupId()) ||
+						(jobId != applicant.getJobId()) ||
+						!ArrayUtil.contains(names, applicant.getName()) ||
+						!Validator.equals(status, applicant.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_APPLICANT_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_FILTERS_COMPANYID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_FILTERS_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_FILTERS_JOBID_5);
+
+			conjunctionable = true;
+
+			if ((names == null) || (names.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < names.length; i++) {
+					String name = names[i];
+
+					if (name == null) {
+						query.append(_FINDER_COLUMN_FILTERS_NAME_4);
+					}
+					else if (name.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_FILTERS_NAME_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_FILTERS_NAME_5);
+					}
+
+					if ((i + 1) < names.length) {
+						query.append(WHERE_AND);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			if (status == null) {
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_4);
+			}
+			else if (status.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_6);
+			}
+			else {
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_5);
+			}
+
+			conjunctionable = true;
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(ApplicantModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(groupId);
+
+				qPos.add(jobId);
+
+				if (names != null) {
+					qPos.add(names);
+				}
+
+				if (status != null) {
+					qPos.add(status);
+				}
+
+				if (!pagination) {
+					list = (List<Applicant>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Applicant>(list);
+				}
+				else {
+					list = (List<Applicant>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_FILTERS,
+					finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_FILTERS,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param name the name
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void removeByFilters(long companyId, long groupId, long jobId,
+		String name, String status) throws SystemException {
+		for (Applicant applicant : findByFilters(companyId, groupId, jobId,
+				name, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(applicant);
+		}
+	}
+
+	/**
+	 * Returns the number of applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE &#63; and status LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param name the name
+	 * @param status the status
+	 * @return the number of matching applicants
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByFilters(long companyId, long groupId, long jobId,
+		String name, String status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_FILTERS;
+
+		Object[] finderArgs = new Object[] {
+				companyId, groupId, jobId, name, status
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(6);
+
+			query.append(_SQL_COUNT_APPLICANT_WHERE);
+
+			query.append(_FINDER_COLUMN_FILTERS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_FILTERS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_FILTERS_JOBID_2);
+
+			boolean bindName = false;
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_FILTERS_NAME_1);
+			}
+			else if (name.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_FILTERS_NAME_3);
+			}
+			else {
+				bindName = true;
+
+				query.append(_FINDER_COLUMN_FILTERS_NAME_2);
+			}
+
+			boolean bindStatus = false;
+
+			if (status == null) {
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_1);
+			}
+			else if (status.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_3);
+			}
+			else {
+				bindStatus = true;
+
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(groupId);
+
+				qPos.add(jobId);
+
+				if (bindName) {
+					qPos.add(name.toLowerCase());
+				}
+
+				if (bindStatus) {
+					qPos.add(status.toLowerCase());
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of applicants where companyId = &#63; and groupId = &#63; and jobId = &#63; and name LIKE all &#63; and status LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param jobId the job ID
+	 * @param names the names
+	 * @param status the status
+	 * @return the number of matching applicants
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByFilters(long companyId, long groupId, long jobId,
+		String[] names, String status) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				companyId, groupId, jobId, StringUtil.merge(names), status
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_FILTERS,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_APPLICANT_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_FILTERS_COMPANYID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_FILTERS_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_FILTERS_JOBID_5);
+
+			conjunctionable = true;
+
+			if ((names == null) || (names.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < names.length; i++) {
+					String name = names[i];
+
+					if (name == null) {
+						query.append(_FINDER_COLUMN_FILTERS_NAME_4);
+					}
+					else if (name.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_FILTERS_NAME_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_FILTERS_NAME_5);
+					}
+
+					if ((i + 1) < names.length) {
+						query.append(WHERE_AND);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			if (status == null) {
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_4);
+			}
+			else if (status.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_6);
+			}
+			else {
+				query.append(_FINDER_COLUMN_FILTERS_STATUS_5);
+			}
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(groupId);
+
+				qPos.add(jobId);
+
+				if (names != null) {
+					qPos.add(names);
+				}
+
+				if (status != null) {
+					qPos.add(status);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_FILTERS,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_FILTERS,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_FILTERS_COMPANYID_2 = "applicant.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_FILTERS_COMPANYID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_FILTERS_COMPANYID_2) + ")";
+	private static final String _FINDER_COLUMN_FILTERS_GROUPID_2 = "applicant.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_FILTERS_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_FILTERS_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_FILTERS_JOBID_2 = "applicant.jobId = ? AND ";
+	private static final String _FINDER_COLUMN_FILTERS_JOBID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_FILTERS_JOBID_2) + ")";
+	private static final String _FINDER_COLUMN_FILTERS_NAME_1 = "applicant.name LIKE NULL AND ";
+	private static final String _FINDER_COLUMN_FILTERS_NAME_2 = "lower(applicant.name) LIKE ? AND ";
+	private static final String _FINDER_COLUMN_FILTERS_NAME_3 = "(applicant.name IS NULL OR applicant.name LIKE '') AND ";
+	private static final String _FINDER_COLUMN_FILTERS_NAME_4 = "(" +
+		removeConjunction(_FINDER_COLUMN_FILTERS_NAME_1) + ")";
+	private static final String _FINDER_COLUMN_FILTERS_NAME_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_FILTERS_NAME_2) + ")";
+	private static final String _FINDER_COLUMN_FILTERS_NAME_6 = "(" +
+		removeConjunction(_FINDER_COLUMN_FILTERS_NAME_3) + ")";
+	private static final String _FINDER_COLUMN_FILTERS_STATUS_1 = "applicant.status LIKE NULL";
+	private static final String _FINDER_COLUMN_FILTERS_STATUS_2 = "lower(applicant.status) LIKE ?";
+	private static final String _FINDER_COLUMN_FILTERS_STATUS_3 = "(applicant.status IS NULL OR applicant.status LIKE '')";
+	private static final String _FINDER_COLUMN_FILTERS_STATUS_4 = "(" +
+		removeConjunction(_FINDER_COLUMN_FILTERS_STATUS_1) + ")";
+	private static final String _FINDER_COLUMN_FILTERS_STATUS_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_FILTERS_STATUS_2) + ")";
+	private static final String _FINDER_COLUMN_FILTERS_STATUS_6 = "(" +
+		removeConjunction(_FINDER_COLUMN_FILTERS_STATUS_3) + ")";
 
 	public ApplicantPersistenceImpl() {
 		setModelClass(Applicant.class);

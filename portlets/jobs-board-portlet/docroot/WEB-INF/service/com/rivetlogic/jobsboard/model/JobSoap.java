@@ -44,6 +44,7 @@ public class JobSoap implements Serializable {
 		soapModel.setType(model.getType());
 		soapModel.setDescription(model.getDescription());
 		soapModel.setSalary(model.getSalary());
+		soapModel.setBookmarks(model.getBookmarks());
 
 		return soapModel;
 	}
@@ -212,6 +213,14 @@ public class JobSoap implements Serializable {
 		_salary = salary;
 	}
 
+	public String getBookmarks() {
+		return _bookmarks;
+	}
+
+	public void setBookmarks(String bookmarks) {
+		_bookmarks = bookmarks;
+	}
+
 	private long _jobId;
 	private long _groupId;
 	private long _companyId;
@@ -226,4 +235,5 @@ public class JobSoap implements Serializable {
 	private long _type;
 	private String _description;
 	private double _salary;
+	private String _bookmarks;
 }

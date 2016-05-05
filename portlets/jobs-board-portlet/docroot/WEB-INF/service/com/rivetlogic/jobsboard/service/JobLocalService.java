@@ -16,7 +16,6 @@ package com.rivetlogic.jobsboard.service;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -53,7 +52,6 @@ public interface JobLocalService extends BaseLocalService, InvokableLocalService
 	* @return the job that was added
 	* @throws SystemException if a system exception occurred
 	*/
-	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.REINDEX)
 	public com.rivetlogic.jobsboard.model.Job addJob(
 		com.rivetlogic.jobsboard.model.Job job)
 		throws com.liferay.portal.kernel.exception.SystemException;
@@ -74,7 +72,6 @@ public interface JobLocalService extends BaseLocalService, InvokableLocalService
 	* @throws PortalException if a job with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.DELETE)
 	public com.rivetlogic.jobsboard.model.Job deleteJob(long jobId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
@@ -86,7 +83,6 @@ public interface JobLocalService extends BaseLocalService, InvokableLocalService
 	* @return the job that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.DELETE)
 	public com.rivetlogic.jobsboard.model.Job deleteJob(
 		com.rivetlogic.jobsboard.model.Job job)
 		throws com.liferay.portal.kernel.exception.SystemException;
@@ -226,7 +222,6 @@ public interface JobLocalService extends BaseLocalService, InvokableLocalService
 	* @return the job that was updated
 	* @throws SystemException if a system exception occurred
 	*/
-	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.REINDEX)
 	public com.rivetlogic.jobsboard.model.Job updateJob(
 		com.rivetlogic.jobsboard.model.Job job)
 		throws com.liferay.portal.kernel.exception.SystemException;
@@ -258,5 +253,47 @@ public interface JobLocalService extends BaseLocalService, InvokableLocalService
 
 	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByCompanyGroup(
 		long companyId, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countByFilters(long companyId, long groupId,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countByBookmarks(long companyId, long groupId,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, java.lang.String bookmarks)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> findByBookmarks(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		java.lang.String bookmarks, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int count(com.liferay.portal.theme.ThemeDisplay themeDisplay,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, boolean bookmaked)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.rivetlogic.jobsboard.model.Job> find(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, boolean bookmaked, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
 		throws com.liferay.portal.kernel.exception.SystemException;
 }

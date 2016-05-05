@@ -16,7 +16,6 @@ package com.rivetlogic.jobsboard.model.impl;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -74,12 +73,13 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 			{ "location", Types.BIGINT },
 			{ "type_", Types.BIGINT },
 			{ "description", Types.CLOB },
-			{ "salary", Types.DOUBLE }
+			{ "salary", Types.DOUBLE },
+			{ "bookmarks", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table rivetlogic_jobsboard_Job (jobId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,active_ BOOLEAN,category LONG,location LONG,type_ LONG,description TEXT null,salary DOUBLE)";
+	public static final String TABLE_SQL_CREATE = "create table rivetlogic_jobsboard_Job (jobId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,active_ BOOLEAN,category LONG,location LONG,type_ LONG,description TEXT null,salary DOUBLE,bookmarks VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table rivetlogic_jobsboard_Job";
-	public static final String ORDER_BY_JPQL = " ORDER BY job.createDate DESC";
-	public static final String ORDER_BY_SQL = " ORDER BY rivetlogic_jobsboard_Job.createDate DESC";
+	public static final String ORDER_BY_JPQL = " ORDER BY job.jobId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY rivetlogic_jobsboard_Job.jobId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -93,14 +93,15 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 				"value.object.column.bitmask.enabled.com.rivetlogic.jobsboard.model.Job"),
 			true);
 	public static long ACTIVE_COLUMN_BITMASK = 1L;
-	public static long CATEGORY_COLUMN_BITMASK = 2L;
-	public static long COMPANYID_COLUMN_BITMASK = 4L;
-	public static long DESCRIPTION_COLUMN_BITMASK = 8L;
-	public static long GROUPID_COLUMN_BITMASK = 16L;
-	public static long LOCATION_COLUMN_BITMASK = 32L;
-	public static long NAME_COLUMN_BITMASK = 64L;
-	public static long TYPE_COLUMN_BITMASK = 128L;
-	public static long CREATEDATE_COLUMN_BITMASK = 256L;
+	public static long BOOKMARKS_COLUMN_BITMASK = 2L;
+	public static long CATEGORY_COLUMN_BITMASK = 4L;
+	public static long COMPANYID_COLUMN_BITMASK = 8L;
+	public static long DESCRIPTION_COLUMN_BITMASK = 16L;
+	public static long GROUPID_COLUMN_BITMASK = 32L;
+	public static long LOCATION_COLUMN_BITMASK = 64L;
+	public static long NAME_COLUMN_BITMASK = 128L;
+	public static long TYPE_COLUMN_BITMASK = 256L;
+	public static long JOBID_COLUMN_BITMASK = 512L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.rivetlogic.jobsboard.model.Job"));
 
@@ -155,6 +156,7 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 		attributes.put("type", getType());
 		attributes.put("description", getDescription());
 		attributes.put("salary", getSalary());
+		attributes.put("bookmarks", getBookmarks());
 
 		return attributes;
 	}
@@ -243,6 +245,12 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 
 		if (salary != null) {
 			setSalary(salary);
+		}
+
+		String bookmarks = (String)attributes.get("bookmarks");
+
+		if (bookmarks != null) {
+			setBookmarks(bookmarks);
 		}
 	}
 
@@ -342,8 +350,6 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 
 	@Override
 	public void setCreateDate(Date createDate) {
-		_columnBitmask = -1L;
-
 		_createDate = createDate;
 	}
 
@@ -510,6 +516,31 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 		_salary = salary;
 	}
 
+	@Override
+	public String getBookmarks() {
+		if (_bookmarks == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _bookmarks;
+		}
+	}
+
+	@Override
+	public void setBookmarks(String bookmarks) {
+		_columnBitmask |= BOOKMARKS_COLUMN_BITMASK;
+
+		if (_originalBookmarks == null) {
+			_originalBookmarks = _bookmarks;
+		}
+
+		_bookmarks = bookmarks;
+	}
+
+	public String getOriginalBookmarks() {
+		return GetterUtil.getString(_originalBookmarks);
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -555,6 +586,7 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 		jobImpl.setType(getType());
 		jobImpl.setDescription(getDescription());
 		jobImpl.setSalary(getSalary());
+		jobImpl.setBookmarks(getBookmarks());
 
 		jobImpl.resetOriginalValues();
 
@@ -563,17 +595,17 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 
 	@Override
 	public int compareTo(Job job) {
-		int value = 0;
+		long primaryKey = job.getPrimaryKey();
 
-		value = DateUtil.compareTo(getCreateDate(), job.getCreateDate());
-
-		value = value * -1;
-
-		if (value != 0) {
-			return value;
+		if (getPrimaryKey() < primaryKey) {
+			return -1;
 		}
-
-		return 0;
+		else if (getPrimaryKey() > primaryKey) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
 	}
 
 	@Override
@@ -634,6 +666,8 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 		jobModelImpl._setOriginalType = false;
 
 		jobModelImpl._originalDescription = jobModelImpl._description;
+
+		jobModelImpl._originalBookmarks = jobModelImpl._bookmarks;
 
 		jobModelImpl._columnBitmask = 0;
 	}
@@ -702,12 +736,20 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 
 		jobCacheModel.salary = getSalary();
 
+		jobCacheModel.bookmarks = getBookmarks();
+
+		String bookmarks = jobCacheModel.bookmarks;
+
+		if ((bookmarks != null) && (bookmarks.length() == 0)) {
+			jobCacheModel.bookmarks = null;
+		}
+
 		return jobCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{jobId=");
 		sb.append(getJobId());
@@ -737,6 +779,8 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 		sb.append(getDescription());
 		sb.append(", salary=");
 		sb.append(getSalary());
+		sb.append(", bookmarks=");
+		sb.append(getBookmarks());
 		sb.append("}");
 
 		return sb.toString();
@@ -744,7 +788,7 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(46);
+		StringBundler sb = new StringBundler(49);
 
 		sb.append("<model><model-name>");
 		sb.append("com.rivetlogic.jobsboard.model.Job");
@@ -806,6 +850,10 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 			"<column><column-name>salary</column-name><column-value><![CDATA[");
 		sb.append(getSalary());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>bookmarks</column-name><column-value><![CDATA[");
+		sb.append(getBookmarks());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -843,6 +891,8 @@ public class JobModelImpl extends BaseModelImpl<Job> implements JobModel {
 	private String _description;
 	private String _originalDescription;
 	private double _salary;
+	private String _bookmarks;
+	private String _originalBookmarks;
 	private long _columnBitmask;
 	private Job _escapedModel;
 }

@@ -287,6 +287,77 @@ public class JobLocalServiceUtil {
 		return getService().findByCompanyGroup(companyId, groupId);
 	}
 
+	public static int countByFilters(long companyId, long groupId,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .countByFilters(companyId, groupId, keywords, status,
+			location, category, type);
+	}
+
+	public static java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .findByFilters(companyId, groupId, keywords, status,
+			location, category, type, start, end);
+	}
+
+	public static java.util.List<com.rivetlogic.jobsboard.model.Job> findByFilters(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .findByFilters(companyId, groupId, keywords, status,
+			location, category, type, start, end, orderBy);
+	}
+
+	public static int countByBookmarks(long companyId, long groupId,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, java.lang.String bookmarks)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .countByBookmarks(companyId, groupId, keywords, status,
+			location, category, type, bookmarks);
+	}
+
+	public static java.util.List<com.rivetlogic.jobsboard.model.Job> findByBookmarks(
+		long companyId, long groupId, java.lang.String keywords,
+		boolean[] status, long[] location, long[] category, long[] type,
+		java.lang.String bookmarks, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .findByBookmarks(companyId, groupId, keywords, status,
+			location, category, type, bookmarks, start, end, orderBy);
+	}
+
+	public static int count(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, boolean bookmaked)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .count(themeDisplay, keywords, status, location, category,
+			type, bookmaked);
+	}
+
+	public static java.util.List<com.rivetlogic.jobsboard.model.Job> find(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay,
+		java.lang.String keywords, boolean[] status, long[] location,
+		long[] category, long[] type, boolean bookmaked, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderBy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .find(themeDisplay, keywords, status, location, category,
+			type, bookmaked, start, end, orderBy);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

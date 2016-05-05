@@ -15,8 +15,12 @@
 package com.rivetlogic.jobsboard.service.impl;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.rivetlogic.jobsboard.model.Job;
 import com.rivetlogic.jobsboard.service.base.JobLocalServiceBaseImpl;
+import com.rivetlogic.jobsboard.util.FiltersUtil;
 
 import java.util.List;
 
@@ -52,6 +56,55 @@ public class JobLocalServiceImpl extends JobLocalServiceBaseImpl {
     
     public List<Job> findByCompanyGroup(long companyId, long groupId) throws SystemException {
         return jobPersistence.findByCompanyGroup(companyId, groupId);
+    }
+    
+    public int countByFilters(long companyId, long groupId, String keywords, boolean[] status, long[] location, long[] category, long[] type) throws SystemException {
+        String[] list = FiltersUtil.processKeywords(keywords);
+        return jobPersistence.countByFilters(companyId, groupId, list, status, category, location, type, list);
+    }
+    
+    public List<Job> findByFilters(long companyId, long groupId, String keywords, boolean[] status, long[] location, long[] category, long[] type, int start, int end) throws SystemException {
+        String[] list = FiltersUtil.processKeywords(keywords);
+        return jobPersistence.findByFilters(companyId, groupId, new String[]{}, status, category, location, type, list, start, end);
+    }
+    
+    public List<Job> findByFilters(long companyId, long groupId, String keywords, boolean[] status, long[] location, long[] category, long[] type, int start, int end, OrderByComparator orderBy) throws SystemException {
+        String[] list = FiltersUtil.processKeywords(keywords);
+        return jobPersistence.findByFilters(companyId, groupId, new String[]{}, status, category, location, type, list, start, end, orderBy);
+    }
+    
+    public int countByBookmarks(long companyId, long groupId, String keywords, boolean[] status, long[] location, long[] category, long[] type, String bookmarks) throws SystemException {
+        String[] list = FiltersUtil.processKeywords(keywords);
+        return jobPersistence.countByBookmarks(companyId, groupId, new String[]{}, status, category, location, type, list, bookmarks);        
+    }
+    
+    public List<Job> findByBookmarks(long companyId, long groupId, String keywords, boolean[] status, long[] location, long[] category, long[] type, String bookmarks, int start, int end, OrderByComparator orderBy) throws SystemException {
+        String[] list = FiltersUtil.processKeywords(keywords);
+        return jobPersistence.findByBookmarks(companyId, groupId, new String[]{}, status, category, location, type, list, bookmarks, start, end, orderBy);
+    }
+    
+    public int count(ThemeDisplay themeDisplay, String keywords, boolean[] status, long[] location, long[] category, long[] type, boolean bookmarked) throws SystemException {
+        long companyId = themeDisplay.getCompanyId();
+        long groupId = themeDisplay.getScopeGroupId();
+        if(bookmarked) {
+            long userId = themeDisplay.getUserId();
+            String bookmark = StringPool.PERCENT + Long.toString(userId) + StringPool.PERCENT;
+            return countByBookmarks(companyId, groupId, keywords, status, location, category, type, bookmark);
+        } else {
+            return countByFilters(companyId, groupId, keywords, status, location, category, type);
+        }
+    }
+    
+    public List<Job> find(ThemeDisplay themeDisplay, String keywords, boolean[] status, long[] location, long[] category, long[] type, boolean bookmarked, int start, int end, OrderByComparator orderBy) throws SystemException {
+        long companyId = themeDisplay.getCompanyId();
+        long groupId = themeDisplay.getScopeGroupId();
+        if(bookmarked) {
+            long userId = themeDisplay.getUserId();
+            String bookmark = StringPool.PERCENT + Long.toString(userId) + StringPool.PERCENT;
+            return findByBookmarks(companyId, groupId, keywords, status, location, category, type, bookmark, start, end, orderBy);
+        } else {
+            return findByFilters(companyId, groupId, keywords, status, location, category, type, start, end, orderBy);
+        }
     }
     
 }

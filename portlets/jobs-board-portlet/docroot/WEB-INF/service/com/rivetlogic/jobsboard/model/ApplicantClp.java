@@ -16,6 +16,7 @@ package com.rivetlogic.jobsboard.model;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
@@ -558,17 +559,17 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 
 	@Override
 	public int compareTo(Applicant applicant) {
-		long primaryKey = applicant.getPrimaryKey();
+		int value = 0;
 
-		if (getPrimaryKey() < primaryKey) {
-			return -1;
+		value = DateUtil.compareTo(getCreateDate(), applicant.getCreateDate());
+
+		value = value * -1;
+
+		if (value != 0) {
+			return value;
 		}
-		else if (getPrimaryKey() > primaryKey) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	@Override
@@ -591,10 +592,6 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 		else {
 			return false;
 		}
-	}
-
-	public Class<?> getClpSerializerClass() {
-		return _clpSerializerClass;
 	}
 
 	@Override
@@ -717,5 +714,4 @@ public class ApplicantClp extends BaseModelImpl<Applicant> implements Applicant 
 	private String _status;
 	private String _notes;
 	private BaseModel<?> _applicantRemoteModel;
-	private Class<?> _clpSerializerClass = com.rivetlogic.jobsboard.service.ClpSerializer.class;
 }

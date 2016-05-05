@@ -28,7 +28,8 @@ create table rivetlogic_jobsboard_Job (
 	location LONG,
 	type_ LONG,
 	description TEXT null,
-	salary DOUBLE
+	salary DOUBLE,
+	bookmarks VARCHAR(75) null
 );
 
 create table rivetlogic_jobsboard_Subscription (

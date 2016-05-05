@@ -15,8 +15,10 @@
 package com.rivetlogic.jobsboard.service.impl;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
 import com.rivetlogic.jobsboard.model.Applicant;
 import com.rivetlogic.jobsboard.service.base.ApplicantLocalServiceBaseImpl;
+import com.rivetlogic.jobsboard.util.FiltersUtil;
 
 import java.util.List;
 
@@ -52,6 +54,16 @@ public class ApplicantLocalServiceImpl extends ApplicantLocalServiceBaseImpl {
     
     public List<Applicant> findByCompanyGroupJob(long companyId, long groupId, long jobId) throws SystemException {
         return applicantPersistence.findByCompanyGroupJob(companyId, groupId, jobId);
+    }
+    
+    public int countByFilters(long companyId, long groupId, long jobId, String status, String keywords) throws SystemException {
+        String[] list = FiltersUtil.processKeywords(keywords);
+        return applicantPersistence.countByFilters(companyId, groupId, jobId, list, status);
+    }
+    
+    public List<Applicant> findByFilters(long companyId, long groupId, long jobId, String status, String keywords, int start, int end) throws SystemException {
+        String[] list = FiltersUtil.processKeywords(keywords);
+        return applicantPersistence.findByFilters(companyId, groupId, jobId, list, status, start, end);
     }
     
 }
