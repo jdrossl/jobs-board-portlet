@@ -7,7 +7,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -28,6 +27,7 @@ import com.rivetlogic.jobsboard.service.JobLocalServiceUtil;
 import com.rivetlogic.jobsboard.service.SubscriptionLocalServiceUtil;
 import com.rivetlogic.jobsboard.util.ApplicantStatus;
 import com.rivetlogic.jobsboard.util.FiltersUtil;
+import com.rivetlogic.jobsboard.util.PrefsKeys;
 import com.rivetlogic.jobsboard.util.WebKeys;
 
 import java.io.File;
@@ -41,8 +41,6 @@ import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
 
 /**
  * Portlet implementation class JobsBoardPortlet
@@ -99,13 +97,13 @@ public class JobsBoardPortlet extends MVCPortlet {
             String description = ParamUtil.getString(req, WebKeys.PARAM_DESC);
             Double salary = ParamUtil.getDouble(req, WebKeys.PARAM_SALARY);
             
-            long categoryId = FiltersUtil.getCategoryId(req, "categoryId");
-            long locationId = FiltersUtil.getCategoryId(req, "locationId");
-            long typeId = FiltersUtil.getCategoryId(req, "typeId");
+            long categoryId = FiltersUtil.getCategoryId(req, PrefsKeys.CATEGORY_ID);
+            long locationId = FiltersUtil.getCategoryId(req, PrefsKeys.LOCATION_ID);
+            long typeId = FiltersUtil.getCategoryId(req, PrefsKeys.TYPE_ID);
             
-            long type = ParamUtil.getLong(req, "categories_" + Long.toString(typeId));
-            long category = ParamUtil.getLong(req, "categories_" + Long.toString(categoryId));
-            long location = ParamUtil.getLong(req, "categories_" + Long.toString(locationId));
+            long type = ParamUtil.getLong(req, WebKeys.PARAM_CATEGORIES + Long.toString(typeId));
+            long category = ParamUtil.getLong(req, WebKeys.PARAM_CATEGORIES + Long.toString(categoryId));
+            long location = ParamUtil.getLong(req, WebKeys.PARAM_CATEGORIES + Long.toString(locationId));
 
             job.setName(name);
             job.setActive(isActive);
@@ -116,7 +114,7 @@ public class JobsBoardPortlet extends MVCPortlet {
             job.setLocation(location);
             
             job.persist();
-            SubscriptionLocalServiceUtil.notifySubscribers(job);
+            SubscriptionLocalServiceUtil.notifySubscribers(req, job);
         } catch (Exception e) {
             LOG.error("Error adding new job:", e);
         }
@@ -142,7 +140,7 @@ public class JobsBoardPortlet extends MVCPortlet {
             Job job = JobLocalServiceUtil.fetchJob(jobId);
             if(job.getBookmarks().contains(userId)) {
                 List<String> list = new ArrayList<String>(); 
-                for(String s : job.getBookmarks().split(",")) {
+                for(String s : job.getBookmarks().split(StringPool.COMMA)) {
                     if(!Validator.equals(s, userId)) {
                         list.add(s);
                     }

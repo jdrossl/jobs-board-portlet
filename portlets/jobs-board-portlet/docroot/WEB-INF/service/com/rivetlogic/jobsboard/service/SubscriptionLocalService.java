@@ -249,5 +249,6 @@ public interface SubscriptionLocalService extends BaseLocalService,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
 
-	public void notifySubscribers(com.rivetlogic.jobsboard.model.Job job);
+	public void notifySubscribers(javax.portlet.PortletRequest req,
+		com.rivetlogic.jobsboard.model.Job job);
 }

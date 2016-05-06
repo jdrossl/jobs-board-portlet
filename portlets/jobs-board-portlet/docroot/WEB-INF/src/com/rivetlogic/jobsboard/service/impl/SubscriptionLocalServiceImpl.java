@@ -19,8 +19,11 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.rivetlogic.jobsboard.model.Job;
 import com.rivetlogic.jobsboard.model.Subscription;
 import com.rivetlogic.jobsboard.service.base.SubscriptionLocalServiceBaseImpl;
+import com.rivetlogic.jobsboard.util.MailUtil;
 
 import java.util.List;
+
+import javax.portlet.PortletRequest;
 
 /**
  * The implementation of the subscription local service.
@@ -46,14 +49,17 @@ public class SubscriptionLocalServiceImpl
     
     private static final Log LOG = LogFactoryUtil.getLog(SubscriptionLocalServiceImpl.class);
     
-    public void notifySubscribers(Job job) {
+    public void notifySubscribers(PortletRequest req, Job job) {
         LOG.debug("Sending notification to subscribers for " + job.getName());
         try {
             List<Subscription> subscriptions = 
                     subscriptionPersistence.findByCompanyGroup(job.getCompanyId(), job.getGroupId());
-            for(Subscription subscription : subscriptions) {
-                LOG.debug("Sending notification for " + subscription.getEmailAddress());
-                //TODO: Implement mail service...
+            if(!subscriptions.isEmpty()) {
+                String message = MailUtil.generateNotification(req, job);
+                for(Subscription subscription : subscriptions) {
+                    LOG.debug("Sending notification for " + subscription.getEmailAddress());
+                    MailUtil.sendNotification(req, subscription, message);
+                }
             }
         } catch(Exception e) {
             LOG.error("Error finding subscriptions:", e);

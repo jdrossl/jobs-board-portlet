@@ -1063,7 +1063,7 @@ public class JobLocalServiceClp implements JobLocalService {
 	@Override
 	public int count(com.liferay.portal.theme.ThemeDisplay themeDisplay,
 		java.lang.String keywords, boolean[] status, long[] location,
-		long[] category, long[] type, boolean bookmaked)
+		long[] category, long[] type, boolean bookmarked)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
@@ -1083,7 +1083,7 @@ public class JobLocalServiceClp implements JobLocalService {
 						
 					ClpSerializer.translateInput(type),
 						
-					bookmaked
+					bookmarked
 					});
 		}
 		catch (Throwable t) {
@@ -1109,7 +1109,7 @@ public class JobLocalServiceClp implements JobLocalService {
 	public java.util.List<com.rivetlogic.jobsboard.model.Job> find(
 		com.liferay.portal.theme.ThemeDisplay themeDisplay,
 		java.lang.String keywords, boolean[] status, long[] location,
-		long[] category, long[] type, boolean bookmaked, int start, int end,
+		long[] category, long[] type, boolean bookmarked, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderBy)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -1130,7 +1130,7 @@ public class JobLocalServiceClp implements JobLocalService {
 						
 					ClpSerializer.translateInput(type),
 						
-					bookmaked,
+					bookmarked,
 						
 					start,
 						

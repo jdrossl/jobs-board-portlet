@@ -117,6 +117,7 @@ public class SubscriptionLocalServiceClpInvoker {
 		_methodName46 = "notifySubscribers";
 
 		_methodParameterTypes46 = new String[] {
+				"javax.portlet.PortletRequest",
 				"com.rivetlogic.jobsboard.model.Job"
 			};
 	}
@@ -224,7 +225,8 @@ public class SubscriptionLocalServiceClpInvoker {
 
 		if (_methodName46.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
-			SubscriptionLocalServiceUtil.notifySubscribers((com.rivetlogic.jobsboard.model.Job)arguments[0]);
+			SubscriptionLocalServiceUtil.notifySubscribers((javax.portlet.PortletRequest)arguments[0],
+				(com.rivetlogic.jobsboard.model.Job)arguments[1]);
 
 			return null;
 		}

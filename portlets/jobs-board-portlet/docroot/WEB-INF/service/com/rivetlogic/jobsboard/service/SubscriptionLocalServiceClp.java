@@ -118,6 +118,7 @@ public class SubscriptionLocalServiceClp implements SubscriptionLocalService {
 		_methodName19 = "notifySubscribers";
 
 		_methodParameterTypes19 = new String[] {
+				"javax.portlet.PortletRequest",
 				"com.rivetlogic.jobsboard.model.Job"
 			};
 	}
@@ -677,11 +678,16 @@ public class SubscriptionLocalServiceClp implements SubscriptionLocalService {
 	}
 
 	@Override
-	public void notifySubscribers(com.rivetlogic.jobsboard.model.Job job) {
+	public void notifySubscribers(javax.portlet.PortletRequest req,
+		com.rivetlogic.jobsboard.model.Job job) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName19,
 				_methodParameterTypes19,
-				new Object[] { ClpSerializer.translateInput(job) });
+				new Object[] {
+					ClpSerializer.translateInput(req),
+					
+				ClpSerializer.translateInput(job)
+				});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);

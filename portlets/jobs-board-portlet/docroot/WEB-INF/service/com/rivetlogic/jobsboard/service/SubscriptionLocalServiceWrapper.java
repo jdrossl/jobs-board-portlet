@@ -288,8 +288,9 @@ public class SubscriptionLocalServiceWrapper implements SubscriptionLocalService
 	}
 
 	@Override
-	public void notifySubscribers(com.rivetlogic.jobsboard.model.Job job) {
-		_subscriptionLocalService.notifySubscribers(job);
+	public void notifySubscribers(javax.portlet.PortletRequest req,
+		com.rivetlogic.jobsboard.model.Job job) {
+		_subscriptionLocalService.notifySubscribers(req, job);
 	}
 
 	/**

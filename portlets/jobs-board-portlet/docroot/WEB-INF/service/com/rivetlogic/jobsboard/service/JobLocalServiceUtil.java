@@ -340,22 +340,22 @@ public class JobLocalServiceUtil {
 	public static int count(
 		com.liferay.portal.theme.ThemeDisplay themeDisplay,
 		java.lang.String keywords, boolean[] status, long[] location,
-		long[] category, long[] type, boolean bookmaked)
+		long[] category, long[] type, boolean bookmarked)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .count(themeDisplay, keywords, status, location, category,
-			type, bookmaked);
+			type, bookmarked);
 	}
 
 	public static java.util.List<com.rivetlogic.jobsboard.model.Job> find(
 		com.liferay.portal.theme.ThemeDisplay themeDisplay,
 		java.lang.String keywords, boolean[] status, long[] location,
-		long[] category, long[] type, boolean bookmaked, int start, int end,
+		long[] category, long[] type, boolean bookmarked, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderBy)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .find(themeDisplay, keywords, status, location, category,
-			type, bookmaked, start, end, orderBy);
+			type, bookmarked, start, end, orderBy);
 	}
 
 	public static void clearService() {
