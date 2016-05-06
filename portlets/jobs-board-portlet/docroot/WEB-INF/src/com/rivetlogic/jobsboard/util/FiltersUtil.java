@@ -27,9 +27,11 @@ public class FiltersUtil {
     }
     
     // TODO: Always return only active if the user is not logged/admin
-    public static boolean[] getStatus(RenderRequest req) {
+    public static boolean[] getStatus(RenderRequest req, ThemeDisplay themeDisplay) {
         String value = ParamUtil.getString(req, "status", "all");
-        if(Validator.equals(value, "all")) {
+        if(!themeDisplay.isSignedIn()) { // || doesn't have role....
+            return new boolean[] { true };
+        }else if(Validator.equals(value, "all")) {
             return new boolean[]{ true, false };
         } else {
             return new boolean[]{ Boolean.parseBoolean(value) };

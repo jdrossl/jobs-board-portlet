@@ -10,6 +10,7 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -34,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -147,10 +149,20 @@ public class JobsBoardPortlet extends MVCPortlet {
     public void bookmarkJob(ActionRequest req, ActionResponse res) throws IOException {
         ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
         long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID);
-        long userId = themeDisplay.getUserId();
+        String userId = Long.toString(themeDisplay.getUserId());
         try {
             Job job = JobLocalServiceUtil.fetchJob(jobId);
-            job.setBookmarks(StringUtil.merge(new Object[]{ job.getBookmarks(), userId }));
+            if(job.getBookmarks().contains(userId)) {
+                List<String> list = new ArrayList<String>(); 
+                for(String s : job.getBookmarks().split(",")) {
+                    if(!Validator.equals(s, userId)) {
+                        list.add(s);
+                    }
+                }
+                job.setBookmarks(StringUtil.merge(list));
+            } else {
+                job.setBookmarks(StringUtil.merge(new Object[]{ job.getBookmarks(), userId }));
+            }
             job.persist();
         } catch(Exception e) {
             LOG.error("Error bookmarking job:", e);

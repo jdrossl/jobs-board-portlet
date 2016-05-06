@@ -15,7 +15,7 @@
 	long[] category = FiltersUtil.getFilter(renderRequest, "category", categories);
 	long[] location = FiltersUtil.getFilter(renderRequest, "location", locations);
 	long[] type = FiltersUtil.getFilter(renderRequest, "type", types);
-	boolean[] status = FiltersUtil.getStatus(renderRequest);
+	boolean[] status = FiltersUtil.getStatus(renderRequest, themeDisplay);
 	boolean bookmarked = ParamUtil.getBoolean(request, "only-bookmarked", false);
 	// --- FILTERS ---
 	
@@ -27,6 +27,8 @@
 	int totalJobs = JobLocalServiceUtil.count(themeDisplay, keywords, status, location, category, type, bookmarked);
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
+	
+	boolean adminView = themeDisplay.isSignedIn(); // && has role...
 %>
 
 <portlet:renderURL var="addURL">
@@ -72,14 +74,18 @@
 													<aui:option label="${ category.name }" value="${ category.categoryId }" />
 												</c:forEach>
 											</aui:select>
-											<aui:select name="status" inlineField="true">
-												<aui:option label="all" value="all" />
-												<aui:option label="active" value="true" />
-												<aui:option label="inactive" value="false" />
-											</aui:select>
+											<c:if test="<%= adminView %>">
+												<aui:select name="status" inlineField="true">
+													<aui:option label="all" value="all" />
+													<aui:option label="active" value="true" />
+													<aui:option label="inactive" value="false" />
+												</aui:select>
+											</c:if>
 										</div>
 									</div>
-									<aui:input name="only-bookmarked" type="checkbox" />
+									<c:if test="<%= adminView %>">
+										<aui:input name="only-bookmarked" type="checkbox" />
+									</c:if>
 								</aui:fieldset>
 							</div>
 						</div>
@@ -94,7 +100,9 @@
 						<aui:button type="submit"/>
 					</aui:nav-item>
 					<aui:nav-item label="clear-search" />
-					<aui:nav-item label="add" iconCssClass="icon-plus" href="<%= addURL %>"/>
+					<c:if test="<%= adminView %>">
+						<aui:nav-item label="add" iconCssClass="icon-plus" href="<%= addURL %>"/>
+					</c:if>
 				</aui:nav>
 			</aui:nav-bar>
 			
@@ -158,11 +166,13 @@
 							<li class="position-posted"><%= format.format(job.getCreateDate()) %></li>
 							<li class="position-type"><%= typ %></li>
 						</ul>
+						<c:if test="<%= adminView %>">
 						<div class="list-item-actions">
 							<ul>
 								<li class="position-applicants">
 									<liferay-ui:icon iconCssClass="icon-user" url="<%= applicantsURL %>" />
 								</li>
+								
 								<li class="position-bookmark">
 									<liferay-ui:icon iconCssClass="<%= (job.getBookmarks().contains(userId))? \"icon-star\":\"icon-star-empty\" %>" url="<%= bookmarkURL %>" />
 								</li>
@@ -174,7 +184,7 @@
 								</li>
 							</ul>
 						</div>
-						
+						</c:if>
 						
 					</div>
 				</liferay-ui:search-container-row>

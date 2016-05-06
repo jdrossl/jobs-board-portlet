@@ -71,7 +71,9 @@
 								<aui:validator name="digits" />
 							</aui:input>
 							<div class="file-field">
-								<aui:input name="cv" label="" placeholder="cv" type="file" required="true"/>
+								<aui:input name="cv" label="" placeholder="cv" type="file" required="true">
+									<aui:validator name="acceptFiles">'doc,docx,pdf'</aui:validator>
+								</aui:input>
 								<div class="input-append">
 								  <input class="span10" id="appendedInputButtons" type="text">
 								  <button class="btn" type="button">CV</button>
