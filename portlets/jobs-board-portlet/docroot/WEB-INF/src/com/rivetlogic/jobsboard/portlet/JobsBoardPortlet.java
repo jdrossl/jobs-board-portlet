@@ -27,6 +27,7 @@ import com.rivetlogic.jobsboard.service.ApplicantLocalServiceUtil;
 import com.rivetlogic.jobsboard.service.JobLocalServiceUtil;
 import com.rivetlogic.jobsboard.service.SubscriptionLocalServiceUtil;
 import com.rivetlogic.jobsboard.util.ApplicantStatus;
+import com.rivetlogic.jobsboard.util.FiltersUtil;
 import com.rivetlogic.jobsboard.util.WebKeys;
 
 import java.io.File;
@@ -97,10 +98,15 @@ public class JobsBoardPortlet extends MVCPortlet {
             Boolean isActive = ParamUtil.getBoolean(req, WebKeys.PARAM_ACTIVE);
             String description = ParamUtil.getString(req, WebKeys.PARAM_DESC);
             Double salary = ParamUtil.getDouble(req, WebKeys.PARAM_SALARY);
-            long type = getCategoryId(req, "typeId");
-            long category =getCategoryId(req, "categoryId");;
-            long location = getCategoryId(req, "locationId");;
             
+            long categoryId = FiltersUtil.getCategoryId(req, "categoryId");
+            long locationId = FiltersUtil.getCategoryId(req, "locationId");
+            long typeId = FiltersUtil.getCategoryId(req, "typeId");
+            
+            long type = ParamUtil.getLong(req, "categories_" + Long.toString(typeId));
+            long category = ParamUtil.getLong(req, "categories_" + Long.toString(categoryId));
+            long location = ParamUtil.getLong(req, "categories_" + Long.toString(locationId));
+
             job.setName(name);
             job.setActive(isActive);
             job.setDescription(description);
@@ -242,11 +248,6 @@ public class JobsBoardPortlet extends MVCPortlet {
             LOG.error("Error updating applicant:", e);
         }
         sendRedirect(req, res);
-    }
-    
-    private long getCategoryId(PortletRequest req, String name) {
-        PortletPreferences prefs = req.getPreferences();
-        return GetterUtil.getLong(prefs.getValue(name, "-1L"));
     }
     
 }

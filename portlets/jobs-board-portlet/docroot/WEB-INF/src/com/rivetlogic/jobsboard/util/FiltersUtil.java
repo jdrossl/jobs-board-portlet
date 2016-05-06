@@ -3,6 +3,7 @@ package com.rivetlogic.jobsboard.util;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -14,6 +15,8 @@ import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 
 public class FiltersUtil {
@@ -54,15 +57,16 @@ public class FiltersUtil {
        }
     }
     
-    public static List<AssetCategory> getCategories(ThemeDisplay themeDisplay, String name) throws PortalException, SystemException {
-        List<AssetVocabulary> vocabularies = AssetVocabularyLocalServiceUtil
-                .getGroupVocabularies(themeDisplay.getScopeGroupId(), false);
-        for(AssetVocabulary voc : vocabularies) {
-            if(Validator.equals(name, voc.getName())) {
-                return voc.getCategories();
-            }
-        }
-        return null;
+    public static List<AssetCategory> getCategories(PortletRequest req, String name) throws PortalException, SystemException {
+        long vocabularyId = getCategoryId(req, name);
+        AssetVocabulary vocabulary = AssetVocabularyLocalServiceUtil
+                .fetchAssetVocabulary(vocabularyId);
+        return vocabulary.getCategories();
+    }
+    
+    public static long getCategoryId(PortletRequest req, String name) {
+        PortletPreferences prefs = req.getPreferences();
+        return GetterUtil.getLong(prefs.getValue(name, "-1L"));
     }
     
 }

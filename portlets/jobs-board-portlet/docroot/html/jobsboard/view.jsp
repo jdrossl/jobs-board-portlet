@@ -4,10 +4,10 @@
 	String userId = Long.toString(themeDisplay.getUserId());
 	SimpleDateFormat format = new SimpleDateFormat("d MMMM, yyyy");
 	
-	// -- CATEGORIES --s
-	List<AssetCategory> categories = FiltersUtil.getCategories(themeDisplay, "Job Category");
-	List<AssetCategory> locations = FiltersUtil.getCategories(themeDisplay, "Job Location");
-	List<AssetCategory> types = FiltersUtil.getCategories(themeDisplay, "Job Type");
+	// -- CATEGORIES --
+	List<AssetCategory> categories = FiltersUtil.getCategories(renderRequest, "categoryId");
+	List<AssetCategory> locations = FiltersUtil.getCategories(renderRequest, "locationId");
+	List<AssetCategory> types = FiltersUtil.getCategories(renderRequest, "typeId");
 	// -- CATEGORIES --
 	
 	// --- FILTERS ---
