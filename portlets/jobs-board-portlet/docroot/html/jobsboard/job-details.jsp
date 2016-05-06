@@ -3,7 +3,7 @@
 <%
 	long jobId = ParamUtil.getLong(request, WebKeys.PARAM_JOB_ID);
 	Job job = JobLocalServiceUtil.fetchJob(jobId);
-	pageContext.setAttribute("job", job);
+	pageContext.setAttribute(WebKeys.PARAM_JOB, job);
 	SimpleDateFormat format = new SimpleDateFormat("d MMMM, yyyy");
 	String category = AssetCategoryLocalServiceUtil.fetchCategory(job.getCategory()).getName();
 	String location = AssetCategoryLocalServiceUtil.fetchCategory(job.getLocation()).getName();

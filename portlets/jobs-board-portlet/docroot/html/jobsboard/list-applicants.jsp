@@ -6,8 +6,8 @@
 	int totalApplicants = 0;
 	
 	// ---- FILTERS ----
-	String status = ParamUtil.getString(request, "status");
-	String keywords = ParamUtil.getString(request, "keywords");
+	String status = ParamUtil.getString(request, WebKeys.PARAM_STATUS);
+	String keywords = ParamUtil.getString(request, WebKeys.PARAM_KEYWORDS);
 	if(Validator.isNull(status) || Validator.equals(status, StringPool.BLANK)) {
 	    status = StringPool.PERCENT;
 	}

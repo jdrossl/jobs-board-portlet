@@ -1,12 +1,16 @@
+<%@page import="com.rivetlogic.jobsboard.util.PrefsKeys"%>
 <%@ include file="/html/init.jsp" %>
 
 <%
 	List<AssetVocabulary> vocabularies =
 		AssetVocabularyLocalServiceUtil.getGroupVocabularies(themeDisplay.getScopeGroupId(), false);
 
-	pageContext.setAttribute("categoryId", GetterUtil.getLong(portletPreferences.getValue("categoryId", "-1")));
-	pageContext.setAttribute("locationId", GetterUtil.getLong(portletPreferences.getValue("locationId", "-1")));
-	pageContext.setAttribute("typeId", GetterUtil.getLong(portletPreferences.getValue("typeId", "-1")));
+	pageContext.setAttribute(PrefsKeys.CATEGORY_ID, 
+	        GetterUtil.getLong(portletPreferences.getValue(PrefsKeys.CATEGORY_ID, "-1")));
+	pageContext.setAttribute(PrefsKeys.LOCATION_ID, 
+	        GetterUtil.getLong(portletPreferences.getValue(PrefsKeys.LOCATION_ID, "-1")));
+	pageContext.setAttribute(PrefsKeys.TYPE_ID, 
+	        GetterUtil.getLong(portletPreferences.getValue(PrefsKeys.TYPE_ID, "-1")));
 %>
 
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />

@@ -27,17 +27,16 @@ public class FiltersUtil {
     public static final String ALL = "all";
 
     public static String[] processKeywords(String keywords) {
-        String[] list = keywords.split(" ");
+        String[] list = keywords.split(StringPool.SPACE);
         for(int i = 0; i < list.length; i++) {
             list[i] = StringPool.PERCENT + list[i] + StringPool.PERCENT;
         }
         return list;
     }
-    
-    // TODO: Always return only active if the user is not logged/admin
-    public static boolean[] getStatus(RenderRequest req, ThemeDisplay themeDisplay) {
-        String value = ParamUtil.getString(req, "status", ALL);
-        if(!themeDisplay.isSignedIn()) { // || doesn't have role....
+
+    public static boolean[] getStatus(RenderRequest req, ThemeDisplay themeDisplay) throws SystemException {
+        String value = ParamUtil.getString(req, WebKeys.PARAM_STATUS, ALL);
+        if(viewAdmin(themeDisplay)) { 
             return new boolean[] { true };
         }else if(Validator.equals(value, ALL)) {
             return new boolean[]{ true, false };

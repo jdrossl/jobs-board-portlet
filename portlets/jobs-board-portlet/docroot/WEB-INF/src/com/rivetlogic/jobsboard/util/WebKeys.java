@@ -6,9 +6,9 @@ public interface WebKeys extends com.liferay.portal.kernel.util.WebKeys {
     String PARAM_ACTIVE = "active";
     String PARAM_DESC = "description";
     String PARAM_SALARY = "salary";
-    String PARAM_CATEGORY = "category";
     String PARAM_LOC = "location";
     String PARAM_TYPE = "type";
+    String PARAM_CATEGORIES = "categories_";
     
     String PARAM_EMAIL = "email";
     String PARAM_PHONE = "phone";
@@ -19,6 +19,9 @@ public interface WebKeys extends com.liferay.portal.kernel.util.WebKeys {
     String PARAM_STATUS = "status";
     String PARAM_NOTES = "notes";
     
+    String PARAM_KEYWORDS = "keywords";
+    
+    String PARAM_JOB = "job";
     String PARAM_JOB_ID = "jobId";
     
 }
