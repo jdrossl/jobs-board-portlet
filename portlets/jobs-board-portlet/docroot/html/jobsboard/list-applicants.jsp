@@ -28,7 +28,7 @@
 <aui:container>
 	<aui:row>
 		<aui:col>
-			<aui:form action="<%= currentURL %>">
+			<aui:form action="<%= currentURL %>" cssClass="main-filters-form">
 			<aui:nav-bar>
 				<aui:nav>
 					<aui:nav-item label="back" iconCssClass="icon-arrow-left" href="<%= redirect %>"/>
@@ -37,7 +37,7 @@
 							<div class="arrow"></div>
 							<div class="popover-content">
 								<aui:fieldset>
-									<aui:select name="status" inlineField="true">
+									<aui:select name="status" inlineField="true" cssClass="filters-submit">
 										<aui:option label="all" value="%" />
 										<aui:option label="<%= ApplicantStatus.PENDING %>" value="<%= ApplicantStatus.PENDING %>" />
 										<aui:option label="<%= ApplicantStatus.SCHEDULED %>" value="<%= ApplicantStatus.SCHEDULED %>" />
@@ -54,12 +54,7 @@
 							<aui:input name="keywords" label="" placeholder="keywords" />
 						</aui:field-wrapper>
 					</aui:nav-item>
-					<%-- TODO: Submit form on status and keywords change --%>
-					<aui:nav-item>
-						<aui:button type="submit"/>
-					</aui:nav-item>
-					<%-- TODO: Clear the form on click --%>
-					<aui:nav-item label="clear-search" />
+					<aui:nav-item label="clear-search" href="<%= iteratorURL.toString() %>" />
 				</aui:nav>
 			</aui:nav-bar>
 			</aui:form>

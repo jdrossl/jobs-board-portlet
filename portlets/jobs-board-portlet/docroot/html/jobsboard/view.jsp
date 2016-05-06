@@ -44,7 +44,7 @@
 					<liferay-ui:message key="categories-not-configured-alert" />
 				</div>
 			</c:if>
-			<aui:form action="<%= iteratorURL %>">
+			<aui:form action="<%= iteratorURL %>" cssClass="main-filters-form">
 			<aui:nav-bar>
 				<aui:nav>
 					<aui:nav-item cssClass="filters" label="filters" iconCssClass="icon-chevron-down">
@@ -54,13 +54,13 @@
 								<aui:fieldset>
 									<div class="row-fluid">
 										<div class="span6">
-											<aui:select name="location" inlineField="true">
-												<aui:option label="all" value="all" />
+											<aui:select name="location" inlineField="true" cssClass="filters-submit">
+												<aui:option label="all" value="all"  />
 												<c:forEach items="<%= locations %>" var="location">
 													<aui:option label="${ location.name }" value="${ location.categoryId }" />
 												</c:forEach>
 											</aui:select>
-											<aui:select name="type" inlineField="true">
+											<aui:select name="type" inlineField="true" cssClass="filters-submit">
 												<aui:option label="all" value="all" />
 												<c:forEach items="<%= types %>" var="type">
 													<aui:option label="${ type.name }" value="${ type.categoryId }" />
@@ -68,14 +68,14 @@
 											</aui:select>
 										</div>
 										<div class="span6">
-											<aui:select name="category" inlineField="true">
+											<aui:select name="category" inlineField="true" cssClass="filters-submit">
 												<aui:option label="all" value="all" />
 												<c:forEach items="<%= categories %>" var="category">
 													<aui:option label="${ category.name }" value="${ category.categoryId }" />
 												</c:forEach>
 											</aui:select>
 											<c:if test="<%= adminView %>">
-												<aui:select name="status" inlineField="true">
+												<aui:select name="status" inlineField="true" cssClass="filters-submit">
 													<aui:option label="all" value="all" />
 													<aui:option label="active" value="true" />
 													<aui:option label="inactive" value="false" />
@@ -84,7 +84,7 @@
 										</div>
 									</div>
 									<c:if test="<%= adminView %>">
-										<aui:input name="only-bookmarked" type="checkbox" />
+										<aui:input name="only-bookmarked" type="checkbox" cssClass="filters-submit"/>
 									</c:if>
 								</aui:fieldset>
 							</div>
@@ -95,19 +95,13 @@
 							<aui:input name="keywords" label="" placeholder="keywords" value="<%= keywords %>" />
 						</aui:field-wrapper>
 					</aui:nav-item>
-					<%-- TODO: Submit form on any input change --%>
-					<aui:nav-item>
-						<aui:button type="submit"/>
-					</aui:nav-item>
-					<aui:nav-item label="clear-search" />
+					<aui:nav-item label="clear-search" href="<%= iteratorURL.toString() %>" />
 					<c:if test="<%= adminView %>">
 						<aui:nav-item label="add" iconCssClass="icon-plus" href="<%= addURL %>"/>
 					</c:if>
 				</aui:nav>
 			</aui:nav-bar>
-			
-			
-			
+						
 			<c:if test="<%= totalJobs > 0 %>">
 			<aui:row>
 				<aui:col width="50">
@@ -115,7 +109,7 @@
 				</aui:col>
 				<aui:col width="50">
 					<aui:field-wrapper cssClass="sort-by-wrapper pull-right">
-						<aui:select name="sort-by" >
+						<aui:select name="sort-by" cssClass="filters-submit" >
 							<aui:option label="date" value="createDate" />
 							<aui:option label="name" value="name" />
 						</aui:select>

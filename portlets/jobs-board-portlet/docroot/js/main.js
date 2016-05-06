@@ -24,6 +24,10 @@ AUI.add('jobs-board-portlet', function (A) {
           var val = (this.get('value').length) ? this.get('value').match(/[^\/\\]+$/)[0] : '';
           this.ancestor('.file-field').one('input[type="text"]').set('value', val);
       }, '.file-field input');
+      
+      this.one('.portlet-body').delegate('change', function(e) {
+    	  A.one('.main-filters-form').submit();
+      }, '.filters-submit');
     }
     
   }, {

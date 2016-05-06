@@ -24,7 +24,7 @@
 <aui:container>
 	<aui:row>
 		<aui:col width="100">
-			<aui:form cssClass="well" action="<%= addURL %>">
+			<aui:form cssClass="well" action="<%= addURL %>" onSubmit="onSubmit()">
 				<aui:fieldset>
 					<aui:input name="name" required="true" />
 					<aui:field-wrapper>
@@ -43,7 +43,7 @@
 						<aui:validator name="number"/>
 					</aui:input>
 					<aui:button-row>
-						<aui:button cssClass="btn-primary" value="submit" type="submit" />
+						<aui:button cssClass="btn-primary" type="submit" />
 					</aui:button-row>
 				</aui:fieldset>
 			</aui:form>
@@ -51,6 +51,14 @@
 	</aui:row>
 </aui:container>
 
-<script type="text/javascript">
-	function <portlet:namespace />initEditor() { return '<%= (job != null)? UnicodeFormatter.toString(job.getDescription()) : StringPool.BLANK %>'; }
-</script>
+<aui:script use="base">
+	Liferay.provide(window, '<portlet:namespace />initEditor', function(){
+		return '<%= (job != null)? UnicodeFormatter.toString(job.getDescription()) : StringPool.BLANK %>';
+	});
+	
+	Liferay.provide(window, 'onSubmit', function(evt){
+		console.log('validating...');
+		console.log(evt);
+		return false;
+	});
+</aui:script>
