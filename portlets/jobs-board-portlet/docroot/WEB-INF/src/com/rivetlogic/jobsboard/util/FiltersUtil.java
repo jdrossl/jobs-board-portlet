@@ -7,6 +7,8 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Role;
+import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetVocabulary;
@@ -20,6 +22,9 @@ import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 
 public class FiltersUtil {
+    
+    public static final String ROLE = "Jobs Manager";
+    public static final String ALL = "all";
 
     public static String[] processKeywords(String keywords) {
         String[] list = keywords.split(" ");
@@ -31,10 +36,10 @@ public class FiltersUtil {
     
     // TODO: Always return only active if the user is not logged/admin
     public static boolean[] getStatus(RenderRequest req, ThemeDisplay themeDisplay) {
-        String value = ParamUtil.getString(req, "status", "all");
+        String value = ParamUtil.getString(req, "status", ALL);
         if(!themeDisplay.isSignedIn()) { // || doesn't have role....
             return new boolean[] { true };
-        }else if(Validator.equals(value, "all")) {
+        }else if(Validator.equals(value, ALL)) {
             return new boolean[]{ true, false };
         } else {
             return new boolean[]{ Boolean.parseBoolean(value) };
@@ -46,7 +51,7 @@ public class FiltersUtil {
            return new long[] {};
        }
        String value = ParamUtil.getString(req, name);
-       if(Validator.isNull(value) || Validator.equals(value, StringPool.BLANK) || Validator.equals(value, "all")) {
+       if(Validator.isNull(value) || Validator.equals(value, StringPool.BLANK) || Validator.equals(value, ALL)) {
            List<Long> ids = new ArrayList<Long>();
            for(AssetCategory cat : categories) {
                ids.add(cat.getCategoryId());
@@ -67,6 +72,20 @@ public class FiltersUtil {
     public static long getCategoryId(PortletRequest req, String name) {
         PortletPreferences prefs = req.getPreferences();
         return GetterUtil.getLong(prefs.getValue(name, "-1L"));
+    }
+    
+    public static boolean viewAdmin(ThemeDisplay themeDisplay) throws SystemException {
+        if(themeDisplay.isSignedIn()) {
+            User user = themeDisplay.getUser();
+            for(Role role : user.getRoles()) {
+                if(Validator.equals(role.getName(), ROLE)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
     }
     
 }

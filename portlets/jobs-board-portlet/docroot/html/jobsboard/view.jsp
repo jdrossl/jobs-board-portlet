@@ -28,7 +28,7 @@
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	
-	boolean adminView = themeDisplay.isSignedIn(); // && has role...
+	boolean adminView = FiltersUtil.viewAdmin(themeDisplay);
 %>
 
 <portlet:renderURL var="addURL">
