@@ -7,6 +7,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -15,8 +16,6 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.asset.model.AssetVocabulary;
-import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
@@ -41,6 +40,8 @@ import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
 /**
  * Portlet implementation class JobsBoardPortlet
@@ -96,28 +97,9 @@ public class JobsBoardPortlet extends MVCPortlet {
             Boolean isActive = ParamUtil.getBoolean(req, WebKeys.PARAM_ACTIVE);
             String description = ParamUtil.getString(req, WebKeys.PARAM_DESC);
             Double salary = ParamUtil.getDouble(req, WebKeys.PARAM_SALARY);
-            long type = 0;
-            long category = 0;
-            long location = 0;
-            
-            List<AssetVocabulary> vocabularies = AssetVocabularyLocalServiceUtil
-                    .getGroupVocabularies(themeDisplay.getScopeGroupId(), false);
-            
-            // TODO: Make categories configurable by ID instead of name.
-            for(AssetVocabulary v : vocabularies) {
-                long categoryId = ParamUtil.getLong(req, "categories_" + Long.toString(v.getVocabularyId()));
-                switch(v.getName()) {
-                    case "Job Category":
-                        category = categoryId;
-                        break;
-                    case "Job Location":
-                        location = categoryId;
-                        break;
-                    case "Job Type":
-                        type = categoryId;
-                        break;
-                }
-            }
+            long type = getCategoryId(req, "typeId");
+            long category =getCategoryId(req, "categoryId");;
+            long location = getCategoryId(req, "locationId");;
             
             job.setName(name);
             job.setActive(isActive);
@@ -260,6 +242,11 @@ public class JobsBoardPortlet extends MVCPortlet {
             LOG.error("Error updating applicant:", e);
         }
         sendRedirect(req, res);
+    }
+    
+    private long getCategoryId(PortletRequest req, String name) {
+        PortletPreferences prefs = req.getPreferences();
+        return GetterUtil.getLong(prefs.getValue(name, "-1L"));
     }
     
 }

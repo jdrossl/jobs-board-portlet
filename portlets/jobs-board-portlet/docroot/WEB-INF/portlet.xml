@@ -16,11 +16,16 @@
 			<name>help-template</name>
 			<value>/html/jobsboard/help.jsp</value>
 		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/jobsboard/config.jsp</value>
+		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 			<portlet-mode>help</portlet-mode>
+			<portlet-mode>config</portlet-mode>
 		</supports>
 		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
