@@ -267,4 +267,7 @@ public interface ApplicantLocalService extends BaseLocalService,
 		long companyId, long groupId, long jobId, java.lang.String status,
 		java.lang.String keywords, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void deleteByJob(com.rivetlogic.jobsboard.model.Job job)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

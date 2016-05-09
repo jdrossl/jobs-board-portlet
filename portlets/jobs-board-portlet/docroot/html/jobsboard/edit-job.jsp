@@ -24,7 +24,7 @@
 <aui:container>
 	<aui:row>
 		<aui:col width="100">
-			<aui:form cssClass="well" action="<%= addURL %>" onSubmit="onSubmit()">
+			<aui:form cssClass="well" action="<%= addURL %>">
 				<aui:fieldset>
 					<aui:input name="name" required="true" />
 					<aui:field-wrapper>
@@ -32,7 +32,6 @@
 					</aui:field-wrapper>
 					<aui:field-wrapper cssClass="edit-form-categories">
 						<%-- TODO: Make each vocabulary required --%>
-						<%-- TODO: Fix style for buttons --%>
 						<liferay-ui:asset-categories-selector hiddenInput="categories" curCategoryIds="<%= currentCategories %>"
 							className="<%= Job.class.getName() %>" />
 					</aui:field-wrapper>
@@ -54,11 +53,5 @@
 <aui:script use="base">
 	Liferay.provide(window, '<portlet:namespace />initEditor', function(){
 		return '<%= (job != null)? UnicodeFormatter.toString(job.getDescription()) : StringPool.BLANK %>';
-	});
-	
-	Liferay.provide(window, 'onSubmit', function(evt){
-		console.log('validating...');
-		console.log(evt);
-		return false;
 	});
 </aui:script>

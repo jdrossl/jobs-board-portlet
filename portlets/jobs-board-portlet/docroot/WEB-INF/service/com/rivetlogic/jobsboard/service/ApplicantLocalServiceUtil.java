@@ -307,6 +307,11 @@ public class ApplicantLocalServiceUtil {
 			start, end);
 	}
 
+	public static void deleteByJob(com.rivetlogic.jobsboard.model.Job job)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteByJob(job);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

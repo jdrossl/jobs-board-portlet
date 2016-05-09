@@ -126,8 +126,8 @@ public class JobsBoardPortlet extends MVCPortlet {
     public void deleteJob(ActionRequest req, ActionResponse res) throws IOException {
         long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID);
         try {
-            JobLocalServiceUtil.deleteJob(jobId);
-            // TODO: Delete all job applicants?
+            Job job = JobLocalServiceUtil.deleteJob(jobId);
+            ApplicantLocalServiceUtil.deleteByJob(job);
         } catch(Exception e) {
             LOG.error("Error deleting job:", e);
         }

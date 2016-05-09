@@ -38,6 +38,8 @@
 <%@ page import="com.rivetlogic.jobsboard.model.Applicant" %>
 <%@ page import="com.rivetlogic.jobsboard.model.impl.JobModelImpl"%>
 <%@ page import="com.rivetlogic.jobsboard.service.ApplicantLocalServiceUtil" %>
+<%@page import="com.rivetlogic.jobsboard.util.MailUtil"%>
+<%@page import="com.rivetlogic.jobsboard.util.PrefsKeys"%>
 
 <portlet:defineObjects />
 <theme:defineObjects />

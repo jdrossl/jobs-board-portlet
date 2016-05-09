@@ -138,6 +138,12 @@ public class ApplicantLocalServiceClp implements ApplicantLocalService {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"int", "int"
 			};
+
+		_methodName24 = "deleteByJob";
+
+		_methodParameterTypes24 = new String[] {
+				"com.rivetlogic.jobsboard.model.Job"
+			};
 	}
 
 	@Override
@@ -862,6 +868,31 @@ public class ApplicantLocalServiceClp implements ApplicantLocalService {
 		return (java.util.List<com.rivetlogic.jobsboard.model.Applicant>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public void deleteByJob(com.rivetlogic.jobsboard.model.Job job)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName24,
+				_methodParameterTypes24,
+				new Object[] { ClpSerializer.translateInput(job) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -909,4 +940,6 @@ public class ApplicantLocalServiceClp implements ApplicantLocalService {
 	private String[] _methodParameterTypes22;
 	private String _methodName23;
 	private String[] _methodParameterTypes23;
+	private String _methodName24;
+	private String[] _methodParameterTypes24;
 }

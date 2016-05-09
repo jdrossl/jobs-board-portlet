@@ -138,6 +138,12 @@ public class ApplicantLocalServiceClpInvoker {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"int", "int"
 			};
+
+		_methodName51 = "deleteByJob";
+
+		_methodParameterTypes51 = new String[] {
+				"com.rivetlogic.jobsboard.model.Job"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -278,6 +284,13 @@ public class ApplicantLocalServiceClpInvoker {
 				((Integer)arguments[6]).intValue());
 		}
 
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+			ApplicantLocalServiceUtil.deleteByJob((com.rivetlogic.jobsboard.model.Job)arguments[0]);
+
+			return null;
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -327,4 +340,6 @@ public class ApplicantLocalServiceClpInvoker {
 	private String[] _methodParameterTypes49;
 	private String _methodName50;
 	private String[] _methodParameterTypes50;
+	private String _methodName51;
+	private String[] _methodParameterTypes51;
 }

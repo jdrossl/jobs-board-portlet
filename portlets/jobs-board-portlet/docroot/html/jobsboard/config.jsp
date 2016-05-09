@@ -1,5 +1,3 @@
-<%@page import="com.rivetlogic.jobsboard.util.MailUtil"%>
-<%@page import="com.rivetlogic.jobsboard.util.PrefsKeys"%>
 <%@ include file="/html/init.jsp" %>
 
 <%
