@@ -114,7 +114,9 @@ public class JobsBoardPortlet extends MVCPortlet {
             job.setLocation(location);
             
             job.persist();
-            SubscriptionLocalServiceUtil.notifySubscribers(req, job);
+            if(jobId == -1) {
+                SubscriptionLocalServiceUtil.notifySubscribers(req, job);
+            }
         } catch (Exception e) {
             LOG.error("Error adding new job:", e);
         }
