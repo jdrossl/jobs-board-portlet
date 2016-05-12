@@ -15,6 +15,7 @@ import com.liferay.portlet.asset.model.AssetVocabulary;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.portlet.PortletPreferences;
@@ -63,9 +64,12 @@ public class FiltersUtil {
     
     public static List<AssetCategory> getCategories(PortletRequest req, String name) throws PortalException, SystemException {
         long vocabularyId = getCategoryId(req, name);
-        AssetVocabulary vocabulary = AssetVocabularyLocalServiceUtil
-                .fetchAssetVocabulary(vocabularyId);
-        return vocabulary.getCategories();
+        if(vocabularyId > 0) {
+            AssetVocabulary vocabulary = AssetVocabularyLocalServiceUtil
+                    .fetchAssetVocabulary(vocabularyId);
+            return vocabulary.getCategories();
+        }
+        return Collections.emptyList();        
     }
     
     public static long getCategoryId(PortletRequest req, String name) {

@@ -54,4 +54,24 @@
 	Liferay.provide(window, '<portlet:namespace />initEditor', function(){
 		return '<%= (job != null)? UnicodeFormatter.toString(job.getDescription()) : StringPool.BLANK %>';
 	});
+	Liferay.provide(window, 'checkCategories', function(event){
+		var ready = true;
+		var values = A.all("input[id^='<portlet:namespace />categories_']").attr('value');
+		values.forEach(function(value){
+			if(ready && value == "") ready = false;
+		});
+		if(!ready) {
+			event.preventDefault();
+			Liferay.Util.openWindow({
+				dialog: {
+					width: '30%',
+					height: '25%',
+					bodyContent: '<liferay-ui:message key="job-categories-warning"/>',
+					destroyOnClose: true
+				},
+				title: Liferay.Language.get('warning'),
+				
+			});
+		}
+	});
 </aui:script>
