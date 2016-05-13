@@ -12,6 +12,8 @@
 
 <liferay-ui:header showBackURL="true" backURL="<%= redirect %>"  title="job-details" />
 
+<liferay-ui:error key="apply-error" message="apply-error"/>
+
 <aui:container>
 	<aui:row>
 		<aui:col width="75">

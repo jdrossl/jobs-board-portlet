@@ -1,11 +1,16 @@
 package com.rivetlogic.jobsboard.util;
 
 import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.ContentUtil;
 import com.rivetlogic.jobsboard.model.Job;
 import com.rivetlogic.jobsboard.model.Subscription;
@@ -18,6 +23,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -57,11 +63,31 @@ public class MailUtil {
     private static String evaluateTemplate(PortletRequest req, Job job) throws Exception {
         StringWriter writer = new StringWriter();
         String template = getTemplate(req);
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("job", job);
+        Map<String,Object> map = getTemplateVariables(req, job);
         Velocity.init();
         Velocity.evaluate(new VelocityContext(map), writer, "velocityLogTag", template);
         return writer.toString();
+    }
+    
+    private static Map<String, Object> getTemplateVariables(PortletRequest req, Job job) throws PortalException, SystemException {
+        Map<String, Object> map = new HashMap<String,Object>();
+        String url = StringPool.BLANK;
+        
+        ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
+        long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), "jobsboard_WAR_jobsboardportlet");
+        if(plid != 0) {
+            PortletURL portalUrl = PortletURLFactoryUtil.create(req, "jobsboard_WAR_jobsboardportlet", plid, PortletRequest.RENDER_PHASE);
+            portalUrl.setParameter("redirect", portalUrl.toString());
+            portalUrl.setParameter("mvcPath", "/html/jobsboard/job-details.jsp");
+            portalUrl.setParameter("jobId", Long.toString(job.getJobId()));
+            url = portalUrl.toString();
+        }
+        
+        map.put("jobName", job.getName());
+        map.put("jobDescription", job.getDescription());
+        map.put("address", url);
+        
+        return map;
     }
     
     public static String generateNotification(PortletRequest req, Job job) throws Exception {

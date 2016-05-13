@@ -1,4 +1,4 @@
 <p>
-We have new job openning that may be of your interest: <strong>$job.name</strong><br/>
-Get more info at <a href="">our site</a>
+We have new job openning that may be of your interest: <strong>$jobName</strong><br/>
+Get more info at <a href="$address">our site</a>
 </p>

@@ -37,7 +37,7 @@ public class FiltersUtil {
 
     public static boolean[] getStatus(RenderRequest req, ThemeDisplay themeDisplay) throws SystemException {
         String value = ParamUtil.getString(req, WebKeys.PARAM_STATUS, ALL);
-        if(viewAdmin(themeDisplay)) { 
+        if(!viewAdmin(themeDisplay)) { 
             return new boolean[] { true };
         }else if(Validator.equals(value, ALL)) {
             return new boolean[]{ true, false };

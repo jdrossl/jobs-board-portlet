@@ -21,10 +21,12 @@
 
 <liferay-ui:header showBackURL="true" backURL="<%= redirect %>"  title="job-details" />
 
+<liferay-ui:error key="update-job-error" message="update-job-error"/>
+
 <aui:container>
 	<aui:row>
 		<aui:col width="100">
-			<aui:form cssClass="well" action="<%= addURL %>">
+			<aui:form cssClass="well" action="<%= addURL %>" onSubmit="checkCategories(event)">
 				<aui:fieldset>
 					<aui:input name="name" required="true" />
 					<aui:field-wrapper>

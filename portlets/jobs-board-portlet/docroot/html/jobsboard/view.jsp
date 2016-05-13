@@ -36,6 +36,10 @@
 	<portlet:param name="redirect" value="<%= currentURL %>" />
 </portlet:renderURL>
 
+<liferay-ui:error key="update-job-error" message="update-job-error"/>
+<liferay-ui:error key="bookmark-error" message="bookmark-error"/>
+<liferay-ui:error key="subscribe-error" message="subscribe-error"/>
+
 <aui:container>
 	<aui:row>
 		<aui:col width="75">

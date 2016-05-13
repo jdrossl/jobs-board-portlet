@@ -14,6 +14,8 @@
 
 <liferay-ui:header showBackURL="true" backURL="<%= redirect %>"  title="applicant-details" />
 
+<liferay-ui:error key="update-applicant-error" message="update-applicant-error"/>
+
 <aui:container>
 	<aui:row>
 		<aui:col width="100">

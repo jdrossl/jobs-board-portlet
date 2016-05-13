@@ -6,6 +6,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -68,6 +70,8 @@ public class JobsBoardPortlet extends MVCPortlet {
             SubscriptionLocalServiceUtil.addSubscription(subscription);
         } catch(Exception e) {
             LOG.error("Error registering subscription:", e);
+            SessionErrors.add(req, "subscription-error");
+            SessionMessages.add(req, PortalUtil.getPortletId(req) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
         }
         sendRedirect(req, res);
     }
@@ -114,11 +118,13 @@ public class JobsBoardPortlet extends MVCPortlet {
             job.setLocation(location);
             
             job.persist();
-            if(jobId == -1) {
+            if(jobId == -1 && job.isActive()) {
                 SubscriptionLocalServiceUtil.notifySubscribers(req, job);
             }
         } catch (Exception e) {
             LOG.error("Error adding new job:", e);
+            SessionErrors.add(req, "update-job-error");
+            SessionMessages.add(req, PortalUtil.getPortletId(req) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
         }
         sendRedirect(req, res);
     }
@@ -130,6 +136,8 @@ public class JobsBoardPortlet extends MVCPortlet {
             ApplicantLocalServiceUtil.deleteByJob(job);
         } catch(Exception e) {
             LOG.error("Error deleting job:", e);
+            SessionErrors.add(req, "delete-job-error");
+            SessionMessages.add(req, PortalUtil.getPortletId(req) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
         }
         sendRedirect(req, res);
     }
@@ -154,6 +162,8 @@ public class JobsBoardPortlet extends MVCPortlet {
             job.persist();
         } catch(Exception e) {
             LOG.error("Error bookmarking job:", e);
+            SessionErrors.add(req, "bookmark-error");
+            SessionMessages.add(req, PortalUtil.getPortletId(req) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
         }
         sendRedirect(req, res);
     }
@@ -163,7 +173,7 @@ public class JobsBoardPortlet extends MVCPortlet {
         long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID);
         UploadPortletRequest upload = PortalUtil.getUploadPortletRequest(req);
         try {
-            long cv = storeFile(upload, themeDisplay);
+            long cv = storeFile(upload, themeDisplay, jobId);
             
             Applicant applicant = ApplicantLocalServiceUtil.createApplicant();
             
@@ -191,17 +201,21 @@ public class JobsBoardPortlet extends MVCPortlet {
             
         } catch(Exception e) {
             LOG.error("Error adding applicant to job:", e);
+            SessionErrors.add(req, "apply-error");
+            SessionMessages.add(req, PortalUtil.getPortletId(req) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
         }
         sendRedirect(req, res);
     }
     
-    private long storeFile(UploadPortletRequest upload, ThemeDisplay themeDisplay) throws PortalException, SystemException, FileNotFoundException {
+    private long storeFile(UploadPortletRequest upload, ThemeDisplay themeDisplay, long jobId) throws PortalException, SystemException, FileNotFoundException {
         long groupId = themeDisplay.getScopeGroupId();
         long parent = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
         String applicantName = ParamUtil.getString(upload, WebKeys.PARAM_NAME);
-        String name = DEFAULT_FILE_NAME + applicantName;
+        String fileName = upload.getFileName(WebKeys.PARAM_CV);
         File file = upload.getFile(WebKeys.PARAM_CV);
         String contentType = upload.getContentType(WebKeys.PARAM_CV);
+        String name = String.format("%s - %s - %s - %s", 
+                DEFAULT_FILE_NAME, jobId, applicantName, fileName);
         ServiceContext serviceContext = ServiceContextFactory.getInstance(DLFileEntry.class.getName(), upload);
         InputStream is = new FileInputStream(file);
         Folder folder = null;
@@ -216,7 +230,7 @@ public class JobsBoardPortlet extends MVCPortlet {
         }
         LOG.debug("Adding CV file to folder");
         FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
-                groupId, folder.getFolderId(), name, contentType, name, StringPool.BLANK, StringPool.BLANK, is, file.getTotalSpace(), serviceContext);
+                groupId, folder.getFolderId(), name, contentType, name, StringPool.BLANK, StringPool.BLANK, is, file.length(), serviceContext);
         LOG.debug("File added");
         return fileEntry.getFileEntryId();
     }
@@ -246,6 +260,8 @@ public class JobsBoardPortlet extends MVCPortlet {
             applicant.persist();
         } catch(Exception e) {
             LOG.error("Error updating applicant:", e);
+            SessionErrors.add(req, "update-applicant-error");
+            SessionMessages.add(req, PortalUtil.getPortletId(req) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
         }
         sendRedirect(req, res);
     }
