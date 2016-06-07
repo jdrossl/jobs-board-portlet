@@ -2,7 +2,7 @@
 
 #set -x
 
-if [ $# -lt 2 ]; then
+if [ -z "$1" ]; then
 	echo
 	echo Usage: ./create.sh hello-world \"Hello World\"
 	echo
@@ -14,8 +14,8 @@ if [ $# -lt 2 ]; then
 	echo
 	echo A third value can be passed to specify the portlet framework to use. Valid
 	echo values are \"jsf\", \"icefaces\", \"liferay_faces_alloy\", \"mvc\", \"primefaces\",
-	echo \"richfaces\", \"spring_mvc\", or \"vaadin\". The default value is \"mvc\". The
-	echo quotation marks are not needed.
+	echo \"richfaces\", or \"vaadin\". The default value is \"mvc\". The quotation marks are
+	echo not needed.
 
 	exit 127
 fi
