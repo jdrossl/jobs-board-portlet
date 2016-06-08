@@ -29,4 +29,3 @@ portlets/*-portlet/docroot/WEB-INF/tld/*.tld
 portlets/*-portlet/docroot/WEB-INF/lib/*.jar
 !portlets/*-portlet/docroot/WEB-INF/lib/*-portlet-service.jar
 /bin
-shared
