@@ -1,3 +1,4 @@
+<%@page import="java.text.NumberFormat"%>
 <%@ include file="/html/init.jsp" %>
 
 <%
@@ -8,6 +9,7 @@
 	String category = AssetCategoryLocalServiceUtil.fetchCategory(job.getCategory()).getName();
 	String location = AssetCategoryLocalServiceUtil.fetchCategory(job.getLocation()).getName();
 	String type = AssetCategoryLocalServiceUtil.fetchCategory(job.getType()).getName();
+	String salary = NumberFormat.getCurrencyInstance().format(job.getSalary());
 %>
 
 <liferay-ui:header showBackURL="true" backURL="<%= redirect %>"  title="job-details" />
@@ -23,7 +25,7 @@
 					<span><span class="icon icon-calendar"></span>&nbsp; <%= format.format(job.getCreateDate()) %></span>&nbsp;
 					<span><span class="icon icon-globe"></span>&nbsp; <%= location %></span>&nbsp;
 					<c:if test="${ job.salary != 0 }">
-					<span><span class="icon icon-money"></span>&nbsp; ${ job.salary }</span>&nbsp;
+					<span><span class="icon icon-money"></span>&nbsp; <%= salary %></span>&nbsp;
 					</c:if>
 					<span><span class="icon icon-time"></span>&nbsp; <%= type %></span>&nbsp;
 				</div>
