@@ -13,13 +13,14 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
-import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.rivetlogic.jobsboard.model.Applicant;
 import com.rivetlogic.jobsboard.model.Job;
@@ -171,9 +172,11 @@ public class JobsBoardPortlet extends MVCPortlet {
     public void applyToJob(ActionRequest req, ActionResponse res) throws IOException {
         ThemeDisplay themeDisplay = (ThemeDisplay) req.getAttribute(WebKeys.THEME_DISPLAY);
         long jobId = ParamUtil.getLong(req, WebKeys.PARAM_JOB_ID);
+        User user = (User) req.getAttribute(WebKeys.USER);
+        long userId = user.getUserId();
         UploadPortletRequest upload = PortalUtil.getUploadPortletRequest(req);
         try {
-            long cv = storeFile(upload, themeDisplay, jobId);
+            long cv = storeFile(upload, themeDisplay, jobId, userId);
             
             Applicant applicant = ApplicantLocalServiceUtil.createApplicant();
             
@@ -207,7 +210,7 @@ public class JobsBoardPortlet extends MVCPortlet {
         sendRedirect(req, res);
     }
     
-    private long storeFile(UploadPortletRequest upload, ThemeDisplay themeDisplay, long jobId) throws PortalException, SystemException, FileNotFoundException {
+    private long storeFile(UploadPortletRequest upload, ThemeDisplay themeDisplay, long jobId, long userId) throws PortalException, SystemException, FileNotFoundException {
         long groupId = themeDisplay.getScopeGroupId();
         long parent = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
         String applicantName = ParamUtil.getString(upload, WebKeys.PARAM_NAME);
@@ -221,16 +224,16 @@ public class JobsBoardPortlet extends MVCPortlet {
         Folder folder = null;
         try {
             LOG.debug("Looking for CV Uploads forlder");
-            folder = DLAppServiceUtil.getFolder(groupId, parent, DEFAULT_FOLDER_NAME);
+            folder = DLAppLocalServiceUtil.getFolder(groupId, parent, DEFAULT_FOLDER_NAME);
             LOG.debug("Folder already exists");
         } catch(Exception e) {
             LOG.debug("Folder does not exist");
-            folder = DLAppServiceUtil.addFolder(groupId, parent, DEFAULT_FOLDER_NAME, DEFAULT_FOLFER_DESC, serviceContext);
+            folder = DLAppLocalServiceUtil.addFolder(userId, groupId, parent, DEFAULT_FOLDER_NAME, DEFAULT_FOLFER_DESC, serviceContext);
             LOG.debug("Folder created");
         }
         LOG.debug("Adding CV file to folder");
-        FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
-                groupId, folder.getFolderId(), name, contentType, name, StringPool.BLANK, StringPool.BLANK, is, file.length(), serviceContext);
+        FileEntry fileEntry = DLAppLocalServiceUtil.addFileEntry(
+                userId, groupId, folder.getFolderId(), name, contentType, name, StringPool.BLANK, StringPool.BLANK, is, file.length(), serviceContext);
         LOG.debug("File added");
         return fileEntry.getFileEntryId();
     }
