@@ -53,9 +53,6 @@
 </aui:container>
 
 <aui:script use="base">
-	Liferay.provide(window, '<portlet:namespace />initEditor', function(){
-		return '<%= (job != null)? UnicodeFormatter.toString(job.getDescription()) : StringPool.BLANK %>';
-	});
 	Liferay.provide(window, 'checkCategories', function(event){
 		var ready = true;
 		var values = A.all("input[id^='<portlet:namespace />categories_']").attr('value');
@@ -77,3 +74,8 @@
 		}
 	});
 </aui:script>
+<script type="text/javascript">
+	function <portlet:namespace />initEditor() {
+		return '<%= (job != null)? UnicodeFormatter.toString(job.getDescription()) : StringPool.BLANK %>';
+	}
+</script>
